@@ -1,6 +1,6 @@
 # hedwig-monitoring-library
 
-This repo contains a library that can be used in accordance with [Rackspace Monitoring] (https://developer.rackspace.com/docs/rackspace-monitoring/v1/api-reference/) for gathering and displaying metrics data.
+This repo contains a library that can be used in accordance with [Rackspace Monitoring](https://developer.rackspace.com/docs/rackspace-monitoring/v1/api-reference/) for gathering and displaying metrics data.
 
 ## Getting started
 

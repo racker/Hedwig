@@ -24,7 +24,7 @@ npm install
 ## Additional Dependecies
 
 * [babel](https://github.com/rollup/rollup-starter-lib/tree/babel) — illustrates writing the source code in ES2015 and transpiling it for older environments with [Babel](https://babeljs.io/)
-* [rollup-plugin-babel] (https://github.com/rollup/rollup-plugin-babel) -
+* [rollup-plugin-babel](https://github.com/rollup/rollup-plugin-babel) -
 Seamless integration between Rollup and Babel.
 * [jsdoc](https://github.com/jsdoc3/jsdoc) — JSDoc 3 is an API documentation generator for Javascript, we will use this to document our libary structure.
 

@@ -1,3 +1,6 @@
+# hidden files/folders
 .DS_Store
+.vscode
+# folders
 node_modules
 dist

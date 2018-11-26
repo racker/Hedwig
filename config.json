@@ -1,0 +1,8 @@
+{
+    "monitoring" : {
+        "url" : "https://monitoring.api.rackspacecloud.com/v1.0/"
+    },
+    "metrics" : {
+        "url" : "https://global.metrics.api.rackspacecloud.com/v2.0/"
+    }
+}

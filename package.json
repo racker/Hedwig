@@ -13,7 +13,9 @@
   "files": [
     "dist"
   ],
-  "dependencies": {},
+  "dependencies": {
+    "@babel/core": "^7.1.6"
+  },
   "devDependencies": {
     "babel-core": "^6.26.3",
     "babel-loader": "^5.4.2",

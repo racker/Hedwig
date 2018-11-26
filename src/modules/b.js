@@ -12,7 +12,7 @@ class B {
     constructor() {}
 
     doSomething() {
-        console.log('B is doing something');
+        return 'B is doing something';
     }
 }
 

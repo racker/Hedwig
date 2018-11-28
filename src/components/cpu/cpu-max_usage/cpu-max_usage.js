@@ -1,9 +1,9 @@
 import * as d3 from 'd3';
 import shadowMarkup from './cpu-max_usage.html';
-import shadowStyle from './cpu-max_usage.css';
+//import shadowStyle from './cpu-max_usage.css';
 //import BaseComponent from '../../BaseComponent';
 
-class CPU_MaxUsage extends HTMLElement {
+export class CPU_MaxUsage extends HTMLElement {
 
     constructor() {
         super();
@@ -11,7 +11,8 @@ class CPU_MaxUsage extends HTMLElement {
 
 
     static get template() {
-        return `<style>${shadowStyles}</style>${shadowMarkup}`;
+        return `${shadowMarkup}`;
+        //return `<style>${shadowStyle}</style>${shadowMarkup}`;
     }
 
     connectedCallback() {
@@ -32,14 +33,6 @@ class CPU_MaxUsage extends HTMLElement {
 
 
     }
-
-
-
-
-
-
-
-
 
 
 }

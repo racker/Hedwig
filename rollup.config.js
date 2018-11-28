@@ -1,6 +1,11 @@
+import babel from 'rollup-plugin-babel';
 import resolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
 import pkg from './package.json';
+
+let babelPlugin = babel({
+    exclude: 'node_modules/**/*',
+});
 
 export default [
 	// browser-friendly UMD build
@@ -12,6 +17,7 @@ export default [
 			format: 'umd'
 		},
 		plugins: [
+			babelPlugin,
 			resolve(), // so Rollup can find any dependecies
 			commonjs() // so Rollup can convert any dependencies to an ES module
 		]

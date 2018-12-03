@@ -5,6 +5,7 @@
   "module": "dist/hedwig-main.esm.js",
   "browser": "dist/hedwig-main.umd.js",
   "scripts": {
+    "preinstall": "npm run build",
     "build": "rollup -c",
     "dev": "rollup -c -w",
     "test": " ./node_modules/karma/bin/karma start",

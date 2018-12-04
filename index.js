@@ -1,2 +1,1 @@
-export { A } from './src/modules/a';
-export { B } from './src/modules/b';
+export { CpuMaxUsage } from './src/components/cpu/cpu-max-usage/cpu-max-usage';

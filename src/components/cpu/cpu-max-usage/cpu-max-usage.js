@@ -12,9 +12,6 @@ export class CpuMaxUsage extends HTMLElement {
         super();
     }
 
-    stupid() {
-        return 'stuff';
-    }
     /**
      * @name connectedCallback
      * @description

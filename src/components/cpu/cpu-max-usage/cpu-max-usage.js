@@ -3,6 +3,7 @@ import * as d3 from 'd3';
 /**
  * @name CpuMaxUsage
  * @description
+ * @extends HTMLElement
  * POC component for proving interopt between Hedwig and Minerva
  */
 export class CpuMaxUsage extends HTMLElement {
@@ -11,6 +12,9 @@ export class CpuMaxUsage extends HTMLElement {
         super();
     }
 
+    stupid() {
+        return 'stuff';
+    }
     /**
      * @name connectedCallback
      * @description
@@ -56,7 +60,7 @@ export class CpuMaxUsage extends HTMLElement {
         .style('stroke-width', 2)
         .style('stroke', 'orange')
         .style('fill', 'none');
-        
+
         return this;
     }
 
@@ -73,7 +77,7 @@ export class CpuMaxUsage extends HTMLElement {
 
         var xAxis = d3.axisBottom(chartProps['x']);
         var yAxis = d3.axisLeft(chartProps['y']);
-        
+
         // Add the X Axis
         this.svg.append("g")
         .attr("class", "x axis")

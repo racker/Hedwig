@@ -20,7 +20,7 @@ module.exports = function(config) {
         frameworks: ['jasmine'],
 
         preprocessors: {
-            'test/test-context.js': ['coverage','webpack']
+            'test/test-context.js': ['webpack']
         },
 
         // list of files / patterns to exclude
@@ -47,15 +47,7 @@ module.exports = function(config) {
         // use dolts reporter, as travis terminal does not support escaping sequences
         // possible values: 'dots', 'progress', 'junit', 'teamcity'
         // CLI --reporters progress
-        reporters : ['coverage', 'spec'],
+        //reporters : ['coverage', 'spec']
 
-        webpack: {
-            module: {
-                loaders: [
-                    { test: /\.js/, exclude: /node_modules/, loader: 'babel-loader' }
-                ]
-            },
-            watch: true
-        }
     });
 };

@@ -1,22 +1,10 @@
 import babel from 'rollup-plugin-babel';
 import resolve from 'rollup-plugin-node-resolve';
-import html from 'rollup-plugin-html';
 import commonjs from 'rollup-plugin-commonjs';
 import pkg from './package.json';
 
 let babelPlugin = babel({
     exclude: 'node_modules/**/*',
-});
-
-let htmlPlugin = html({
-    include: [
-        '**/*.svg',
-        '**/*.html',
-    ],
-    htmlMinifierOptions: {
-        collapseWhitespace: true,
-        quoteCharacter: "'", // reduces escape characters
-    },
 });
 
 export default [
@@ -30,7 +18,6 @@ export default [
 		},
 		plugins: [
 			babelPlugin,
-			htmlPlugin,
 			resolve(), // so Rollup can find any dependecies
 			commonjs() // so Rollup can convert any dependencies to an ES module
 		]
@@ -48,9 +35,6 @@ export default [
 		output: [
 			{ file: pkg.main, format: 'cjs' },
 			{ file: pkg.module, format: 'es' }
-		],
-		plugins: [
-            htmlPlugin
 		]
 	}
 ];

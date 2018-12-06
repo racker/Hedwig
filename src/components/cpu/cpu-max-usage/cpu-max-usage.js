@@ -10,7 +10,10 @@ export class CpuMaxUsage extends HTMLElement {
 
     constructor() {
         super();
+        this.marshalledData = null;
+        this.chartProps = {};
     }
+
 
     /**
      * @name connectedCallback
@@ -24,10 +27,6 @@ export class CpuMaxUsage extends HTMLElement {
         this.margin = { top: 30, right: 20, bottom: 30, left: 50 };
         this.height = 200 - this.margin.top - this.margin.bottom;
         this.width = 600 - this.margin.left - this.margin.right;
-
-        this.dataMarshaller()
-            .svgSetup()
-            .axisSetup();
     }
 
     /**
@@ -68,12 +67,22 @@ export class CpuMaxUsage extends HTMLElement {
      */
     axisSetup () {
         // Scale the graph to the dimensions of the svg
-        var chartProps = {};
-        chartProps['x'] = d3.scaleLinear().range([0, this.width]);
-        chartProps['y'] = d3.scaleLinear().range([this.height, 0]);
+         // Scale the graph to the dimensions of the svg
+         this.chartProps.x = d3.scaleTime().range([0, this.width]);
+         this.chartProps.y = d3.scaleLinear().range([this.height, 0]);
+        /*
+        this.chartProps.x.domain(d3.extent(this.marshalledData, function(d) {
+            return d.time;
+        }));
+        */
+        this.chartProps.y.domain([0, d3.max(this.marshalledData, function(d) {
+            return d.cpu_max_usage;
+        })]);
 
-        var xAxis = d3.axisBottom(chartProps['x']);
-        var yAxis = d3.axisLeft(chartProps['y']);
+        var xAxis = d3.axisBottom(this.chartProps.x).tickFormat(d3.timeFormat("%I:%M%p"));
+        var yAxis = d3.axisLeft(this.chartProps.y).ticks(5).tickFormat(function(d) {
+            return d + "%";
+        });
 
         // Add the X Axis
         this.svg.append("g")
@@ -90,23 +99,6 @@ export class CpuMaxUsage extends HTMLElement {
     }
 
     /**
-     * @name dataMarshaller
-     * @description
-     * Marshalls the data before being rendered in the graph
-     */
-    dataMarshaller () {
-        var value = this.attributes.getNamedItem('data').value;
-        var data = JSON.parse(value);
-        this.marshalledData = [];
-
-        for (let index in data[0].valuesCollection) {
-            this.marshalledData.push({ time: data[0].valuesCollection[index][0], cpu_max_usage: data[0].valuesCollection[index][8] });
-        }
-
-        return this
-    }
-
-    /**
      * @name calculateLine
      * @description
      * Creates the line used in the graph for this component
@@ -119,7 +111,20 @@ export class CpuMaxUsage extends HTMLElement {
         })
         .x(function(data, index){
             return index * 10;
-        })
+            //return new Date(data.time);
+        });
+    }
+
+    static get observedAttributes() {
+        return ['data'];
+    }
+
+    attributeChangedCallback(name, oldValue, newValue) {
+        if (newValue && name === "data") {
+            this.marshalledData = JSON.parse(newValue);
+            this.svgSetup()
+                .axisSetup();
+        }
     }
 }
 

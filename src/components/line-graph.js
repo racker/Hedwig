@@ -100,10 +100,10 @@ export class LineGraph extends HTMLElement {
 
         // Create the line
         var line = d3.line()
-            .x(function(d, i) {
+            .x((d, i) => {
                 return xScale(d.x); 
             })
-            .y(function(d) { 
+            .y((d) => { 
                 return yScale(d.y);
             })
             .curve(d3.curveMonotoneX)
@@ -116,7 +116,9 @@ export class LineGraph extends HTMLElement {
        
        svg.append("g")
            .attr("class", "y axis")
-           .call(d3.axisLeft(yScale).ticks(data.length));
+           .call(d3.axisLeft(yScale).ticks(data.length).tickFormat((d) => {
+                return (d * 100) + '%'
+           }));
         
         svg.append("path")
             .datum(mappedData)

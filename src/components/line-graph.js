@@ -48,23 +48,6 @@ export class LineGraph extends HTMLElement {
         }
         return results;
     }
-    
-    /**
-     * @name map
-     * @param {Object} data 
-     * @description
-     * Maps the parsed data object to ordinal values
-     */
-    map(data) {
-        var results = [];
-        for (var i = 0; i < data.length; i++) {
-            results.push({ 
-                x: data[i].time, 
-                y: data[i].value 
-            });
-        }
-        return results;
-    }
 
     /**
      * @name renderGraph
@@ -73,7 +56,6 @@ export class LineGraph extends HTMLElement {
      * Renders the graph using d3js
      */
     renderGraph(data) {
-        var mappedData = this.map(data);
 
         // Setup the margins and height, width
         var margin = JSON.parse(this.dataset.margin);
@@ -90,7 +72,7 @@ export class LineGraph extends HTMLElement {
         
         // Create X time scale
         var xScale = d3.scaleTime()
-            .domain([mappedData[0].x, mappedData[mappedData.length - 1].x])
+            .domain([data[0].time, data[data.length - 1].time])
             .range([0, width]);
 
         // Create Y linear scale
@@ -101,10 +83,10 @@ export class LineGraph extends HTMLElement {
         // Create the line
         var line = d3.line()
             .x((d, i) => {
-                return xScale(d.x); 
+                return xScale(d.time); 
             })
             .y((d) => { 
-                return yScale(d.y);
+                return yScale(d.value);
             })
             .curve(d3.curveMonotoneX)
         
@@ -121,7 +103,7 @@ export class LineGraph extends HTMLElement {
            }));
         
         svg.append("path")
-            .datum(mappedData)
+            .datum(data)
             .attr("class", "line")
             .attr("d", line)
             .style('stroke-width', 2)

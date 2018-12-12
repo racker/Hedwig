@@ -62,10 +62,11 @@ export class LineGraph extends HTMLElement {
         var height = this.dataset.height;
         var width = this.dataset.width;
 
+        console.log(height, width);
         // Setup the svg element in the DOM
         var svg = d3.select('svg')
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
+            .style("width", parseInt(width) + parseInt(margin.left) + parseInt(margin.right))
+            .style("height", parseInt(height) + parseInt(margin.top) + parseInt(margin.bottom))
             .append('g')
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 

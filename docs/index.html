@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en"><!-- lang is necessary for screen reader compatibility -->
+<head>
+  <title>Welcome to Hedwig!</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="shortcut icon" href="images/favicon.png" />
+
+  <!-- DO NOT BUNDLE: HelixUI Styles -->
+  <link rel="stylesheet" href="assets/styles/helix-ui.min.css" />
+  <script src="assets/scripts/hedwig-main.umd.js"></script>
+</head>
+<body class="hxHorizontal" id="top">
+  <!-- Accessibility: This link should be the first item in tab order. -->
+  <a href="#content">Skip to main content</a>
+
+  <header id="head">
+      <img src='./assets/images/245892900001212.png' height=100 style="float:left; padding-right: 15px; position: relative; padding-left: 75px; " />
+      <h2 style='color: #16b9d4'>Hedwig</h2>
+  </header>
+
+  <div id="app">
+    <div id="stage">
+      <nav id="nav" class="hxNav">
+        <!-- Product Navigation -->
+        <a href="#getting-started">Getting Started</a>
+        <a href="#install">Install</a>
+        <a href="#how-to">How To Use</a>
+
+        <hx-disclosure aria-controls="section-1">
+          Components
+          <hx-icon class="toggle-icon" type="angle-down"></hx-icon>
+        </hx-disclosure>
+        <hx-reveal id="section-1" open>
+          <a href="#cpu-system-usage">cpu system usage</a>
+        </hx-reveal>
+        <!-- end:Product Navigation -->
+      </nav>
+
+      <!-- Accessibility: [role="main"] must be present on main#content -->
+      <main role="main" id="content">
+        <hx-panel class="hxSpan-12-xs">
+          <hx-panelbody class="hxBox hxMd">
+            <div>
+              <p>
+                Hedwig is a component library for graphing monitoring data for Rackspace.
+              </p>
+              <p>
+                It is based on web components, so it can fit inside of any web UI application.
+              </p>
+            </div>
+            <br><br>
+            <h3 id='getting-started'>How to get started</h3>
+            <div>
+              To get started simply install Hedwig into your application
+            </div>
+            <br><br>
+            <h3 id='install'>Installing Hedwig</h3>
+            <div id='install'>
+              <p>
+                Install using npm
+              </p>
+              <br>
+              <pre><code class="bash">npm install rackspace/hedwig</code></pre>
+            </div>
+            <br><br>
+            <div id='how-to'>
+              <h3>How To Use</h3>
+              <p>
+                Hedwig uses <a href='https://www.webcomponents.org'>web components</a> so it is quite easy to use.
+              </p>
+              <p>
+                Just add a component tag to your page and add any data-* attributes for configuration
+              </p>
+              <br>
+              <pre><code class='html'>&lt;system-usage data-height="200" data-width="400" data={{ someBoundData }} &gt;&lt;/system-usage&gt;</code></pre>
+              <br>
+              <p>This will render the graph, taking in the data and mapping according to the components perscrabed data format.</p>
+            </div>
+            <br><br>
+            <hr>
+            <br><br>
+            <div id='components'>
+              <h2>Components</h2>
+            </div>
+            <br><br>
+            <div id='cpu-system-usage'>
+              <h3>CPU System Usage</h3>
+              <div>
+                <p>
+                  Description:<br><br>
+                  Dispalys the percentage of the CPU used by the system over time
+                </p>
+                <br>
+                <p>
+                  Tag: <br>
+                  <pre><code class='html'>&lt;system-usage data-height="200" data-width="400" data={{ someBoundData }} &gt;&lt;/system-usage&gt;</code></pre>
+                </p>
+                <br>
+                <p>Sample data structure</p>
+                <pre><code>
+[{ 
+    "cpu_sys_percent_average": {
+        "time": "2018-11-24T18:58:21Z",
+        "value": 0.2
+    }
+},
+{
+    "cpu_sys_percent_average": {
+        "time": "2018-11-25T23:58:21Z",
+        "value": 0.5
+    }
+},
+{
+    "cpu_sys_percent_average": {
+        "time": "2018-11-26T02:58:21Z",
+        "value": 0.3
+    }
+},
+{
+    "cpu_sys_percent_average": {
+        "time": "2018-11-27T10:58:21Z",
+        "value": 0.1
+    }
+}]    
+                  </code></pre>
+                  <br><br>
+                  <p>
+                      Renders: <br>
+                    </p>
+                    <script>
+                        var mock = [
+                            { 
+                                "cpu_sys_percent_average": {
+                                    "time": "2018-11-24T18:58:21Z",
+                                    "value": 0.2
+                                }
+                            },
+                            {
+                                "cpu_sys_percent_average": {
+                                    "time": "2018-11-25T23:58:21Z",
+                                    "value": 0.5
+                                }
+                            },
+                            {
+                                "cpu_sys_percent_average": {
+                                    "time": "2018-11-26T02:58:21Z",
+                                    "value": 0.3
+                                }
+                            },
+                            {
+                                "cpu_sys_percent_average": {
+                                    "time": "2018-11-27T10:58:21Z",
+                                    "value": 0.1
+                                }
+                            }        
+                        ];
+            
+                        document.write('<system-usage data-height=200 data-width=400 data-graph=' + JSON.stringify(mock) + '></system-usage>');
+                    </script>
+
+                    <p>Options</p>
+                    <table class='hxTable hxTable--condensed'>
+                      <thead>
+                        <tr>
+                          <th>Name</th>
+                          <th>Required</th>
+                          <th>Default Value</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>Margin</td>
+                          <td>no</td>
+                          <td>{ top: 50, right: 50, bottom: 50, left: 50 }</td>
+                        </tr>
+                        <tr>
+                          <td>Height</td>
+                          <td>no</td>
+                          <td>200</td>
+                        </tr>
+                        <tr>
+                          <td>Weight</td>
+                          <td>no</td>
+                          <td>600</td>
+                        </tr>
+                        <tr>
+                            <td>Line Color</td>
+                            <td>no</td>
+                            <td>#0c7c84</td>
+                          </tr>
+                      </tbody>
+                    </table>
+              </div>
+            </div>
+          </hx-panelbody>
+        </hx-panel>
+      </main>
+    </div>
+  </div>
+
+  <footer id="foot">
+    &copy; 2018 Rackspace US, Inc.
+    <nav>
+      <a href="https://www.rackspace.com/information/legal/websiteterms">Website Terms</a>
+      <a href="https://www.rackspace.com/information/legal/privacystatement">Privacy Policy</a>
+    </nav>
+  </footer>
+
+  <!--
+    DO NOT BUNDLE: ES5-compiled assets specifically for use in the browser.
+    Provides additional polyfills and automatically initializes HelixUI.
+  -->
+  <script src="assets/scripts/helix-ui.browser.min.js"></script>
+  <a id="bottom"></a>
+</body>
+</html>

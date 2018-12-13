@@ -4,7 +4,7 @@ import { Defaults } from "../../defaults";
  * @name WaitAverage
  * @description
  * @extends HTMLElement
- * Graph representing System Usage information
+ * Graph representing cpu average wait time information
  */
 export class WaitAverage extends HTMLElement {
  

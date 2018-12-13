@@ -3327,7 +3327,7 @@
       return columns;
     }
 
-    function dsvFormat(delimiter) {
+    function dsv(delimiter) {
       var reFormat = new RegExp("[\"" + delimiter + "\n\r]"),
           DELIMITER = delimiter.charCodeAt(0);
 
@@ -3420,9 +3420,19 @@
       };
     }
 
-    var csv = dsvFormat(",");
+    var csv = dsv(",");
 
-    var tsv = dsvFormat("\t");
+    var csvParse = csv.parse;
+    var csvParseRows = csv.parseRows;
+    var csvFormat = csv.format;
+    var csvFormatRows = csv.formatRows;
+
+    var tsv = dsv("\t");
+
+    var tsvParse = tsv.parse;
+    var tsvParseRows = tsv.parseRows;
+    var tsvFormat = tsv.format;
+    var tsvFormatRows = tsv.formatRows;
 
     function tree_add(d) {
       var x = +this._x.call(null, d),
@@ -4614,6 +4624,8 @@
     var saturday = weekday(6);
 
     var sundays = sunday.range;
+    var mondays = monday.range;
+    var thursdays = thursday.range;
 
     var month = newInterval(function(date) {
       date.setDate(1);
@@ -4703,6 +4715,8 @@
     var utcSaturday = utcWeekday(6);
 
     var utcSundays = utcSunday.range;
+    var utcMondays = utcMonday.range;
+    var utcThursdays = utcThursday.range;
 
     var utcMonth = newInterval(function(date) {
       date.setUTCDate(1);
@@ -6422,11 +6436,50 @@
     }
     customElements.define('cpu-average-usage', AverageUsage);
 
+    /**
+     * @name WaitAverage
+     * @description
+     * @extends HTMLElement
+     * Graph representing System Usage information
+     */
+
+    class WaitAverage extends HTMLElement {
+      constructor() {
+        super();
+      }
+      /**
+       * @name connectedCallback
+       * @description
+       * Call back for when the component is attached to the DOM
+       */
+
+
+      connectedCallback() {
+        var defaults = new Defaults();
+        var margin = this.dataset.margin || defaults.margin;
+        var height = (this.dataset.height || defaults.height) - margin.top - margin.bottom;
+        var width = (this.dataset.width || defaults.width) - margin.left - margin.right;
+        var lineColor = this.dataset.lineColor || defaults.lineColor;
+        this.innerHTML = "<line-graph data-margin=" + JSON.stringify(margin) + " data-height=" + height + " data-width=" + width + " data-graph=" + this.dataset.graph + " data-line-color=" + lineColor + "></lineGraph>";
+      }
+      /**
+       * @name disconnectedCallback
+       * @description
+       * Call back for when the component is detached from the DOM
+       */
+
+
+      disconnectedCallback() {}
+
+    }
+    customElements.define('cpu-wait-average', WaitAverage);
+
     exports.Defaults = Defaults;
     exports.LineGraph = LineGraph;
     exports.CpuMaxUsage = CpuMaxUsage;
     exports.SystemUsage = SystemUsage;
     exports.AverageUsage = AverageUsage;
+    exports.WaitAverage = WaitAverage;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 

@@ -18,8 +18,13 @@ export class LineGraph extends HTMLElement {
      * Call back for when the component is attached to the DOM
      */
     connectedCallback() {
-        this.innerHTML = "<svg></svg>";
-        this.renderGraph(this.parseData(this.dataset.graph));
+        
+        this.innerHTML = '<svg></svg>';
+        var svg = document.querySelector('svg')
+
+        this.attachShadow({ mode: 'open' });
+        this.shadowRoot.appendChild(svg);
+        this.renderGraph(this.parseData(this.dataset.graph), svg);
     }
 
     /**
@@ -55,16 +60,15 @@ export class LineGraph extends HTMLElement {
      * @description
      * Renders the graph using d3js
      */
-    renderGraph(data) {
+    renderGraph(data, el) {
 
         // Setup the margins and height, width
         var margin = JSON.parse(this.dataset.margin);
         var height = this.dataset.height;
         var width = this.dataset.width;
 
-        console.log(height, width);
         // Setup the svg element in the DOM
-        var svg = d3.select('svg')
+        var svg = d3.select(el)
             .style("width", parseInt(width) + parseInt(margin.left) + parseInt(margin.right))
             .style("height", parseInt(height) + parseInt(margin.top) + parseInt(margin.bottom))
             .append('g')
@@ -78,7 +82,9 @@ export class LineGraph extends HTMLElement {
 
         // Create Y linear scale
         var yScale = d3.scaleLinear()
-            .domain([0, .5])
+            .domain([0, d3.max(data, function(d) {
+                return d.value;
+            })])
             .range([height, 0]);
 
         // Create the line

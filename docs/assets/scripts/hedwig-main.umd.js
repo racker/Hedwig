@@ -115,6 +115,41 @@
       return stop < start ? -step1 : step1;
     }
 
+    function max(values, valueof) {
+      var n = values.length,
+          i = -1,
+          value,
+          max;
+
+      if (valueof == null) {
+        while (++i < n) { // Find the first comparable value.
+          if ((value = values[i]) != null && value >= value) {
+            max = value;
+            while (++i < n) { // Compare the remaining values.
+              if ((value = values[i]) != null && value > max) {
+                max = value;
+              }
+            }
+          }
+        }
+      }
+
+      else {
+        while (++i < n) { // Find the first comparable value.
+          if ((value = valueof(values[i], i, values)) != null && value >= value) {
+            max = value;
+            while (++i < n) { // Compare the remaining values.
+              if ((value = valueof(values[i], i, values)) != null && value > max) {
+                max = value;
+              }
+            }
+          }
+        }
+      }
+
+      return max;
+    }
+
     var slice$1 = Array.prototype.slice;
 
     function identity$1(x) {
@@ -4216,15 +4251,15 @@
       };
     }
 
-    function bimap(domain, range, deinterpolate, reinterpolate) {
-      var d0 = domain[0], d1 = domain[1], r0 = range[0], r1 = range[1];
+    function bimap(domain, range$$1, deinterpolate, reinterpolate) {
+      var d0 = domain[0], d1 = domain[1], r0 = range$$1[0], r1 = range$$1[1];
       if (d1 < d0) d0 = deinterpolate(d1, d0), r0 = reinterpolate(r1, r0);
       else d0 = deinterpolate(d0, d1), r0 = reinterpolate(r0, r1);
       return function(x) { return r0(d0(x)); };
     }
 
-    function polymap(domain, range, deinterpolate, reinterpolate) {
-      var j = Math.min(domain.length, range.length) - 1,
+    function polymap(domain, range$$1, deinterpolate, reinterpolate) {
+      var j = Math.min(domain.length, range$$1.length) - 1,
           d = new Array(j),
           r = new Array(j),
           i = -1;
@@ -4232,12 +4267,12 @@
       // Reverse descending domains.
       if (domain[j] < domain[0]) {
         domain = domain.slice().reverse();
-        range = range.slice().reverse();
+        range$$1 = range$$1.slice().reverse();
       }
 
       while (++i < j) {
         d[i] = deinterpolate(domain[i], domain[i + 1]);
-        r[i] = reinterpolate(range[i], range[i + 1]);
+        r[i] = reinterpolate(range$$1[i], range$$1[i + 1]);
       }
 
       return function(x) {
@@ -4258,7 +4293,7 @@
     // reinterpolate(a, b)(t) takes a parameter t in [0,1] and returns the corresponding domain value x in [a,b].
     function continuous(deinterpolate, reinterpolate) {
       var domain = unit,
-          range = unit,
+          range$$1 = unit,
           interpolate$$1 = interpolateValue,
           clamp = false,
           piecewise$$1,
@@ -4266,17 +4301,17 @@
           input;
 
       function rescale() {
-        piecewise$$1 = Math.min(domain.length, range.length) > 2 ? polymap : bimap;
+        piecewise$$1 = Math.min(domain.length, range$$1.length) > 2 ? polymap : bimap;
         output = input = null;
         return scale;
       }
 
       function scale(x) {
-        return (output || (output = piecewise$$1(domain, range, clamp ? deinterpolateClamp(deinterpolate) : deinterpolate, interpolate$$1)))(+x);
+        return (output || (output = piecewise$$1(domain, range$$1, clamp ? deinterpolateClamp(deinterpolate) : deinterpolate, interpolate$$1)))(+x);
       }
 
       scale.invert = function(y) {
-        return (input || (input = piecewise$$1(range, domain, deinterpolateLinear, clamp ? reinterpolateClamp(reinterpolate) : reinterpolate)))(+y);
+        return (input || (input = piecewise$$1(range$$1, domain, deinterpolateLinear, clamp ? reinterpolateClamp(reinterpolate) : reinterpolate)))(+y);
       };
 
       scale.domain = function(_) {
@@ -4284,11 +4319,11 @@
       };
 
       scale.range = function(_) {
-        return arguments.length ? (range = slice$5.call(_), rescale()) : range.slice();
+        return arguments.length ? (range$$1 = slice$5.call(_), rescale()) : range$$1.slice();
       };
 
       scale.rangeRound = function(_) {
-        return range = slice$5.call(_), interpolate$$1 = interpolateRound, rescale();
+        return range$$1 = slice$5.call(_), interpolate$$1 = interpolateRound, rescale();
       };
 
       scale.clamp = function(_) {
@@ -4579,8 +4614,6 @@
     var saturday = weekday(6);
 
     var sundays = sunday.range;
-    var mondays = monday.range;
-    var thursdays = thursday.range;
 
     var month = newInterval(function(date) {
       date.setDate(1);
@@ -4670,8 +4703,6 @@
     var utcSaturday = utcWeekday(6);
 
     var utcSundays = utcSunday.range;
-    var utcMondays = utcMonday.range;
-    var utcThursdays = utcThursday.range;
 
     var utcMonth = newInterval(function(date) {
       date.setUTCDate(1);
@@ -6125,8 +6156,13 @@
 
 
       connectedCallback() {
-        this.innerHTML = "<svg></svg>";
-        this.renderGraph(this.parseData(this.dataset.graph));
+        this.innerHTML = '<svg></svg>';
+        var svg$$1 = document.querySelector('svg');
+        this.attachShadow({
+          mode: 'open'
+        });
+        this.shadowRoot.appendChild(svg$$1);
+        this.renderGraph(this.parseData(this.dataset.graph), svg$$1);
       }
       /**
        * @name disconnectedCallback
@@ -6167,18 +6203,19 @@
        */
 
 
-      renderGraph(data) {
+      renderGraph(data, el) {
         // Setup the margins and height, width
         var margin = JSON.parse(this.dataset.margin);
         var height = this.dataset.height;
-        var width = this.dataset.width;
-        console.log(height, width); // Setup the svg element in the DOM
+        var width = this.dataset.width; // Setup the svg element in the DOM
 
-        var svg$$1 = select('svg').style("width", parseInt(width) + parseInt(margin.left) + parseInt(margin.right)).style("height", parseInt(height) + parseInt(margin.top) + parseInt(margin.bottom)).append('g').attr("transform", "translate(" + margin.left + "," + margin.top + ")"); // Create X time scale
+        var svg$$1 = select(el).style("width", parseInt(width) + parseInt(margin.left) + parseInt(margin.right)).style("height", parseInt(height) + parseInt(margin.top) + parseInt(margin.bottom)).append('g').attr("transform", "translate(" + margin.left + "," + margin.top + ")"); // Create X time scale
 
         var xScale = time().domain([data[0].time, data[data.length - 1].time]).range([0, width]); // Create Y linear scale
 
-        var yScale = linear$2().domain([0, .5]).range([height, 0]); // Create the line
+        var yScale = linear$2().domain([0, max(data, function (d) {
+          return d.value;
+        })]).range([height, 0]); // Create the line
 
         var line$$1 = line().x((d, i) => {
           return xScale(d.time);
@@ -6345,12 +6382,51 @@
       disconnectedCallback() {}
 
     }
-    customElements.define('system-usage', SystemUsage);
+    customElements.define('cpu-system-usage', SystemUsage);
+
+    /**
+     * @name AverageUsage
+     * @description
+     * @extends HTMLElement
+     * Graph representing System Usage information
+     */
+
+    class AverageUsage extends HTMLElement {
+      constructor() {
+        super();
+      }
+      /**
+       * @name connectedCallback
+       * @description
+       * Call back for when the component is attached to the DOM
+       */
+
+
+      connectedCallback() {
+        var defaults = new Defaults();
+        var margin = this.dataset.margin || defaults.margin;
+        var height = (this.dataset.height || defaults.height) - margin.top - margin.bottom;
+        var width = (this.dataset.width || defaults.width) - margin.left - margin.right;
+        var lineColor = this.dataset.lineColor || defaults.lineColor;
+        this.innerHTML = "<line-graph data-margin=" + JSON.stringify(margin) + " data-height=" + height + " data-width=" + width + " data-graph=" + this.dataset.graph + " data-line-color=" + lineColor + "></lineGraph>";
+      }
+      /**
+       * @name disconnectedCallback
+       * @description
+       * Call back for when the component is detached from the DOM
+       */
+
+
+      disconnectedCallback() {}
+
+    }
+    customElements.define('cpu-average-usage', AverageUsage);
 
     exports.Defaults = Defaults;
     exports.LineGraph = LineGraph;
     exports.CpuMaxUsage = CpuMaxUsage;
     exports.SystemUsage = SystemUsage;
+    exports.AverageUsage = AverageUsage;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 

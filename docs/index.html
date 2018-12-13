@@ -33,6 +33,7 @@
         </hx-disclosure>
         <hx-reveal id="section-1" open>
           <a href="#cpu-system-usage">cpu system usage</a>
+          <a href="#cpu-average-usage">cpu average usage</a>
         </hx-reveal>
         <!-- end:Product Navigation -->
       </nav>
@@ -73,9 +74,9 @@
                 Just add a component tag to your page and add any data-* attributes for configuration
               </p>
               <br>
-              <pre><code class='html'>&lt;system-usage data-height="200" data-width="400" data={{ someBoundData }} &gt;&lt;/system-usage&gt;</code></pre>
+              <pre><code class='html'>&lt;cpu-ystem-usage data-height="200" data-width="400" data={{ someBoundData }} &gt;&lt;/cpu-system-usage&gt;</code></pre>
               <br>
-              <p>This will render the graph, taking in the data and mapping according to the components perscrabed data format.</p>
+              <p>This will render the graph, taking in the data and mapping according to the components perscribed data format.</p>
             </div>
             <br><br>
             <hr>
@@ -94,7 +95,7 @@
                 <br>
                 <p>
                   Tag: <br>
-                  <pre><code class='html'>&lt;system-usage data-height="200" data-width="400" data={{ someBoundData }} &gt;&lt;/system-usage&gt;</code></pre>
+                  <pre><code class='html'>&lt;cpu-system-usage data-height="200" data-width="400" data={{ someBoundData }} &gt;&lt;/cpu-system-usage&gt;</code></pre>
                 </p>
                 <br>
                 <p>Sample data structure</p>
@@ -156,7 +157,7 @@
                             }        
                         ];
             
-                        document.write('<system-usage data-height=200 data-width=400 data-graph=' + JSON.stringify(mock) + '></system-usage>');
+                        document.write('<cpu-system-usage data-height=200 data-width=400 data-graph=' + JSON.stringify(mock) + '></cpu-system-usage>');
                     </script>
 
                     <p>Options</p>
@@ -193,6 +194,115 @@
                     </table>
               </div>
             </div>
+            <div id='cpu-average-usage'>
+                <h3>CPU Average Usage</h3>
+                <div>
+                  <p>
+                    Description:<br><br>
+                    Displays the percentage of the average CPU used over time
+                  </p>
+                  <br>
+                  <p>
+                    Tag: <br>
+                    <pre><code class='html'>&lt;cpu-average-usage data-height="200" data-width="400" data={{ someBoundData }} &gt;&lt;/cpu-average-usage&gt;</code></pre>
+                  </p>
+                  <br>
+                  <p>Sample data structure</p>
+                  <pre><code>
+[{ 
+    "cpu_usage_average": {
+        "time": "2018-11-24T18:58:21Z",
+        "value": .37
+    }
+},
+{
+    "cpu_usage_average": {
+        "time": "2018-11-25T23:58:21Z",
+        "value": 0.50
+    }
+},
+{
+    "cpu_usage_average": {
+        "time": "2018-11-26T02:58:21Z",
+        "value": 1.80
+    }
+},
+{
+    "cpu_usage_average": {
+        "time": "2018-11-27T10:58:21Z",
+        "value": 0.12
+    }
+}]    
+                    </code></pre>
+                    <br><br>
+                    <p>
+                        Renders: <br>
+                      </p>
+                      <script>
+                          var mock = [
+                          { 
+                              "cpu_usage_average": {
+                                  "time": "2018-11-24T18:58:21Z",
+                                  "value": .37
+                              }
+                          },
+                          {
+                              "cpu_usage_average": {
+                                  "time": "2018-11-25T23:58:21Z",
+                                  "value": 0.50
+                              }
+                          },
+                          {
+                              "cpu_usage_average": {
+                                  "time": "2018-11-26T02:58:21Z",
+                                  "value": 1.80
+                              }
+                          },
+                          {
+                              "cpu_usage_average": {
+                                  "time": "2018-11-27T10:58:21Z",
+                                  "value": 0.12
+                              }
+                          }    
+                          ];
+              
+                          document.write('<cpu-average-usage data-height="200" data-width="400" data-graph=' + JSON.stringify(mock) + '></cpu-system-usage>');
+                      </script>
+  
+                      <p>Options</p>
+                      <table class='hxTable hxTable--condensed'>
+                        <thead>
+                          <tr>
+                            <th>Name</th>
+                            <th>Required</th>
+                            <th>Default Value</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>Margin</td>
+                            <td>no</td>
+                            <td>{ top: 50, right: 50, bottom: 50, left: 50 }</td>
+                          </tr>
+                          <tr>
+                            <td>Height</td>
+                            <td>no</td>
+                            <td>200</td>
+                          </tr>
+                          <tr>
+                            <td>Weight</td>
+                            <td>no</td>
+                            <td>600</td>
+                          </tr>
+                          <tr>
+                              <td>Line Color</td>
+                              <td>no</td>
+                              <td>#0c7c84</td>
+                            </tr>
+                        </tbody>
+                      </table>
+                </div>
+              </div>
           </hx-panelbody>
         </hx-panel>
       </main>

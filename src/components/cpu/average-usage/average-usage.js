@@ -1,16 +1,15 @@
 import { Defaults } from "../../defaults";
 
 /**
- * @name SystemUsage
+ * @name AverageUsage
  * @description
  * @extends HTMLElement
  * Graph representing System Usage information
  */
-export class SystemUsage extends HTMLElement {
+export class AverageUsage extends HTMLElement {
  
     constructor() {
         super();
-        
     }
 
     /**
@@ -24,8 +23,6 @@ export class SystemUsage extends HTMLElement {
         var height = (this.dataset.height || defaults.height) - margin.top - margin.bottom;
         var width = (this.dataset.width || defaults.width) - margin.left - margin.right;
         var lineColor = this.dataset.lineColor || defaults.lineColor;
-
-        
 
         this.innerHTML = "<line-graph data-margin=" + JSON.stringify(margin) + 
             " data-height=" + height + 
@@ -43,4 +40,4 @@ export class SystemUsage extends HTMLElement {
     disconnectedCallback() {}
 }
 
-customElements.define('cpu-system-usage', SystemUsage);
+customElements.define('cpu-average-usage', AverageUsage);

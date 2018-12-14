@@ -6,3 +6,4 @@ export { SystemUsage } from './src/components/cpu/system-usage/system-usage';
 export { AverageUsage } from './src/components/cpu/average-usage/average-usage';
 export { WaitAverage } from './src/components/cpu/wait-average/wait-average';
 export { IrqAverage } from './src/components/cpu/irq-average/irq-average';
+export { MinUsage } from './src/components/cpu/min-usage/min-usage';

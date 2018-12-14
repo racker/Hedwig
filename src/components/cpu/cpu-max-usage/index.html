@@ -1,10 +1,10 @@
 <html>
     <head>
-        <script src="../../../../dist/hedwig-main.umd.js"></script>
+        <script type="text/javascript" src="../../../../dist/hedwig-main.umd.js"></script>
     </head>
     <body>
         <script>
-            var mock = [ 
+            var mock = [
                 {
                     "name": "agent_cpu",
                     "columns": [
@@ -96,7 +96,7 @@
                 }
             ];
 
-            document.write('<cpu-max-usage data=' + JSON.stringify(mock) + '></cpu-max-usage>');
+            document.write('<cpu-max-usage data-graph=' + JSON.stringify(mock) + '></cpu-max-usage>');
         </script>
     </body>
 </html>

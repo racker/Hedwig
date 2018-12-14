@@ -1,19 +1,16 @@
-import * as d3 from 'd3';
+import { Defaults } from "../../defaults";
 
 /**
  * @name CpuMaxUsage
- * @description
+ * @description Percentage utilization of the most-utilized CPU
  * @extends HTMLElement
- * POC component for proving interopt between Hedwig and Minerva
+ * Graph representing CPU Max Usage
  */
 export class CpuMaxUsage extends HTMLElement {
 
     constructor() {
         super();
-        this.marshalledData = null;
-        this.chartProps = {};
     }
-
 
     /**
      * @name connectedCallback
@@ -21,112 +18,66 @@ export class CpuMaxUsage extends HTMLElement {
      * Call back for when the component is attached to the DOM
      */
     connectedCallback() {
-        this.innerHTML = "<svg></svg>";
+        this.defaults = {};
+        var defaults = new Defaults();
+        this.defaults.margin = this.dataset.margin || defaults.margin;
+        this.defaults.height = (this.dataset.height || defaults.height) - this.defaults.margin.top - this.defaults.margin.bottom;
+        this.defaults.width = (this.dataset.width || defaults.width) - this.defaults.margin.left - this.defaults.margin.right;
+        this.defaults.lineColor = this.dataset.lineColor || defaults.lineColor;
 
-        // Setup the margins and height, width
-        this.margin = { top: 30, right: 20, bottom: 30, left: 50 };
-        this.height = 200 - this.margin.top - this.margin.bottom;
-        this.width = 600 - this.margin.left - this.margin.right;
+        this.render();
+    }
+
+    /**
+     * @name render
+     * @description
+     * Kicks off the render process after attribute value has been set & connectedcallback has run.
+     * @param {string} data this param is collected from the data-graph attribute
+     */
+    render () {
+        if (this.graphData && this.defaults) {
+          this.innerHTML = "<line-graph data-margin=" + JSON.stringify(this.defaults.margin) + " data-height=" + this.defaults.height + " data-width=" + this.defaults.width + " data-graph=" + this.graphData + " data-line-color=" + this.defaults.lineColor + "></lineGraph>";
+        }
+      }
+
+      /**
+       * @name dataPoints
+       * @description Sets datapoints this.graphdata
+       * @param {string} data This param is stringified JSON data setting
+       */
+    dataPoints(data){
+        this.graphData = data;
     }
 
     /**
      * @name disconnectedCallback
      * @description
-     * Call back for when the component is detached from the DOM
+     * Call back for when the component is detached from the DOM.
      */
     disconnectedCallback() {}
 
     /**
-     * @name svgSetup
-     * @description
-     * Setups the SVG element for use with d3js
+     * @name observedAttributes
+     * @description Sets what attributes this component will listen for.
+     * @returns {Array} an array of attribute to watch for value changes
      */
-    svgSetup () {
-        // Setup the svg element in the DOM
-        this.svg = d3.select('svg')
-        .attr("width", this.width + this.margin.left + this.margin.right)
-        .attr("height", this.height + this.margin.top + this.margin.bottom)
-        .append('g')
-        .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
-
-        // Create the path to the line in the svg element
-        this.svg.append('path')
-        .attr('d', this.calculateLine()(this.marshalledData))
-        .attr('class', 'line')
-        .style('stroke-width', 2)
-        .style('stroke', 'orange')
-        .style('fill', 'none');
-
-        return this;
-    }
-
-    /**
-     * @name axisSetup
-     * @description
-     * Sets up the X and Y axis for the graph rendered in this component
-     */
-    axisSetup () {
-        // Scale the graph to the dimensions of the svg
-         // Scale the graph to the dimensions of the svg
-         this.chartProps.x = d3.scaleTime().range([0, this.width]);
-         this.chartProps.y = d3.scaleLinear().range([this.height, 0]);
-        /*
-        this.chartProps.x.domain(d3.extent(this.marshalledData, function(d) {
-            return d.time;
-        }));
-        */
-        this.chartProps.y.domain([0, d3.max(this.marshalledData, function(d) {
-            return d.cpu_max_usage;
-        })]);
-
-        var xAxis = d3.axisBottom(this.chartProps.x).tickFormat(d3.timeFormat("%I:%M%p"));
-        var yAxis = d3.axisLeft(this.chartProps.y).ticks(5).tickFormat(function(d) {
-            return d + "%";
-        });
-
-        // Add the X Axis
-        this.svg.append("g")
-        .attr("class", "x axis")
-        .attr("transform", "translate(0," + this.height + ")")
-        .call(xAxis);
-
-        // Add the Y Axis
-        this.svg.append("g")
-        .attr("class", "y axis")
-        .call(yAxis);
-
-        return this;
-    }
-
-    /**
-     * @name calculateLine
-     * @description
-     * Creates the line used in the graph for this component
-     */
-    calculateLine () {
-        // Create the line
-        return d3.line()
-        .y(function(data, index){
-            return data.cpu_max_usage;
-        })
-        .x(function(data, index){
-            return index * 10;
-            //return new Date(data.time);
-        });
-    }
-
     static get observedAttributes() {
-        return ['data'];
+        return ['data-graph'];
     }
 
+    /**
+     * @name attributeChangedCallback
+     * @description This callback is fired when attribute values change for
+     * @param {string} name attribute name
+     * @param {any} oldValue original value upon page load, will most of the time be blank
+     * @param {any} newValue new value bound to the attribute
+     */
     attributeChangedCallback(name, oldValue, newValue) {
-        if (newValue && name === "data") {
-            this.marshalledData = JSON.parse(newValue);
-            this.svgSetup()
-                .axisSetup();
+        if (newValue && name === "data-graph") {
+            this.dataPoints(newValue);
+            this.render();
         }
     }
 }
 
 customElements.define('cpu-max-usage', CpuMaxUsage);
-

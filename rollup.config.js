@@ -22,6 +22,19 @@ export default [
 			commonjs() // so Rollup can convert any dependencies to an ES module
 		]
 	},
+	{
+		input: 'index.js',
+		output: {
+			name: 'hedwig-docs',
+			file: pkg.docs,
+			format: 'umd'
+		},
+		plugins: [
+			babelPlugin,
+			resolve(), // so Rollup can find any dependecies
+			commonjs() // so Rollup can convert any dependencies to an ES module
+		]
+	},
 
 	// CommonJS (for Node) and ES module (for bundlers) build.
 	// (We could have three entries in the configuration array

@@ -4,6 +4,7 @@
   "main": "dist/hedwig-main.cjs.js",
   "module": "dist/hedwig-main.esm.js",
   "browser": "dist/hedwig-main.umd.js",
+  "docs": "docs/assets/scripts/hedwig-main.umd.js",
   "scripts": {
     "preinstall": "npm run build",
     "build": "rollup -c",

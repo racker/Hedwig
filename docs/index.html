@@ -38,6 +38,7 @@
           <a href="#cpu-irq-average">cpu irq average</a>
           <a href="#cpu-min-usage">cpu min usage</a>
           <a href="#cpu-user-usage">cpu user usage</a>
+          <a href="#cpu-count">cpu count</a>
         </hx-reveal>
         <!-- end:Product Navigation -->
       </nav>
@@ -104,7 +105,7 @@
                 <br>
                 <p>Sample data structure</p>
                 <pre><code>
-[{ 
+[{
     "cpu_sys_percent_average": {
         "time": "2018-11-24T18:58:21Z",
         "value": 0.2
@@ -127,7 +128,7 @@
         "time": "2018-11-27T10:58:21Z",
         "value": 0.1
     }
-}]    
+}]
                   </code></pre>
                   <br><br>
                   <p>
@@ -135,7 +136,7 @@
                     </p>
                     <script>
                         var mock = [
-                            { 
+                            {
                                 "cpu_sys_percent_average": {
                                     "time": "2018-11-24T18:58:21Z",
                                     "value": 0.2
@@ -158,9 +159,9 @@
                                     "time": "2018-11-27T10:58:21Z",
                                     "value": 0.1
                                 }
-                            }        
+                            }
                         ];
-            
+
                         document.write('<cpu-system-usage data-height=200 data-width=400 data-graph=' + JSON.stringify(mock) + '></cpu-system-usage>');
                     </script>
 
@@ -213,7 +214,7 @@
                   <br>
                   <p>Sample data structure</p>
                   <pre><code>
-[{ 
+[{
     "cpu_usage_average": {
         "time": "2018-11-24T18:58:21Z",
         "value": .37
@@ -236,7 +237,7 @@
         "time": "2018-11-27T10:58:21Z",
         "value": 0.12
     }
-}]    
+}]
                     </code></pre>
                     <br><br>
                     <p>
@@ -244,7 +245,7 @@
                       </p>
                       <script>
                           var mock = [
-                          { 
+                          {
                               "cpu_usage_average": {
                                   "time": "2018-11-24T18:58:21Z",
                                   "value": .37
@@ -267,12 +268,12 @@
                                   "time": "2018-11-27T10:58:21Z",
                                   "value": 0.12
                               }
-                          }    
+                          }
                           ];
-              
+
                           document.write('<cpu-average-usage data-height="200" data-width="400" data-graph=' + JSON.stringify(mock) + '></cpu-system-usage>');
                       </script>
-  
+
                       <p>Options</p>
                       <table class='hxTable hxTable--condensed'>
                         <thead>
@@ -322,7 +323,7 @@
                   <br>
                   <p>Sample data structure</p>
                   <pre><code>
-[{ 
+[{
   "cpu_wait_percent_average": {
       "time": "2018-11-24T18:58:21Z",
       "value": .22
@@ -345,7 +346,7 @@
       "time": "2018-11-27T10:58:21Z",
       "value": 0.50
   }
-}]    
+}]
                     </code></pre>
                     <br><br>
                     <p>
@@ -353,7 +354,7 @@
                       </p>
                       <script>
                           var mock = [
-                          { 
+                          {
                               "cpu_wait_percent_average": {
                                   "time": "2018-11-24T18:58:21Z",
                                   "value": .22
@@ -376,12 +377,12 @@
                                   "time": "2018-11-27T10:58:21Z",
                                   "value": 0.50
                               }
-                          }   
+                          }
                           ];
-              
+
                           document.write('<cpu-wait-average data-height="200" data-width="400" data-graph=' + JSON.stringify(mock) + '></cpu-wait-average>');
                       </script>
-  
+
                       <p>Options</p>
                       <table class='hxTable hxTable--condensed'>
                         <thead>
@@ -431,7 +432,7 @@
                   <br>
                   <p>Sample data structure</p>
                   <pre><code>
-[{ 
+[{
   "cpu_irq_percent_average": {
       "time": "2018-11-24T18:58:21Z",
       "value": .10
@@ -454,7 +455,7 @@
       "time": "2018-11-27T10:58:21Z",
       "value": .99
   }
-}]    
+}]
                     </code></pre>
                     <br><br>
                     <p>
@@ -462,7 +463,7 @@
                       </p>
                       <script>
                           var mock = [
-                          { 
+                          {
                               "cpu_irq_percent_average": {
                                   "time": "2018-11-24T18:58:21Z",
                                   "value": .10
@@ -487,10 +488,10 @@
                               }
                           }
                           ];
-              
+
                           document.write('<cpu-irq-average data-height="200" data-width="400" data-graph=' + JSON.stringify(mock) + '></cpu-irq-average>');
                       </script>
-  
+
                       <p>Options</p>
                       <table class='hxTable hxTable--condensed'>
                         <thead>
@@ -540,7 +541,7 @@
                   <br>
                   <p>Sample data structure</p>
                   <pre><code>
-[{ 
+[{
   "cpu_min_cpu_usage": {
       "time": "2018-11-24T18:58:21Z",
       "value": .005
@@ -563,7 +564,7 @@
       "time": "2018-11-27T10:58:21Z",
       "value": .05
   }
-}]    
+}]
                     </code></pre>
                     <br><br>
                     <p>
@@ -571,7 +572,7 @@
                       </p>
                       <script>
                           var mock = [
-                          { 
+                          {
                               "cpu_min_cpu_usage": {
                                   "time": "2018-11-24T18:58:21Z",
                                   "value": .005
@@ -596,10 +597,10 @@
                               }
                           }
                           ];
-              
+
                           document.write('<cpu-min-usage data-height="200" data-width="400" data-graph=' + JSON.stringify(mock) + '></cpu-min-usage>');
                       </script>
-  
+
                       <p>Options</p>
                       <table class='hxTable hxTable--condensed'>
                         <thead>
@@ -649,7 +650,7 @@
                       <br>
                       <p>Sample data structure</p>
                       <pre><code>
-    [{ 
+    [{
         "cpu_user_percent_average": {
             "time": "2018-11-24T18:58:21Z",
             "value": .4
@@ -672,7 +673,7 @@
             "time": "2018-11-27T10:58:21Z",
             "value": .65
         }
-    }]    
+    }]
                         </code></pre>
                         <br><br>
                         <p>
@@ -680,7 +681,7 @@
                           </p>
                           <script>
                                 var mock = [
-                                { 
+                                {
                                     "cpu_user_percent_average": {
                                         "time": "2018-11-24T18:58:21Z",
                                         "value": .4
@@ -705,10 +706,10 @@
                                     }
                                 }
                                 ];
-                  
+
                               document.write('<cpu-user-usage data-height="200" data-width="400" data-graph=' + JSON.stringify(mock) + '></cpu-user-usage>');
                           </script>
-      
+
                           <p>Options</p>
                           <table class='hxTable hxTable--condensed'>
                             <thead>
@@ -719,6 +720,120 @@
                               </tr>
                             </thead>
                             <tbody>
+                              <tr>
+                                <td>Margin</td>
+                                <td>no</td>
+                                <td>{ top: 50, right: 50, bottom: 50, left: 50 }</td>
+                              </tr>
+                              <tr>
+                                <td>Height</td>
+                                <td>no</td>
+                                <td>200</td>
+                              </tr>
+                              <tr>
+                                <td>Weight</td>
+                                <td>no</td>
+                                <td>600</td>
+                              </tr>
+                              <tr>
+                                  <td>Line Color</td>
+                                  <td>no</td>
+                                  <td>#0c7c84</td>
+                                </tr>
+                            </tbody>
+                          </table>
+                    </div>
+                </div>
+            <div id='cpu-count'>
+                    <h3>CPU Count</h3>
+                    <div>
+                      <p>
+                        Description:<br><br>
+                        CPU Count in numbers
+                      </p>
+                      <br>
+                      <p>
+                        Tag: <br>
+                        <pre><code class='html'>&lt;cpu-count data-height="200" data-width="400" data={{ someBoundData }} &gt;&lt;/cpu-count&gt;</code></pre>
+                      </p>
+                      <br>
+                      <p>Sample data structure</p>
+                      <pre><code>
+    [{
+        "cpu_cpu_count": {
+            "time": "2018-12-12T18:58:21Z",
+            "value": 85
+        }
+    },
+    {
+        "cpu_cpu_count": {
+            "time": "2018-12-13T23:58:21Z",
+            "value": 48
+        }
+    },
+    {
+        "cpu_cpu_count": {
+            "time": "2018-12-14T02:58:21Z",
+            "value": 66
+        }
+    },
+    {
+        "cpu_cpu_count": {
+            "time": "2018-12-15T10:58:21Z",
+            "value": 33
+        }
+    }]
+                        </code></pre>
+                        <br><br>
+                        <p>
+                            Renders: <br>
+                          </p>
+                          <script>
+                                var mock = [
+                                {
+                                    "cpu_cpu_count": {
+                                        "time": "2018-12-12T18:58:21Z",
+                                        "value": 85
+                                    }
+                                },
+                                {
+                                    "cpu_cpu_count": {
+                                        "time": "2018-12-13T23:58:21Z",
+                                        "value": 48
+                                    }
+                                },
+                                {
+                                    "cpu_cpu_count": {
+                                        "time": "2018-12-14T02:58:21Z",
+                                        "value": 66
+                                    }
+                                },
+                                {
+                                    "cpu_cpu_count": {
+                                        "time": "2018-12-15T10:58:21Z",
+                                        "value": 33
+                                    }
+                                }
+                                ];
+
+                              document.write('<cpu-count data-height="200" data-width="400" data-graph=' + JSON.stringify(mock) + '></cpu-count>');
+                          </script>
+
+                          <p>Options</p>
+                          <table class='hxTable hxTable--condensed'>
+                            <thead>
+                              <tr>
+                                <th>Name</th>
+                                <th>Required</th>
+                                <th>Default Value</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                                    <tr>
+                                        <td>Unit</td>
+                                        <td>no</td>
+                                        <td>'count'</td>
+                                      </tr>
                               <tr>
                                 <td>Margin</td>
                                 <td>no</td>

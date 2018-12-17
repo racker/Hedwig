@@ -6133,10 +6133,6 @@
       bezierCurveTo: function(x1, y1, x2, y2, x, y) { this._context.bezierCurveTo(y1, x1, y2, x2, y, x); }
     };
 
-    function monotoneX(context) {
-      return new MonotoneX(context);
-    }
-
     /**
      * @name LineGraph
      * @description
@@ -6221,7 +6217,7 @@
           return xScale(d.time);
         }).y(d => {
           return yScale(d.value);
-        }).curve(monotoneX); // Add everything to the SVG
+        }); // Add everything to the SVG
 
         svg$$1.append("g").attr("class", "x axis").attr("transform", "translate(0," + height + ")").call(axisBottom(xScale).ticks(data.length));
         svg$$1.append("g").attr("class", "y axis").call(axisLeft(yScale).ticks(data.length).tickFormat(d => {
@@ -6574,6 +6570,44 @@
     }
     customElements.define('cpu-user-usage', UserUsage);
 
+    /**
+     * @name StolenPercent
+     * @description
+     * @extends HTMLElement
+     * Graph representing the stolen CPU percent over time
+     */
+
+    class StolenPercent extends HTMLElement {
+      constructor() {
+        super();
+      }
+      /**
+       * @name connectedCallback
+       * @description
+       * Call back for when the component is attached to the DOM
+       */
+
+
+      connectedCallback() {
+        var defaults = new Defaults();
+        var margin = this.dataset.margin || defaults.margin;
+        var height = (this.dataset.height || defaults.height) - margin.top - margin.bottom;
+        var width = (this.dataset.width || defaults.width) - margin.left - margin.right;
+        var lineColor = this.dataset.lineColor || defaults.lineColor;
+        this.innerHTML = "<line-graph data-margin=" + JSON.stringify(margin) + " data-height=" + height + " data-width=" + width + " data-graph=" + this.dataset.graph + " data-line-color=" + lineColor + "></lineGraph>";
+      }
+      /**
+       * @name disconnectedCallback
+       * @description
+       * Call back for when the component is detached from the DOM
+       */
+
+
+      disconnectedCallback() {}
+
+    }
+    customElements.define('cpu-stolen-percent', StolenPercent);
+
     exports.Defaults = Defaults;
     exports.LineGraph = LineGraph;
     exports.CpuMaxUsage = CpuMaxUsage;
@@ -6583,6 +6617,7 @@
     exports.IrqAverage = IrqAverage;
     exports.MinUsage = MinUsage;
     exports.UserUsage = UserUsage;
+    exports.StolenPercent = StolenPercent;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 

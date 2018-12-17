@@ -95,7 +95,7 @@ export class LineGraph extends HTMLElement {
             .y((d) => { 
                 return yScale(d.value);
             })
-            .curve(d3.curveMonotoneX)
+            
         
         // Add everything to the SVG
         svg.append("g")

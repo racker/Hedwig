@@ -1,7 +1,7 @@
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
     typeof define === 'function' && define.amd ? define(['exports'], factory) :
-    (factory((global['hedwig-main'] = {})));
+    (factory((global['hedwig-docs'] = {})));
 }(this, (function (exports) { 'use strict';
 
     /**
@@ -6170,7 +6170,7 @@
       disconnectedCallback() {}
       /**
        * @name parseData
-       * @param {Object} data 
+       * @param {Object} data
        * @description
        * Parses data into an array while converting time to a proper
        * Javascript date object
@@ -6193,7 +6193,7 @@
       }
       /**
        * @name renderGraph
-       * @param {Object} data 
+       * @param {Object} data
        * @description
        * Renders the graph using d3js
        */
@@ -6203,7 +6203,8 @@
         // Setup the margins and height, width
         var margin = JSON.parse(this.dataset.margin);
         var height = this.dataset.height;
-        var width = this.dataset.width; // Setup the svg element in the DOM
+        var width = this.dataset.width;
+        var unit = this.dataset.unit; // Setup the svg element in the DOM
 
         var svg$$1 = select(el).style("width", parseInt(width) + parseInt(margin.left) + parseInt(margin.right)).style("height", parseInt(height) + parseInt(margin.top) + parseInt(margin.bottom)).append('g').attr("transform", "translate(" + margin.left + "," + margin.top + ")"); // Create X time scale
 
@@ -6221,7 +6222,13 @@
 
         svg$$1.append("g").attr("class", "x axis").attr("transform", "translate(0," + height + ")").call(axisBottom(xScale).ticks(data.length));
         svg$$1.append("g").attr("class", "y axis").call(axisLeft(yScale).ticks(data.length).tickFormat(d => {
-          return d * 100 + '%';
+          switch (true) {
+            case unit === 'count':
+              return d;
+
+            default:
+              return d * 100 + '%';
+          }
         }));
         svg$$1.append("path").datum(data).attr("class", "line").attr("d", line$$1).style('stroke-width', 2).style('stroke', this.dataset.lineColor).style('fill', 'none');
       }
@@ -6231,9 +6238,9 @@
 
     /**
      * @name CpuMaxUsage
-     * @description
+     * @description Percentage utilization of the most-utilized CPU
      * @extends HTMLElement
-     * POC component for proving interopt between Hedwig and Minerva
+     * Graph representing CPU Max Usage
      */
 
     class CpuMaxUsage extends HTMLElement {
@@ -6248,95 +6255,69 @@
 
 
       connectedCallback() {
-        this.innerHTML = "<svg></svg>"; // Setup the margins and height, width
+        this.defaults = {};
+        var defaults = new Defaults();
+        this.defaults.margin = this.dataset.margin || defaults.margin;
+        this.defaults.height = (this.dataset.height || defaults.height) - this.defaults.margin.top - this.defaults.margin.bottom;
+        this.defaults.width = (this.dataset.width || defaults.width) - this.defaults.margin.left - this.defaults.margin.right;
+        this.defaults.lineColor = this.dataset.lineColor || defaults.lineColor;
+        this.render();
+      }
+      /**
+       * @name render
+       * @description
+       * Kicks off the render process after attribute value has been set & connectedcallback has run.
+       * @param {string} data this param is collected from the data-graph attribute
+       */
 
-        this.margin = {
-          top: 30,
-          right: 20,
-          bottom: 30,
-          left: 50
-        };
-        this.height = 200 - this.margin.top - this.margin.bottom;
-        this.width = 600 - this.margin.left - this.margin.right;
-        this.dataMarshaller().svgSetup().axisSetup();
+
+      render() {
+        if (this.graphData && this.defaults) {
+          this.innerHTML = "<line-graph data-margin=" + JSON.stringify(this.defaults.margin) + " data-height=" + this.defaults.height + " data-width=" + this.defaults.width + " data-graph=" + this.graphData + " data-line-color=" + this.defaults.lineColor + "></lineGraph>";
+        }
+      }
+      /**
+       * @name dataPoints
+       * @description Sets datapoints this.graphdata
+       * @param {string} data This param is stringified JSON data setting
+       */
+
+
+      dataPoints(data) {
+        this.graphData = data;
       }
       /**
        * @name disconnectedCallback
        * @description
-       * Call back for when the component is detached from the DOM
+       * Call back for when the component is detached from the DOM.
        */
 
 
       disconnectedCallback() {}
       /**
-       * @name svgSetup
-       * @description
-       * Setups the SVG element for use with d3js
+       * @name observedAttributes
+       * @description Sets what attributes this component will listen for.
+       * @returns {Array} an array of attribute to watch for value changes
        */
 
 
-      svgSetup() {
-        // Setup the svg element in the DOM
-        this.svg = select('svg').attr("width", this.width + this.margin.left + this.margin.right).attr("height", this.height + this.margin.top + this.margin.bottom).append('g').attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")"); // Create the path to the line in the svg element
-
-        this.svg.append('path').attr('d', this.calculateLine()(this.marshalledData)).attr('class', 'line').style('stroke-width', 2).style('stroke', 'orange').style('fill', 'none');
-        return this;
+      static get observedAttributes() {
+        return ['data-graph'];
       }
       /**
-       * @name axisSetup
-       * @description
-       * Sets up the X and Y axis for the graph rendered in this component
+       * @name attributeChangedCallback
+       * @description This callback is fired when attribute values change for
+       * @param {string} name attribute name
+       * @param {any} oldValue original value upon page load, will most of the time be blank
+       * @param {any} newValue new value bound to the attribute
        */
 
 
-      axisSetup() {
-        // Scale the graph to the dimensions of the svg
-        var chartProps = {};
-        chartProps['x'] = linear$2().range([0, this.width]);
-        chartProps['y'] = linear$2().range([this.height, 0]);
-        var xAxis = axisBottom(chartProps['x']);
-        var yAxis = axisLeft(chartProps['y']); // Add the X Axis
-
-        this.svg.append("g").attr("class", "x axis").attr("transform", "translate(0," + this.height + ")").call(xAxis); // Add the Y Axis
-
-        this.svg.append("g").attr("class", "y axis").call(yAxis);
-        return this;
-      }
-      /**
-       * @name dataMarshaller
-       * @description
-       * Marshalls the data before being rendered in the graph
-       */
-
-
-      dataMarshaller() {
-        var value = this.attributes.getNamedItem('data').value;
-        var data = JSON.parse(value);
-        this.marshalledData = [];
-
-        for (let index in data[0].valuesCollection) {
-          this.marshalledData.push({
-            time: data[0].valuesCollection[index][0],
-            cpu_max_usage: data[0].valuesCollection[index][8]
-          });
+      attributeChangedCallback(name, oldValue, newValue) {
+        if (newValue && name === "data-graph") {
+          this.dataPoints(newValue);
+          this.render();
         }
-
-        return this;
-      }
-      /**
-       * @name calculateLine
-       * @description
-       * Creates the line used in the graph for this component
-       */
-
-
-      calculateLine() {
-        // Create the line
-        return line().y(function (data, index) {
-          return data.cpu_max_usage;
-        }).x(function (data, index) {
-          return index * 10;
-        });
       }
 
     }
@@ -6608,6 +6589,45 @@
     }
     customElements.define('cpu-stolen-percent', StolenPercent);
 
+    /**
+     * @name CpuCount
+     * @description
+     * @extends HTMLElement
+     * Graph representing CPU Count
+     */
+
+    class CpuCount extends HTMLElement {
+      constructor() {
+        super();
+      }
+      /**
+       * @name connectedCallback
+       * @description
+       * Call back for when the component is attached to the DOM
+       */
+
+
+      connectedCallback() {
+        var defaults = new Defaults();
+        var margin = this.dataset.margin || defaults.margin;
+        var height = (this.dataset.height || defaults.height) - margin.top - margin.bottom;
+        var width = (this.dataset.width || defaults.width) - margin.left - margin.right;
+        var lineColor = this.dataset.lineColor || defaults.lineColor;
+        var unit = this.dataset.unit || 'count';
+        this.innerHTML = "<line-graph data-margin=" + JSON.stringify(margin) + " data-height=" + height + " data-width=" + width + " data-graph=" + this.dataset.graph + " data-line-color=" + lineColor + " data-unit=" + unit + "></lineGraph>";
+      }
+      /**
+       * @name disconnectedCallback
+       * @description
+       * Call back for when the component is detached from the DOM
+       */
+
+
+      disconnectedCallback() {}
+
+    }
+    customElements.define('cpu-count', CpuCount);
+
     exports.Defaults = Defaults;
     exports.LineGraph = LineGraph;
     exports.CpuMaxUsage = CpuMaxUsage;
@@ -6618,6 +6638,7 @@
     exports.MinUsage = MinUsage;
     exports.UserUsage = UserUsage;
     exports.StolenPercent = StolenPercent;
+    exports.CpuCount = CpuCount;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 

@@ -6174,7 +6174,7 @@
       disconnectedCallback() {}
       /**
        * @name parseData
-       * @param {Object} data 
+       * @param {Object} data
        * @description
        * Parses data into an array while converting time to a proper
        * Javascript date object
@@ -6197,7 +6197,7 @@
       }
       /**
        * @name renderGraph
-       * @param {Object} data 
+       * @param {Object} data
        * @description
        * Renders the graph using d3js
        */
@@ -6207,7 +6207,8 @@
         // Setup the margins and height, width
         var margin = JSON.parse(this.dataset.margin);
         var height = this.dataset.height;
-        var width = this.dataset.width; // Setup the svg element in the DOM
+        var width = this.dataset.width;
+        var unit = this.dataset.unit; // Setup the svg element in the DOM
 
         var svg$$1 = select(el).style("width", parseInt(width) + parseInt(margin.left) + parseInt(margin.right)).style("height", parseInt(height) + parseInt(margin.top) + parseInt(margin.bottom)).append('g').attr("transform", "translate(" + margin.left + "," + margin.top + ")"); // Create X time scale
 
@@ -6225,7 +6226,13 @@
 
         svg$$1.append("g").attr("class", "x axis").attr("transform", "translate(0," + height + ")").call(axisBottom(xScale).ticks(data.length));
         svg$$1.append("g").attr("class", "y axis").call(axisLeft(yScale).ticks(data.length).tickFormat(d => {
-          return d * 100 + '%';
+          switch (true) {
+            case unit === 'count':
+              return d;
+
+            default:
+              return d * 100 + '%';
+          }
         }));
         svg$$1.append("path").datum(data).attr("class", "line").attr("d", line$$1).style('stroke-width', 2).style('stroke', this.dataset.lineColor).style('fill', 'none');
       }
@@ -6548,6 +6555,45 @@
     }
     customElements.define('cpu-user-usage', UserUsage);
 
+    /**
+     * @name CpuCount
+     * @description
+     * @extends HTMLElement
+     * Graph representing CPU Count
+     */
+
+    class CpuCount extends HTMLElement {
+      constructor() {
+        super();
+      }
+      /**
+       * @name connectedCallback
+       * @description
+       * Call back for when the component is attached to the DOM
+       */
+
+
+      connectedCallback() {
+        var defaults = new Defaults();
+        var margin = this.dataset.margin || defaults.margin;
+        var height = (this.dataset.height || defaults.height) - margin.top - margin.bottom;
+        var width = (this.dataset.width || defaults.width) - margin.left - margin.right;
+        var lineColor = this.dataset.lineColor || defaults.lineColor;
+        var unit = this.dataset.unit || 'count';
+        this.innerHTML = "<line-graph data-margin=" + JSON.stringify(margin) + " data-height=" + height + " data-width=" + width + " data-graph=" + this.dataset.graph + " data-line-color=" + lineColor + " data-unit=" + unit + "></lineGraph>";
+      }
+      /**
+       * @name disconnectedCallback
+       * @description
+       * Call back for when the component is detached from the DOM
+       */
+
+
+      disconnectedCallback() {}
+
+    }
+    customElements.define('cpu-count', CpuCount);
+
     exports.Defaults = Defaults;
     exports.LineGraph = LineGraph;
     exports.CpuMaxUsage = CpuMaxUsage;
@@ -6557,6 +6603,7 @@
     exports.IrqAverage = IrqAverage;
     exports.MinUsage = MinUsage;
     exports.UserUsage = UserUsage;
+    exports.CpuCount = CpuCount;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 

@@ -7,7 +7,7 @@ import * as d3 from 'd3';
  * Generic line graph component for reusability
  */
 export class LineGraph extends HTMLElement {
- 
+
     constructor() {
         super();
     }
@@ -18,7 +18,7 @@ export class LineGraph extends HTMLElement {
      * Call back for when the component is attached to the DOM
      */
     connectedCallback() {
-        
+
         this.innerHTML = '<svg></svg>';
         var svg = document.querySelector('svg')
 
@@ -36,7 +36,7 @@ export class LineGraph extends HTMLElement {
 
     /**
      * @name parseData
-     * @param {Object} data 
+     * @param {Object} data
      * @description
      * Parses data into an array while converting time to a proper
      * Javascript date object
@@ -56,7 +56,7 @@ export class LineGraph extends HTMLElement {
 
     /**
      * @name renderGraph
-     * @param {Object} data 
+     * @param {Object} data
      * @description
      * Renders the graph using d3js
      */
@@ -66,6 +66,7 @@ export class LineGraph extends HTMLElement {
         var margin = JSON.parse(this.dataset.margin);
         var height = this.dataset.height;
         var width = this.dataset.width;
+        var unit = this.dataset.unit;
 
         // Setup the svg element in the DOM
         var svg = d3.select(el)
@@ -74,7 +75,7 @@ export class LineGraph extends HTMLElement {
             .append('g')
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-        
+
         // Create X time scale
         var xScale = d3.scaleTime()
             .domain([data[0].time, data[data.length - 1].time])
@@ -90,25 +91,30 @@ export class LineGraph extends HTMLElement {
         // Create the line
         var line = d3.line()
             .x((d, i) => {
-                return xScale(d.time); 
+                return xScale(d.time);
             })
-            .y((d) => { 
+            .y((d) => {
                 return yScale(d.value);
             })
-            .curve(d3.curveMonotoneX)
-        
+            .curve(d3.curveMonotoneX);
+
         // Add everything to the SVG
         svg.append("g")
            .attr("class", "x axis")
            .attr("transform", "translate(0," + height + ")")
            .call(d3.axisBottom(xScale).ticks(data.length));
-       
+
        svg.append("g")
            .attr("class", "y axis")
            .call(d3.axisLeft(yScale).ticks(data.length).tickFormat((d) => {
-                return (d * 100) + '%'
+               switch(true) {
+                    case unit === 'count':
+                        return (d);
+                    default:
+                    return (d * 100) + '%';
+               }
            }));
-        
+
         svg.append("path")
             .datum(data)
             .attr("class", "line")

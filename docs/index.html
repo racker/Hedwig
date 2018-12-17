@@ -40,6 +40,7 @@
           <a href="#cpu-max-usage">cpu max usage</a>
           <a href="#cpu-user-usage">cpu user usage</a>
           <a href="#cpu-count">cpu count</a>
+          <a href="#cpu-stolen-percent">cpu stolen percent</a>
         </hx-reveal>
         <!-- end:Product Navigation -->
       </nav>
@@ -603,7 +604,6 @@
                           document.write('<cpu-min-usage data-height="200" data-width="400" data-graph=' + JSON.stringify(mock) + '></cpu-min-usage>');
                       </script>
 
-<<<<<<< HEAD
                       <p>Options</p>
                       <table class='hxTable hxTable--condensed'>
                         <thead>
@@ -713,8 +713,6 @@
                           document.write('<cpu-max-usage data-height="200" data-width="400" data-graph=' + JSON.stringify(mock) + '></cpu-max-usage>');
                       </script>
 
-=======
->>>>>>> cpu_count_graph_MNRVA-56
                       <p>Options</p>
                       <table class='hxTable hxTable--condensed'>
                         <thead>
@@ -948,6 +946,115 @@
                                         <td>no</td>
                                         <td>'count'</td>
                                       </tr>
+                              <tr>
+                                <td>Margin</td>
+                                <td>no</td>
+                                <td>{ top: 50, right: 50, bottom: 50, left: 50 }</td>
+                              </tr>
+                              <tr>
+                                <td>Height</td>
+                                <td>no</td>
+                                <td>200</td>
+                              </tr>
+                              <tr>
+                                <td>Weight</td>
+                                <td>no</td>
+                                <td>600</td>
+                              </tr>
+                              <tr>
+                                  <td>Line Color</td>
+                                  <td>no</td>
+                                  <td>#0c7c84</td>
+                                </tr>
+                            </tbody>
+                          </table>
+                    </div>
+            </div>
+            <div id='cpu-stolen-percent'>
+                    <h3>CPU Stolen Percent</h3>
+                    <div>
+                      <p>
+                        Description:<br><br>
+                        Displays the percentage of the average stolen CPU amount over time
+                      </p>
+                      <br>
+                      <p>
+                        Tag: <br>
+                        <pre><code class='html'>&lt;cpu-stolen-percent data-height="200" data-width="400" data={{ someBoundData }} &gt;&lt;/cpu-stolen-percent&gt;</code></pre>
+                      </p>
+                      <br>
+                      <p>Sample data structure</p>
+                      <pre><code>
+    [{ 
+        "cpu_stolen_percent_average": {
+            "time": "2018-11-24T18:58:21Z",
+            "value": .04
+        }
+    },
+    {
+        "cpu_stolen_percent_average": {
+            "time": "2018-11-25T23:58:21Z",
+            "value": .025
+        }
+    },
+    {
+        "cpu_stolen_percent_average": {
+            "time": "2018-11-26T02:58:21Z",
+            "value": .37
+        }
+    },
+    {
+        "cpu_stolen_percent_average": {
+            "time": "2018-11-27T10:58:21Z",
+            "value": .05
+        }
+    }]    
+                        </code></pre>
+                        <br><br>
+                        <p>
+                            Renders: <br>
+                          </p>
+                          <script>
+                                var mock = [
+                                { 
+                                    "cpu_stolen_percent_average": {
+                                        "time": "2018-11-24T18:58:21Z",
+                                        "value": .04
+                                    }
+                                },
+                                {
+                                    "cpu_stolen_percent_average": {
+                                        "time": "2018-11-25T23:58:21Z",
+                                        "value": .025
+                                    }
+                                },
+                                {
+                                    "cpu_stolen_percent_average": {
+                                        "time": "2018-11-26T02:58:21Z",
+                                        "value": .37
+                                    }
+                                },
+                                {
+                                    "cpu_stolen_percent_average": {
+                                        "time": "2018-11-27T10:58:21Z",
+                                        "value": .05
+                                    }
+                                }
+                                ];
+                  
+                              document.write('<cpu-stolen-percent data-height="200" data-width="400" data-graph=' + JSON.stringify(mock) + '></cpu-stolen-percent>');
+                          </script>
+      
+                          <p>Options</p>
+                          <table class='hxTable hxTable--condensed'>
+                            <thead>
+                              <tr>
+                                <th>Name</th>
+                                <th>Required</th>
+                                <th>Default Value</th>
+                              </tr>
+                            </thead>
+                            <tbody>
                               <tr>
                                 <td>Margin</td>
                                 <td>no</td>

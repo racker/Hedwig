@@ -8,4 +8,5 @@ export { WaitAverage } from './src/components/cpu/wait-average/wait-average';
 export { IrqAverage } from './src/components/cpu/irq-average/irq-average';
 export { MinUsage } from './src/components/cpu/min-usage/min-usage';
 export { UserUsage } from './src/components/cpu/user-usage/user-usage';
+export { StolenPercent } from './src/components/cpu/stolen-percent/stolen-percent';
 export { CpuCount } from './src/components/cpu/cpu-count/cpu-count';

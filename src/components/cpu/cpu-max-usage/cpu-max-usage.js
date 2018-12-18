@@ -12,6 +12,7 @@ export class CpuMaxUsage extends HTMLElement {
         super();
     }
 
+
     /**
      * @name connectedCallback
      * @description
@@ -36,15 +37,19 @@ export class CpuMaxUsage extends HTMLElement {
      */
     render () {
         if (this.graphData && this.defaults) {
-          this.innerHTML = "<line-graph data-margin=" + JSON.stringify(this.defaults.margin) + " data-height=" + this.defaults.height + " data-width=" + this.defaults.width + " data-graph=" + this.graphData + " data-line-color=" + this.defaults.lineColor + "></lineGraph>";
-        }
-      }
+            this.innerHTML = "<line-graph data-margin=" + JSON.stringify(this.defaults.margin) +
+            " data-height=" + this.defaults.height +
+            " data-width=" + this.defaults.width +
+            " data-graph=" + this.graphData +
+            " data-line-color=" + this.defaults.lineColor + "></lineGraph>";
+          }
+    }
 
-      /**
-       * @name dataPoints
-       * @description Sets datapoints this.graphdata
-       * @param {string} data This param is stringified JSON data setting
-       */
+    /**
+     * @name dataPoints
+     * @description Sets datapoints this.graphdata
+     * @param {string} data This param is stringified JSON data setting
+     */
     dataPoints(data){
         this.graphData = data;
     }
@@ -52,7 +57,7 @@ export class CpuMaxUsage extends HTMLElement {
     /**
      * @name disconnectedCallback
      * @description
-     * Call back for when the component is detached from the DOM.
+     * Call back for when the component is detached from the DOM
      */
     disconnectedCallback() {}
 

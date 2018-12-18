@@ -6289,7 +6289,7 @@
       /**
        * @name disconnectedCallback
        * @description
-       * Call back for when the component is detached from the DOM.
+       * Call back for when the component is detached from the DOM
        */
 
 
@@ -6342,12 +6342,36 @@
 
 
       connectedCallback() {
+        this.defaults = {};
         var defaults = new Defaults();
-        var margin = this.dataset.margin || defaults.margin;
-        var height = (this.dataset.height || defaults.graphHeight) - margin.top - margin.bottom;
-        var width = (this.dataset.width || defaults.graphWidth) - margin.left - margin.right;
-        var lineColor = this.dataset.lineColor || defaults.lineColor;
-        this.innerHTML = "<line-graph data-margin=" + JSON.stringify(margin) + " data-height=" + height + " data-width=" + width + " data-graph=" + this.dataset.graph + " data-line-color=" + lineColor + "></lineGraph>";
+        this.defaults.margin = this.dataset.margin || defaults.margin;
+        this.defaults.height = (this.dataset.height || defaults.graphHeight) - this.defaults.margin.top - this.defaults.margin.bottom;
+        this.defaults.width = (this.dataset.width || defaults.graphWidth) - this.defaults.margin.left - this.defaults.margin.right;
+        this.defaults.lineColor = this.dataset.lineColor || defaults.lineColor;
+        this.render();
+      }
+      /**
+       * @name render
+       * @description
+       * Kicks off the render process after attribute value has been set & connectedcallback has run.
+       * @param {string} data this param is collected from the data-graph attribute
+       */
+
+
+      render() {
+        if (this.graphData && this.defaults) {
+          this.innerHTML = "<line-graph data-margin=" + JSON.stringify(this.defaults.margin) + " data-height=" + this.defaults.height + " data-width=" + this.defaults.width + " data-graph=" + this.graphData + " data-line-color=" + this.defaults.lineColor + "></lineGraph>";
+        }
+      }
+      /**
+       * @name dataPoints
+       * @description Sets datapoints this.graphdata
+       * @param {string} data This param is stringified JSON data setting
+       */
+
+
+      dataPoints(data) {
+        this.graphData = data;
       }
       /**
        * @name disconnectedCallback
@@ -6357,6 +6381,31 @@
 
 
       disconnectedCallback() {}
+      /**
+       * @name observedAttributes
+       * @description Sets what attributes this component will listen for.
+       * @returns {Array} an array of attribute to watch for value changes
+       */
+
+
+      static get observedAttributes() {
+        return ['data-graph'];
+      }
+      /**
+       * @name attributeChangedCallback
+       * @description This callback is fired when attribute values change for
+       * @param {string} name attribute name
+       * @param {any} oldValue original value upon page load, will most of the time be blank
+       * @param {any} newValue new value bound to the attribute
+       */
+
+
+      attributeChangedCallback(name, oldValue, newValue) {
+        if (newValue && name === "data-graph") {
+          this.dataPoints(newValue);
+          this.render();
+        }
+      }
 
     }
     customElements.define('cpu-system-usage', SystemUsage);
@@ -6380,12 +6429,36 @@
 
 
       connectedCallback() {
+        this.defaults = {};
         var defaults = new Defaults();
-        var margin = this.dataset.margin || defaults.margin;
-        var height = (this.dataset.height || defaults.graphHeight) - margin.top - margin.bottom;
-        var width = (this.dataset.width || defaults.graphWidth) - margin.left - margin.right;
-        var lineColor = this.dataset.lineColor || defaults.lineColor;
-        this.innerHTML = "<line-graph data-margin=" + JSON.stringify(margin) + " data-height=" + height + " data-width=" + width + " data-graph=" + this.dataset.graph + " data-line-color=" + lineColor + "></lineGraph>";
+        this.defaults.margin = this.dataset.margin || defaults.margin;
+        this.defaults.height = (this.dataset.height || defaults.graphHeight) - this.defaults.margin.top - this.defaults.margin.bottom;
+        this.defaults.width = (this.dataset.width || defaults.graphWidth) - this.defaults.margin.left - this.defaults.margin.right;
+        this.defaults.lineColor = this.dataset.lineColor || defaults.lineColor;
+        this.render();
+      }
+      /**
+       * @name render
+       * @description
+       * Kicks off the render process after attribute value has been set & connectedcallback has run.
+       * @param {string} data this param is collected from the data-graph attribute
+       */
+
+
+      render() {
+        if (this.graphData && this.defaults) {
+          this.innerHTML = "<line-graph data-margin=" + JSON.stringify(this.defaults.margin) + " data-height=" + this.defaults.height + " data-width=" + this.defaults.width + " data-graph=" + this.graphData + " data-line-color=" + this.defaults.lineColor + "></lineGraph>";
+        }
+      }
+      /**
+       * @name dataPoints
+       * @description Sets datapoints this.graphdata
+       * @param {string} data This param is stringified JSON data setting
+       */
+
+
+      dataPoints(data) {
+        this.graphData = data;
       }
       /**
        * @name disconnectedCallback
@@ -6395,6 +6468,31 @@
 
 
       disconnectedCallback() {}
+      /**
+       * @name observedAttributes
+       * @description Sets what attributes this component will listen for.
+       * @returns {Array} an array of attribute to watch for value changes
+       */
+
+
+      static get observedAttributes() {
+        return ['data-graph'];
+      }
+      /**
+       * @name attributeChangedCallback
+       * @description This callback is fired when attribute values change for
+       * @param {string} name attribute name
+       * @param {any} oldValue original value upon page load, will most of the time be blank
+       * @param {any} newValue new value bound to the attribute
+       */
+
+
+      attributeChangedCallback(name, oldValue, newValue) {
+        if (newValue && name === "data-graph") {
+          this.dataPoints(newValue);
+          this.render();
+        }
+      }
 
     }
     customElements.define('cpu-average-usage', AverageUsage);
@@ -6418,12 +6516,36 @@
 
 
       connectedCallback() {
+        this.defaults = {};
         var defaults = new Defaults();
-        var margin = this.dataset.margin || defaults.margin;
-        var height = (this.dataset.height || defaults.graphHeight) - margin.top - margin.bottom;
-        var width = (this.dataset.width || defaults.graphWidth) - margin.left - margin.right;
-        var lineColor = this.dataset.lineColor || defaults.lineColor;
-        this.innerHTML = "<line-graph data-margin=" + JSON.stringify(margin) + " data-height=" + height + " data-width=" + width + " data-graph=" + this.dataset.graph + " data-line-color=" + lineColor + "></lineGraph>";
+        this.defaults.margin = this.dataset.margin || defaults.margin;
+        this.defaults.height = (this.dataset.height || defaults.graphHeight) - this.defaults.margin.top - this.defaults.margin.bottom;
+        this.defaults.width = (this.dataset.width || defaults.graphWidth) - this.defaults.margin.left - this.defaults.margin.right;
+        this.defaults.lineColor = this.dataset.lineColor || defaults.lineColor;
+        this.render();
+      }
+      /**
+       * @name render
+       * @description
+       * Kicks off the render process after attribute value has been set & connectedcallback has run.
+       * @param {string} data this param is collected from the data-graph attribute
+       */
+
+
+      render() {
+        if (this.graphData && this.defaults) {
+          this.innerHTML = "<line-graph data-margin=" + JSON.stringify(this.defaults.margin) + " data-height=" + this.defaults.height + " data-width=" + this.defaults.width + " data-graph=" + this.graphData + " data-line-color=" + this.defaults.lineColor + "></lineGraph>";
+        }
+      }
+      /**
+       * @name dataPoints
+       * @description Sets datapoints this.graphdata
+       * @param {string} data This param is stringified JSON data setting
+       */
+
+
+      dataPoints(data) {
+        this.graphData = data;
       }
       /**
        * @name disconnectedCallback
@@ -6433,6 +6555,31 @@
 
 
       disconnectedCallback() {}
+      /**
+       * @name observedAttributes
+       * @description Sets what attributes this component will listen for.
+       * @returns {Array} an array of attribute to watch for value changes
+       */
+
+
+      static get observedAttributes() {
+        return ['data-graph'];
+      }
+      /**
+       * @name attributeChangedCallback
+       * @description This callback is fired when attribute values change for
+       * @param {string} name attribute name
+       * @param {any} oldValue original value upon page load, will most of the time be blank
+       * @param {any} newValue new value bound to the attribute
+       */
+
+
+      attributeChangedCallback(name, oldValue, newValue) {
+        if (newValue && name === "data-graph") {
+          this.dataPoints(newValue);
+          this.render();
+        }
+      }
 
     }
     customElements.define('cpu-wait-average', WaitAverage);
@@ -6456,12 +6603,36 @@
 
 
       connectedCallback() {
+        this.defaults = {};
         var defaults = new Defaults();
-        var margin = this.dataset.margin || defaults.margin;
-        var height = (this.dataset.height || defaults.graphHeight) - margin.top - margin.bottom;
-        var width = (this.dataset.width || defaults.graphWidth) - margin.left - margin.right;
-        var lineColor = this.dataset.lineColor || defaults.lineColor;
-        this.innerHTML = "<line-graph data-margin=" + JSON.stringify(margin) + " data-height=" + height + " data-width=" + width + " data-graph=" + this.dataset.graph + " data-line-color=" + lineColor + "></lineGraph>";
+        this.defaults.margin = this.dataset.margin || defaults.margin;
+        this.defaults.height = (this.dataset.height || defaults.graphHeight) - this.defaults.margin.top - this.defaults.margin.bottom;
+        this.defaults.width = (this.dataset.width || defaults.graphWidth) - this.defaults.margin.left - this.defaults.margin.right;
+        this.defaults.lineColor = this.dataset.lineColor || defaults.lineColor;
+        this.render();
+      }
+      /**
+       * @name render
+       * @description
+       * Kicks off the render process after attribute value has been set & connectedcallback has run.
+       * @param {string} data this param is collected from the data-graph attribute
+       */
+
+
+      render() {
+        if (this.graphData && this.defaults) {
+          this.innerHTML = "<line-graph data-margin=" + JSON.stringify(this.defaults.margin) + " data-height=" + this.defaults.height + " data-width=" + this.defaults.width + " data-graph=" + this.graphData + " data-line-color=" + this.defaults.lineColor + "></lineGraph>";
+        }
+      }
+      /**
+       * @name dataPoints
+       * @description Sets datapoints this.graphdata
+       * @param {string} data This param is stringified JSON data setting
+       */
+
+
+      dataPoints(data) {
+        this.graphData = data;
       }
       /**
        * @name disconnectedCallback
@@ -6471,6 +6642,31 @@
 
 
       disconnectedCallback() {}
+      /**
+       * @name observedAttributes
+       * @description Sets what attributes this component will listen for.
+       * @returns {Array} an array of attribute to watch for value changes
+       */
+
+
+      static get observedAttributes() {
+        return ['data-graph'];
+      }
+      /**
+       * @name attributeChangedCallback
+       * @description This callback is fired when attribute values change for
+       * @param {string} name attribute name
+       * @param {any} oldValue original value upon page load, will most of the time be blank
+       * @param {any} newValue new value bound to the attribute
+       */
+
+
+      attributeChangedCallback(name, oldValue, newValue) {
+        if (newValue && name === "data-graph") {
+          this.dataPoints(newValue);
+          this.render();
+        }
+      }
 
     }
     customElements.define('cpu-irq-average', IrqAverage);
@@ -6494,12 +6690,36 @@
 
 
       connectedCallback() {
+        this.defaults = {};
         var defaults = new Defaults();
-        var margin = this.dataset.margin || defaults.margin;
-        var height = (this.dataset.height || defaults.graphHeight) - margin.top - margin.bottom;
-        var width = (this.dataset.width || defaults.graphWidth) - margin.left - margin.right;
-        var lineColor = this.dataset.lineColor || defaults.lineColor;
-        this.innerHTML = "<line-graph data-margin=" + JSON.stringify(margin) + " data-height=" + height + " data-width=" + width + " data-graph=" + this.dataset.graph + " data-line-color=" + lineColor + "></lineGraph>";
+        this.defaults.margin = this.dataset.margin || defaults.margin;
+        this.defaults.height = (this.dataset.height || defaults.graphHeight) - this.defaults.margin.top - this.defaults.margin.bottom;
+        this.defaults.width = (this.dataset.width || defaults.graphWidth) - this.defaults.margin.left - this.defaults.margin.right;
+        this.defaults.lineColor = this.dataset.lineColor || defaults.lineColor;
+        this.render();
+      }
+      /**
+       * @name render
+       * @description
+       * Kicks off the render process after attribute value has been set & connectedcallback has run.
+       * @param {string} data this param is collected from the data-graph attribute
+       */
+
+
+      render() {
+        if (this.graphData && this.defaults) {
+          this.innerHTML = "<line-graph data-margin=" + JSON.stringify(this.defaults.margin) + " data-height=" + this.defaults.height + " data-width=" + this.defaults.width + " data-graph=" + this.graphData + " data-line-color=" + this.defaults.lineColor + "></lineGraph>";
+        }
+      }
+      /**
+       * @name dataPoints
+       * @description Sets datapoints this.graphdata
+       * @param {string} data This param is stringified JSON data setting
+       */
+
+
+      dataPoints(data) {
+        this.graphData = data;
       }
       /**
        * @name disconnectedCallback
@@ -6509,6 +6729,31 @@
 
 
       disconnectedCallback() {}
+      /**
+       * @name observedAttributes
+       * @description Sets what attributes this component will listen for.
+       * @returns {Array} an array of attribute to watch for value changes
+       */
+
+
+      static get observedAttributes() {
+        return ['data-graph'];
+      }
+      /**
+       * @name attributeChangedCallback
+       * @description This callback is fired when attribute values change for
+       * @param {string} name attribute name
+       * @param {any} oldValue original value upon page load, will most of the time be blank
+       * @param {any} newValue new value bound to the attribute
+       */
+
+
+      attributeChangedCallback(name, oldValue, newValue) {
+        if (newValue && name === "data-graph") {
+          this.dataPoints(newValue);
+          this.render();
+        }
+      }
 
     }
     customElements.define('cpu-min-usage', MinUsage);
@@ -6532,12 +6777,36 @@
 
 
       connectedCallback() {
+        this.defaults = {};
         var defaults = new Defaults();
-        var margin = this.dataset.margin || defaults.margin;
-        var height = (this.dataset.height || defaults.graphHeight) - margin.top - margin.bottom;
-        var width = (this.dataset.width || defaults.graphWidth) - margin.left - margin.right;
-        var lineColor = this.dataset.lineColor || defaults.lineColor;
-        this.innerHTML = "<line-graph data-margin=" + JSON.stringify(margin) + " data-height=" + height + " data-width=" + width + " data-graph=" + this.dataset.graph + " data-line-color=" + lineColor + "></lineGraph>";
+        this.defaults.margin = this.dataset.margin || defaults.margin;
+        this.defaults.height = (this.dataset.height || defaults.graphHeight) - this.defaults.margin.top - this.defaults.margin.bottom;
+        this.defaults.width = (this.dataset.width || defaults.graphWidth) - this.defaults.margin.left - this.defaults.margin.right;
+        this.defaults.lineColor = this.dataset.lineColor || defaults.lineColor;
+        this.render();
+      }
+      /**
+       * @name render
+       * @description
+       * Kicks off the render process after attribute value has been set & connectedcallback has run.
+       * @param {string} data this param is collected from the data-graph attribute
+       */
+
+
+      render() {
+        if (this.graphData && this.defaults) {
+          this.innerHTML = "<line-graph data-margin=" + JSON.stringify(this.defaults.margin) + " data-height=" + this.defaults.height + " data-width=" + this.defaults.width + " data-graph=" + this.graphData + " data-line-color=" + this.defaults.lineColor + "></lineGraph>";
+        }
+      }
+      /**
+       * @name dataPoints
+       * @description Sets datapoints this.graphdata
+       * @param {string} data This param is stringified JSON data setting
+       */
+
+
+      dataPoints(data) {
+        this.graphData = data;
       }
       /**
        * @name disconnectedCallback
@@ -6547,6 +6816,31 @@
 
 
       disconnectedCallback() {}
+      /**
+       * @name observedAttributes
+       * @description Sets what attributes this component will listen for.
+       * @returns {Array} an array of attribute to watch for value changes
+       */
+
+
+      static get observedAttributes() {
+        return ['data-graph'];
+      }
+      /**
+       * @name attributeChangedCallback
+       * @description This callback is fired when attribute values change for
+       * @param {string} name attribute name
+       * @param {any} oldValue original value upon page load, will most of the time be blank
+       * @param {any} newValue new value bound to the attribute
+       */
+
+
+      attributeChangedCallback(name, oldValue, newValue) {
+        if (newValue && name === "data-graph") {
+          this.dataPoints(newValue);
+          this.render();
+        }
+      }
 
     }
     customElements.define('cpu-user-usage', UserUsage);
@@ -6570,12 +6864,36 @@
 
 
       connectedCallback() {
+        this.defaults = {};
         var defaults = new Defaults();
-        var margin = this.dataset.margin || defaults.margin;
-        var height = (this.dataset.height || defaults.graphHeight) - margin.top - margin.bottom;
-        var width = (this.dataset.width || defaults.graphWidth) - margin.left - margin.right;
-        var lineColor = this.dataset.lineColor || defaults.lineColor;
-        this.innerHTML = "<line-graph data-margin=" + JSON.stringify(margin) + " data-height=" + height + " data-width=" + width + " data-graph=" + this.dataset.graph + " data-line-color=" + lineColor + "></lineGraph>";
+        this.defaults.margin = this.dataset.margin || defaults.margin;
+        this.defaults.height = (this.dataset.height || defaults.graphHeight) - this.defaults.margin.top - this.defaults.margin.bottom;
+        this.defaults.width = (this.dataset.width || defaults.graphWidth) - this.defaults.margin.left - this.defaults.margin.right;
+        this.defaults.lineColor = this.dataset.lineColor || defaults.lineColor;
+        this.render();
+      }
+      /**
+       * @name render
+       * @description
+       * Kicks off the render process after attribute value has been set & connectedcallback has run.
+       * @param {string} data this param is collected from the data-graph attribute
+       */
+
+
+      render() {
+        if (this.graphData && this.defaults) {
+          this.innerHTML = "<line-graph data-margin=" + JSON.stringify(this.defaults.margin) + " data-height=" + this.defaults.height + " data-width=" + this.defaults.width + " data-graph=" + this.graphData + " data-line-color=" + this.defaults.lineColor + "></lineGraph>";
+        }
+      }
+      /**
+       * @name dataPoints
+       * @description Sets datapoints this.graphdata
+       * @param {string} data This param is stringified JSON data setting
+       */
+
+
+      dataPoints(data) {
+        this.graphData = data;
       }
       /**
        * @name disconnectedCallback
@@ -6585,6 +6903,31 @@
 
 
       disconnectedCallback() {}
+      /**
+       * @name observedAttributes
+       * @description Sets what attributes this component will listen for.
+       * @returns {Array} an array of attribute to watch for value changes
+       */
+
+
+      static get observedAttributes() {
+        return ['data-graph'];
+      }
+      /**
+       * @name attributeChangedCallback
+       * @description This callback is fired when attribute values change for
+       * @param {string} name attribute name
+       * @param {any} oldValue original value upon page load, will most of the time be blank
+       * @param {any} newValue new value bound to the attribute
+       */
+
+
+      attributeChangedCallback(name, oldValue, newValue) {
+        if (newValue && name === "data-graph") {
+          this.dataPoints(newValue);
+          this.render();
+        }
+      }
 
     }
     customElements.define('cpu-stolen-percent', StolenPercent);
@@ -6608,13 +6951,36 @@
 
 
       connectedCallback() {
+        this.defaults = {};
         var defaults = new Defaults();
-        var margin = this.dataset.margin || defaults.margin;
-        var height = (this.dataset.height || defaults.graphHeight) - margin.top - margin.bottom;
-        var width = (this.dataset.width || defaults.graphWidth) - margin.left - margin.right;
-        var lineColor = this.dataset.lineColor || defaults.lineColor;
-        var unit = this.dataset.unit || 'count';
-        this.innerHTML = "<line-graph data-margin=" + JSON.stringify(margin) + " data-height=" + height + " data-width=" + width + " data-graph=" + this.dataset.graph + " data-line-color=" + lineColor + " data-unit=" + unit + "></lineGraph>";
+        this.defaults.margin = this.dataset.margin || defaults.margin;
+        this.defaults.height = (this.dataset.height || defaults.graphHeight) - this.defaults.margin.top - this.defaults.margin.bottom;
+        this.defaults.width = (this.dataset.width || defaults.graphWidth) - this.defaults.margin.left - this.defaults.margin.right;
+        this.defaults.lineColor = this.dataset.lineColor || defaults.lineColor;
+        this.render();
+      }
+      /**
+       * @name render
+       * @description
+       * Kicks off the render process after attribute value has been set & connectedcallback has run.
+       * @param {string} data this param is collected from the data-graph attribute
+       */
+
+
+      render() {
+        if (this.graphData && this.defaults) {
+          this.innerHTML = "<line-graph data-margin=" + JSON.stringify(this.defaults.margin) + " data-height=" + this.defaults.height + " data-width=" + this.defaults.width + " data-graph=" + this.graphData + " data-line-color=" + this.defaults.lineColor + "></lineGraph>";
+        }
+      }
+      /**
+       * @name dataPoints
+       * @description Sets datapoints this.graphdata
+       * @param {string} data This param is stringified JSON data setting
+       */
+
+
+      dataPoints(data) {
+        this.graphData = data;
       }
       /**
        * @name disconnectedCallback
@@ -6624,6 +6990,31 @@
 
 
       disconnectedCallback() {}
+      /**
+       * @name observedAttributes
+       * @description Sets what attributes this component will listen for.
+       * @returns {Array} an array of attribute to watch for value changes
+       */
+
+
+      static get observedAttributes() {
+        return ['data-graph'];
+      }
+      /**
+       * @name attributeChangedCallback
+       * @description This callback is fired when attribute values change for
+       * @param {string} name attribute name
+       * @param {any} oldValue original value upon page load, will most of the time be blank
+       * @param {any} newValue new value bound to the attribute
+       */
+
+
+      attributeChangedCallback(name, oldValue, newValue) {
+        if (newValue && name === "data-graph") {
+          this.dataPoints(newValue);
+          this.render();
+        }
+      }
 
     }
     customElements.define('cpu-count', CpuCount);

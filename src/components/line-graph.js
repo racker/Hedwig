@@ -110,7 +110,7 @@ export class LineGraph extends HTMLElement {
                     case unit === 'count':
                         return (d);
                     default:
-                    return (d * 100) + '%';
+                        return (d * 100) + '%';
                }
            }));
 

@@ -21,8 +21,8 @@ export class SystemUsage extends HTMLElement {
     connectedCallback() {
         var defaults = new Defaults();
         var margin = this.dataset.margin || defaults.margin;
-        var height = (this.dataset.height || defaults.height) - margin.top - margin.bottom;
-        var width = (this.dataset.width || defaults.width) - margin.left - margin.right;
+        var height = (this.dataset.height || defaults.graphHeight) - margin.top - margin.bottom;
+        var width = (this.dataset.width || defaults.graphWidth) - margin.left - margin.right;
         var lineColor = this.dataset.lineColor || defaults.lineColor;
 
         

@@ -1,12 +1,12 @@
 import { Defaults } from "../../defaults";
 
 /**
- * @name CpuMaxUsage
+ * @name IdlePercent
  * @description Percentage utilization of the most-utilized CPU
  * @extends HTMLElement
  * Graph representing CPU Max Usage
  */
-export class CpuMaxUsage extends HTMLElement {
+export class IdlePercent extends HTMLElement {
 
     constructor() {
         super();
@@ -36,7 +36,13 @@ export class CpuMaxUsage extends HTMLElement {
      */
     render () {
         if (this.graphData && this.defaults) {
-          this.innerHTML = "<line-graph data-margin=" + JSON.stringify(this.defaults.margin) + " data-height=" + this.defaults.height + " data-width=" + this.defaults.width + " data-graph=" + this.graphData + " data-line-color=" + this.defaults.lineColor + "></lineGraph>";
+          this.innerHTML = "<line-graph data-margin=" + 
+            JSON.stringify(this.defaults.margin) + 
+            " data-height=" + this.defaults.height + 
+            " data-width=" + this.defaults.width + 
+            " data-graph=" + this.graphData + 
+            " data-line-color=" + this.defaults.lineColor + 
+            "></lineGraph>";
         }
       }
 
@@ -80,4 +86,4 @@ export class CpuMaxUsage extends HTMLElement {
     }
 }
 
-customElements.define('cpu-max-usage', CpuMaxUsage);
+customElements.define('cpu-idle-percent', IdlePercent);

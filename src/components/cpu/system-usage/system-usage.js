@@ -13,7 +13,7 @@ export class SystemUsage extends HTMLElement {
 
     }
 
-   /**
+    /**
      * @name connectedCallback
      * @description
      * Call back for when the component is attached to the DOM
@@ -22,8 +22,8 @@ export class SystemUsage extends HTMLElement {
         this.defaults = {};
         var defaults = new Defaults();
         this.defaults.margin = this.dataset.margin || defaults.margin;
-        this.defaults.height = (this.dataset.height || defaults.height) - this.defaults.margin.top - this.defaults.margin.bottom;
-        this.defaults.width = (this.dataset.width || defaults.width) - this.defaults.margin.left - this.defaults.margin.right;
+        this.defaults.height = (this.dataset.height || defaults.graphHeight) - this.defaults.margin.top - this.defaults.margin.bottom;
+        this.defaults.width = (this.dataset.width || defaults.graphWidth) - this.defaults.margin.left - this.defaults.margin.right;
         this.defaults.lineColor = this.dataset.lineColor || defaults.lineColor;
 
         this.render();

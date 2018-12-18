@@ -21,8 +21,8 @@ export class UserUsage extends HTMLElement {
         this.defaults = {};
         var defaults = new Defaults();
         this.defaults.margin = this.dataset.margin || defaults.margin;
-        this.defaults.height = (this.dataset.height || defaults.height) - this.defaults.margin.top - this.defaults.margin.bottom;
-        this.defaults.width = (this.dataset.width || defaults.width) - this.defaults.margin.left - this.defaults.margin.right;
+        this.defaults.height = (this.dataset.height || defaults.graphHeight) - this.defaults.margin.top - this.defaults.margin.bottom;
+        this.defaults.width = (this.dataset.width || defaults.graphWidth) - this.defaults.margin.left - this.defaults.margin.right;
         this.defaults.lineColor = this.dataset.lineColor || defaults.lineColor;
 
         this.render();
@@ -36,8 +36,12 @@ export class UserUsage extends HTMLElement {
      */
     render () {
         if (this.graphData && this.defaults) {
-          this.innerHTML = "<line-graph data-margin=" + JSON.stringify(this.defaults.margin) + " data-height=" + this.defaults.height + " data-width=" + this.defaults.width + " data-graph=" + this.graphData + " data-line-color=" + this.defaults.lineColor + "></lineGraph>";
-        }
+            this.innerHTML = "<line-graph data-margin=" + JSON.stringify(this.defaults.margin) +
+            " data-height=" + this.defaults.height +
+            " data-width=" + this.defaults.width +
+            " data-graph=" + this.graphData +
+            " data-line-color=" + this.defaults.lineColor + "></lineGraph>";
+          }
     }
 
     /**

@@ -37,8 +37,12 @@ export class SystemUsage extends HTMLElement {
      */
     render () {
         if (this.graphData && this.defaults) {
-          this.innerHTML = "<line-graph data-margin=" + JSON.stringify(this.defaults.margin) + " data-height=" + this.defaults.height + " data-width=" + this.defaults.width + " data-graph=" + this.graphData + " data-line-color=" + this.defaults.lineColor + "></lineGraph>";
-        }
+            this.innerHTML = "<line-graph data-margin=" + JSON.stringify(this.defaults.margin) +
+            " data-height=" + this.defaults.height +
+            " data-width=" + this.defaults.width +
+            " data-graph=" + this.graphData +
+            " data-line-color=" + this.defaults.lineColor + "></lineGraph>";
+          }
     }
 
     /**

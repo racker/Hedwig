@@ -18,13 +18,27 @@ export class LineGraph extends HTMLElement {
      * Call back for when the component is attached to the DOM
      */
     connectedCallback() {
-
         this.innerHTML = '<svg></svg>';
         var svg = document.querySelector('svg')
+        var data = JSON.parse(this.dataset.graph);
 
         this.attachShadow({ mode: 'open' });
         this.shadowRoot.appendChild(svg);
-        this.renderGraph(this.parseData(this.dataset.graph), svg);
+        this.renderGraph(this.parseData(data), svg);
+    }
+
+    /**
+     * @name parseData
+     * @param {Object} data
+     * @description
+     * Parses data so that dates are javascript date objects
+     * which is required for d3js
+     */
+    parseData(data) {
+        for (var i = 0; i < data.length; i++) {
+            data[i].time = new Date(data[i].time);
+        }
+        return data;
     }
 
     /**
@@ -35,33 +49,12 @@ export class LineGraph extends HTMLElement {
     disconnectedCallback() {}
 
     /**
-     * @name parseData
-     * @param {Object} data
-     * @description
-     * Parses data into an array while converting time to a proper
-     * Javascript date object
-     */
-    parseData(data) {
-        data = JSON.parse(data);
-        var results = [];
-        for (var i = 0; i < data.length; i++) {
-            var item = {};
-            var key = Object.keys(data[i])[0];
-            item.time = new Date(data[i][key].time);
-            item.value = data[i][key].value;
-            results.push(item);
-        }
-        return results;
-    }
-
-    /**
      * @name renderGraph
      * @param {Object} data
      * @description
      * Renders the graph using d3js
      */
     renderGraph(data, el) {
-
         // Setup the margins and height, width
         var margin = JSON.parse(this.dataset.margin);
         var height = this.dataset.height;
@@ -103,7 +96,7 @@ export class LineGraph extends HTMLElement {
            .attr("transform", "translate(0," + height + ")")
            .call(d3.axisBottom(xScale).ticks(data.length));
 
-       svg.append("g")
+        svg.append("g")
            .attr("class", "y axis")
            .call(d3.axisLeft(yScale).ticks(data.length).tickFormat((d) => {
                switch(true) {

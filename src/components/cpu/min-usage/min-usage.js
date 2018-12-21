@@ -29,6 +29,24 @@ export class MinUsage extends HTMLElement {
     }
 
     /**
+     * @name parseData
+     * @param {Object} data
+     * @description
+     * Parses data into an array while converting stripping the 
+     * measurement key
+     */
+    parseData(data) {
+        data = JSON.parse(data);
+ 
+        var results = [];
+        for (var i = 0; i < data.length; i++) {
+            var item = data[i].cpu_min_cpu_usage;
+            results.push(item);
+        }
+        return results;
+    }
+
+    /**
      * @name render
      * @description
      * Kicks off the render process after attribute value has been set & connectedcallback has run.
@@ -39,7 +57,7 @@ export class MinUsage extends HTMLElement {
             this.innerHTML = "<line-graph data-margin=" + JSON.stringify(this.defaults.margin) +
             " data-height=" + this.defaults.height +
             " data-width=" + this.defaults.width +
-            " data-graph=" + this.graphData +
+            " data-graph=" + JSON.stringify(this.graphData) +
             " data-line-color=" + this.defaults.lineColor + "></lineGraph>";
           }
     }
@@ -50,7 +68,7 @@ export class MinUsage extends HTMLElement {
      * @param {string} data This param is stringified JSON data setting
      */
     dataPoints(data){
-        this.graphData = data;
+        this.graphData = this.parseData(data);
     }
 
     /**

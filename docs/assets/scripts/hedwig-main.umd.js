@@ -6154,11 +6154,28 @@
       connectedCallback() {
         this.innerHTML = '<svg></svg>';
         var svg$$1 = document.querySelector('svg');
+        var data = JSON.parse(this.dataset.graph);
         this.attachShadow({
           mode: 'open'
         });
         this.shadowRoot.appendChild(svg$$1);
-        this.renderGraph(this.parseData(this.dataset.graph), svg$$1);
+        this.renderGraph(this.parseData(data), svg$$1);
+      }
+      /**
+       * @name parseData
+       * @param {Object} data
+       * @description
+       * Parses data so that dates are javascript date objects
+       * which is required for d3js
+       */
+
+
+      parseData(data) {
+        for (var i = 0; i < data.length; i++) {
+          data[i].time = new Date(data[i].time);
+        }
+
+        return data;
       }
       /**
        * @name disconnectedCallback
@@ -6168,29 +6185,6 @@
 
 
       disconnectedCallback() {}
-      /**
-       * @name parseData
-       * @param {Object} data
-       * @description
-       * Parses data into an array while converting time to a proper
-       * Javascript date object
-       */
-
-
-      parseData(data) {
-        data = JSON.parse(data);
-        var results = [];
-
-        for (var i = 0; i < data.length; i++) {
-          var item = {};
-          var key = Object.keys(data[i])[0];
-          item.time = new Date(data[i][key].time);
-          item.value = data[i][key].value;
-          results.push(item);
-        }
-
-        return results;
-      }
       /**
        * @name renderGraph
        * @param {Object} data
@@ -6264,6 +6258,26 @@
         this.render();
       }
       /**
+       * @name parseData
+       * @param {Object} data
+       * @description
+       * Parses data into an array while converting stripping the 
+       * measurement key
+       */
+
+
+      parseData(data) {
+        data = JSON.parse(data);
+        var results = [];
+
+        for (var i = 0; i < data.length; i++) {
+          var item = data[i].cpu_max_cpu_usage;
+          results.push(item);
+        }
+
+        return results;
+      }
+      /**
        * @name render
        * @description
        * Kicks off the render process after attribute value has been set & connectedcallback has run.
@@ -6273,7 +6287,7 @@
 
       render() {
         if (this.graphData && this.defaults) {
-          this.innerHTML = "<line-graph data-margin=" + JSON.stringify(this.defaults.margin) + " data-height=" + this.defaults.height + " data-width=" + this.defaults.width + " data-graph=" + this.graphData + " data-line-color=" + this.defaults.lineColor + "></lineGraph>";
+          this.innerHTML = "<line-graph data-margin=" + JSON.stringify(this.defaults.margin) + " data-height=" + this.defaults.height + " data-width=" + this.defaults.width + " data-graph=" + JSON.stringify(this.graphData) + " data-line-color=" + this.defaults.lineColor + "></lineGraph>";
         }
       }
       /**
@@ -6284,7 +6298,7 @@
 
 
       dataPoints(data) {
-        this.graphData = data;
+        this.graphData = this.parseData(data);
       }
       /**
        * @name disconnectedCallback
@@ -6351,6 +6365,26 @@
         this.render();
       }
       /**
+       * @name parseData
+       * @param {Object} data
+       * @description
+       * Parses data into an array while converting stripping the 
+       * measurement key
+       */
+
+
+      parseData(data) {
+        data = JSON.parse(data);
+        var results = [];
+
+        for (var i = 0; i < data.length; i++) {
+          var item = data[i].cpu_sys_percent_average;
+          results.push(item);
+        }
+
+        return results;
+      }
+      /**
        * @name render
        * @description
        * Kicks off the render process after attribute value has been set & connectedcallback has run.
@@ -6360,7 +6394,7 @@
 
       render() {
         if (this.graphData && this.defaults) {
-          this.innerHTML = "<line-graph data-margin=" + JSON.stringify(this.defaults.margin) + " data-height=" + this.defaults.height + " data-width=" + this.defaults.width + " data-graph=" + this.graphData + " data-line-color=" + this.defaults.lineColor + "></lineGraph>";
+          this.innerHTML = "<line-graph data-margin=" + JSON.stringify(this.defaults.margin) + " data-height=" + this.defaults.height + " data-width=" + this.defaults.width + " data-graph=" + JSON.stringify(this.graphData) + " data-line-color=" + this.defaults.lineColor + "></lineGraph>";
         }
       }
       /**
@@ -6371,7 +6405,7 @@
 
 
       dataPoints(data) {
-        this.graphData = data;
+        this.graphData = this.parseData(data);
       }
       /**
        * @name disconnectedCallback
@@ -6438,6 +6472,26 @@
         this.render();
       }
       /**
+       * @name parseData
+       * @param {Object} data
+       * @description
+       * Parses data into an array while converting stripping the 
+       * measurement key
+       */
+
+
+      parseData(data) {
+        data = JSON.parse(data);
+        var results = [];
+
+        for (var i = 0; i < data.length; i++) {
+          var item = data[i].cpu_usage_average;
+          results.push(item);
+        }
+
+        return results;
+      }
+      /**
        * @name render
        * @description
        * Kicks off the render process after attribute value has been set & connectedcallback has run.
@@ -6447,7 +6501,7 @@
 
       render() {
         if (this.graphData && this.defaults) {
-          this.innerHTML = "<line-graph data-margin=" + JSON.stringify(this.defaults.margin) + " data-height=" + this.defaults.height + " data-width=" + this.defaults.width + " data-graph=" + this.graphData + " data-line-color=" + this.defaults.lineColor + "></lineGraph>";
+          this.innerHTML = "<line-graph data-margin=" + JSON.stringify(this.defaults.margin) + " data-height=" + this.defaults.height + " data-width=" + this.defaults.width + " data-graph=" + JSON.stringify(this.graphData) + " data-line-color=" + this.defaults.lineColor + "></lineGraph>";
         }
       }
       /**
@@ -6458,7 +6512,7 @@
 
 
       dataPoints(data) {
-        this.graphData = data;
+        this.graphData = this.parseData(data);
       }
       /**
        * @name disconnectedCallback
@@ -6525,6 +6579,26 @@
         this.render();
       }
       /**
+       * @name parseData
+       * @param {Object} data
+       * @description
+       * Parses data into an array while converting stripping the 
+       * measurement key
+       */
+
+
+      parseData(data) {
+        data = JSON.parse(data);
+        var results = [];
+
+        for (var i = 0; i < data.length; i++) {
+          var item = data[i].cpu_wait_percent_average;
+          results.push(item);
+        }
+
+        return results;
+      }
+      /**
        * @name render
        * @description
        * Kicks off the render process after attribute value has been set & connectedcallback has run.
@@ -6534,7 +6608,7 @@
 
       render() {
         if (this.graphData && this.defaults) {
-          this.innerHTML = "<line-graph data-margin=" + JSON.stringify(this.defaults.margin) + " data-height=" + this.defaults.height + " data-width=" + this.defaults.width + " data-graph=" + this.graphData + " data-line-color=" + this.defaults.lineColor + "></lineGraph>";
+          this.innerHTML = "<line-graph data-margin=" + JSON.stringify(this.defaults.margin) + " data-height=" + this.defaults.height + " data-width=" + this.defaults.width + " data-graph=" + JSON.stringify(this.graphData) + " data-line-color=" + this.defaults.lineColor + "></lineGraph>";
         }
       }
       /**
@@ -6545,7 +6619,7 @@
 
 
       dataPoints(data) {
-        this.graphData = data;
+        this.graphData = this.parseData(data);
       }
       /**
        * @name disconnectedCallback
@@ -6612,6 +6686,26 @@
         this.render();
       }
       /**
+       * @name parseData
+       * @param {Object} data
+       * @description
+       * Parses data into an array while converting stripping the 
+       * measurement key
+       */
+
+
+      parseData(data) {
+        data = JSON.parse(data);
+        var results = [];
+
+        for (var i = 0; i < data.length; i++) {
+          var item = data[i].cpu_irq_percent_average;
+          results.push(item);
+        }
+
+        return results;
+      }
+      /**
        * @name render
        * @description
        * Kicks off the render process after attribute value has been set & connectedcallback has run.
@@ -6621,7 +6715,7 @@
 
       render() {
         if (this.graphData && this.defaults) {
-          this.innerHTML = "<line-graph data-margin=" + JSON.stringify(this.defaults.margin) + " data-height=" + this.defaults.height + " data-width=" + this.defaults.width + " data-graph=" + this.graphData + " data-line-color=" + this.defaults.lineColor + "></lineGraph>";
+          this.innerHTML = "<line-graph data-margin=" + JSON.stringify(this.defaults.margin) + " data-height=" + this.defaults.height + " data-width=" + this.defaults.width + " data-graph=" + JSON.stringify(this.graphData) + " data-line-color=" + this.defaults.lineColor + "></lineGraph>";
         }
       }
       /**
@@ -6632,7 +6726,7 @@
 
 
       dataPoints(data) {
-        this.graphData = data;
+        this.graphData = this.parseData(data);
       }
       /**
        * @name disconnectedCallback
@@ -6699,6 +6793,26 @@
         this.render();
       }
       /**
+       * @name parseData
+       * @param {Object} data
+       * @description
+       * Parses data into an array while converting stripping the 
+       * measurement key
+       */
+
+
+      parseData(data) {
+        data = JSON.parse(data);
+        var results = [];
+
+        for (var i = 0; i < data.length; i++) {
+          var item = data[i].cpu_min_cpu_usage;
+          results.push(item);
+        }
+
+        return results;
+      }
+      /**
        * @name render
        * @description
        * Kicks off the render process after attribute value has been set & connectedcallback has run.
@@ -6708,7 +6822,7 @@
 
       render() {
         if (this.graphData && this.defaults) {
-          this.innerHTML = "<line-graph data-margin=" + JSON.stringify(this.defaults.margin) + " data-height=" + this.defaults.height + " data-width=" + this.defaults.width + " data-graph=" + this.graphData + " data-line-color=" + this.defaults.lineColor + "></lineGraph>";
+          this.innerHTML = "<line-graph data-margin=" + JSON.stringify(this.defaults.margin) + " data-height=" + this.defaults.height + " data-width=" + this.defaults.width + " data-graph=" + JSON.stringify(this.graphData) + " data-line-color=" + this.defaults.lineColor + "></lineGraph>";
         }
       }
       /**
@@ -6719,7 +6833,7 @@
 
 
       dataPoints(data) {
-        this.graphData = data;
+        this.graphData = this.parseData(data);
       }
       /**
        * @name disconnectedCallback
@@ -6786,6 +6900,26 @@
         this.render();
       }
       /**
+       * @name parseData
+       * @param {Object} data
+       * @description
+       * Parses data into an array while converting stripping the 
+       * measurement key
+       */
+
+
+      parseData(data) {
+        data = JSON.parse(data);
+        var results = [];
+
+        for (var i = 0; i < data.length; i++) {
+          var item = data[i].cpu_user_percent_average;
+          results.push(item);
+        }
+
+        return results;
+      }
+      /**
        * @name render
        * @description
        * Kicks off the render process after attribute value has been set & connectedcallback has run.
@@ -6795,7 +6929,7 @@
 
       render() {
         if (this.graphData && this.defaults) {
-          this.innerHTML = "<line-graph data-margin=" + JSON.stringify(this.defaults.margin) + " data-height=" + this.defaults.height + " data-width=" + this.defaults.width + " data-graph=" + this.graphData + " data-line-color=" + this.defaults.lineColor + "></lineGraph>";
+          this.innerHTML = "<line-graph data-margin=" + JSON.stringify(this.defaults.margin) + " data-height=" + this.defaults.height + " data-width=" + this.defaults.width + " data-graph=" + JSON.stringify(this.graphData) + " data-line-color=" + this.defaults.lineColor + "></lineGraph>";
         }
       }
       /**
@@ -6806,7 +6940,7 @@
 
 
       dataPoints(data) {
-        this.graphData = data;
+        this.graphData = this.parseData(data);
       }
       /**
        * @name disconnectedCallback
@@ -6873,6 +7007,26 @@
         this.render();
       }
       /**
+       * @name parseData
+       * @param {Object} data
+       * @description
+       * Parses data into an array while converting stripping the 
+       * measurement key
+       */
+
+
+      parseData(data) {
+        data = JSON.parse(data);
+        var results = [];
+
+        for (var i = 0; i < data.length; i++) {
+          var item = data[i].cpu_stolen_percent_average;
+          results.push(item);
+        }
+
+        return results;
+      }
+      /**
        * @name render
        * @description
        * Kicks off the render process after attribute value has been set & connectedcallback has run.
@@ -6882,7 +7036,7 @@
 
       render() {
         if (this.graphData && this.defaults) {
-          this.innerHTML = "<line-graph data-margin=" + JSON.stringify(this.defaults.margin) + " data-height=" + this.defaults.height + " data-width=" + this.defaults.width + " data-graph=" + this.graphData + " data-line-color=" + this.defaults.lineColor + "></lineGraph>";
+          this.innerHTML = "<line-graph data-margin=" + JSON.stringify(this.defaults.margin) + " data-height=" + this.defaults.height + " data-width=" + this.defaults.width + " data-graph=" + JSON.stringify(this.graphData) + " data-line-color=" + this.defaults.lineColor + "></lineGraph>";
         }
       }
       /**
@@ -6893,7 +7047,7 @@
 
 
       dataPoints(data) {
-        this.graphData = data;
+        this.graphData = this.parseData(data);
       }
       /**
        * @name disconnectedCallback
@@ -6960,6 +7114,26 @@
         this.render();
       }
       /**
+       * @name parseData
+       * @param {Object} data
+       * @description
+       * Parses data into an array while converting stripping the 
+       * measurement key
+       */
+
+
+      parseData(data) {
+        data = JSON.parse(data);
+        var results = [];
+
+        for (var i = 0; i < data.length; i++) {
+          var item = data[i].cpu_cpu_count;
+          results.push(item);
+        }
+
+        return results;
+      }
+      /**
        * @name render
        * @description
        * Kicks off the render process after attribute value has been set & connectedcallback has run.
@@ -6969,7 +7143,7 @@
 
       render() {
         if (this.graphData && this.defaults) {
-          this.innerHTML = "<line-graph data-margin=" + JSON.stringify(this.defaults.margin) + " data-height=" + this.defaults.height + " data-width=" + this.defaults.width + " data-graph=" + this.graphData + " data-line-color=" + this.defaults.lineColor + "></lineGraph>";
+          this.innerHTML = "<line-graph data-margin=" + JSON.stringify(this.defaults.margin) + " data-height=" + this.defaults.height + " data-width=" + this.defaults.width + " data-graph=" + JSON.stringify(this.graphData) + " data-line-color=" + this.defaults.lineColor + "></lineGraph>";
         }
       }
       /**
@@ -6980,7 +7154,7 @@
 
 
       dataPoints(data) {
-        this.graphData = data;
+        this.graphData = this.parseData(data);
       }
       /**
        * @name disconnectedCallback
@@ -7047,6 +7221,26 @@
         this.render();
       }
       /**
+       * @name parseData
+       * @param {Object} data
+       * @description
+       * Parses data into an array while converting stripping the 
+       * measurement key
+       */
+
+
+      parseData(data) {
+        data = JSON.parse(data);
+        var results = [];
+
+        for (var i = 0; i < data.length; i++) {
+          var item = data[i].cpu_idle_percent_average;
+          results.push(item);
+        }
+
+        return results;
+      }
+      /**
        * @name render
        * @description
        * Kicks off the render process after attribute value has been set & connectedcallback has run.
@@ -7056,7 +7250,7 @@
 
       render() {
         if (this.graphData && this.defaults) {
-          this.innerHTML = "<line-graph data-margin=" + JSON.stringify(this.defaults.margin) + " data-height=" + this.defaults.height + " data-width=" + this.defaults.width + " data-graph=" + this.graphData + " data-line-color=" + this.defaults.lineColor + "></lineGraph>";
+          this.innerHTML = "<line-graph data-margin=" + JSON.stringify(this.defaults.margin) + " data-height=" + this.defaults.height + " data-width=" + this.defaults.width + " data-graph=" + JSON.stringify(this.graphData) + " data-line-color=" + this.defaults.lineColor + "></lineGraph>";
         }
       }
       /**
@@ -7067,7 +7261,7 @@
 
 
       dataPoints(data) {
-        this.graphData = data;
+        this.graphData = this.parseData(data);
       }
       /**
        * @name disconnectedCallback

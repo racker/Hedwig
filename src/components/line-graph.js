@@ -19,7 +19,7 @@ export class LineGraph extends HTMLElement {
      */
     connectedCallback() {
         this.innerHTML = '<svg></svg>';
-        var svg = document.querySelector('svg')
+        var svg = document.querySelector('svg');
         var data = JSON.parse(this.dataset.graph);
 
         this.attachShadow({ mode: 'open' });
@@ -89,7 +89,7 @@ export class LineGraph extends HTMLElement {
             .y((d) => {
                 return yScale(d.value);
             })
-            
+
         // Add everything to the SVG
         svg.append("g")
            .attr("class", "x axis")
@@ -101,7 +101,9 @@ export class LineGraph extends HTMLElement {
            .call(d3.axisLeft(yScale).ticks(data.length).tickFormat((d) => {
                switch(true) {
                     case unit === 'count':
-                        return (d);
+                        return d;
+                    case unit === 'kb':
+                        return d + ' kb';
                     default:
                         return (d * 100) + '%';
                }

@@ -11,3 +11,5 @@ export { UserUsage } from './src/components/cpu/user-usage/user-usage';
 export { StolenPercent } from './src/components/cpu/stolen-percent/stolen-percent';
 export { CpuCount } from './src/components/cpu/cpu-count/cpu-count';
 export { IdlePercent } from './src/components/cpu/idle-percent/idle-percent';
+
+export { FilesystemUsed } from './src/components/filesystem/filesystem-used/filesystem-used';

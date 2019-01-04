@@ -21,7 +21,7 @@ npm install
 
 ## Testing
 
-Currently this project is handling visual regression testing with [BackstopJS](https://github.com/garris/BackstopJS) to create new reference file for the project run the command `npm run reference`.
+Currently this project is handling visual regression testing with [BackstopJS](https://github.com/garris/BackstopJS) to create new reference files for the project run the command `npm run reference`.
 
 This places images in the folder `test/backstop_data/bitmaps_reference`.
 

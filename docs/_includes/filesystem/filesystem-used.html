@@ -14,28 +14,28 @@
       <p>Sample data structure</p>
       <pre><code>
 [{
-"filesystem_used": {
-"time": "2018-11-24T18:58:21Z",
-"value": 37014077
-}
+    "filesystem_used": {
+        "time": "2018-12-24T18:58:21Z",
+        "value": 5366200
+    }
 },
 {
-"filesystem_used": {
-"time": "2018-11-25T23:58:21Z",
-"value": 26015663
-}
+    "filesystem_used": {
+        "time": "2018-12-25T23:58:21Z",
+        "value": 5766200
+    }
 },
 {
-"filesystem_used": {
-"time": "2018-11-26T02:58:21Z",
-"value": 1016882
-}
+    "filesystem_used": {
+        "time": "2018-12-26T02:58:21Z",
+        "value": 6166200
+    }
 },
 {
-"filesystem_used": {
-"time": "2018-11-27T10:58:21Z",
-"value": 22026419
-}
+    "filesystem_used": {
+        "time": "2018-12-27T10:58:21Z",
+        "value": 6566200
+    }
 }]
         </code></pre>
         <br><br>
@@ -45,29 +45,29 @@
           <script>
               var mock = [
               {
-                  "filesystem_used": {
-                      "time": "2018-11-24T18:58:21Z",
-                      "value": 37014077
-                  }
-              },
-              {
-                  "filesystem_used": {
-                      "time": "2018-11-25T23:58:21Z",
-                      "value": 26015663
-                  }
-              },
-              {
-                  "filesystem_used": {
-                      "time": "2018-11-26T02:58:21Z",
-                      "value": 1016882
-                  }
-              },
-              {
-                  "filesystem_used": {
-                      "time": "2018-11-27T10:58:21Z",
-                      "value": 22026419
-                  }
-              }
+                    "filesystem_used": {
+                        "time": "2018-12-24T18:58:21Z",
+                        "value": 5366200
+                    }
+                },
+                {
+                    "filesystem_used": {
+                        "time": "2018-12-25T23:58:21Z",
+                        "value": 5766200
+                    }
+                },
+                {
+                    "filesystem_used": {
+                        "time": "2018-12-26T02:58:21Z",
+                        "value": 6166200
+                    }
+                },
+                {
+                    "filesystem_used": {
+                        "time": "2018-12-27T10:58:21Z",
+                        "value": 6566200
+                    }
+                }
               ];
 
               document.write('<filesystem-used data-height="200" data-width="400" data-unit="kb" data-graph=' + JSON.stringify(mock) + '></filesystem-used>');

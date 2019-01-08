@@ -2,6 +2,7 @@ const glob = require('glob-promise');
 const backstop = require('backstopjs');
 var args = require('minimist')(process.argv.slice(2));
 const componentPath = './src/components';
+const config = require('./_config');
 
 const projectConfig = (scenarios) => {
     return require("./test/backstop.config.js")({"scenarios": scenarios});
@@ -22,12 +23,12 @@ if( args.openReport ) {
 }
 
 function getScenariosForProject(projectPath) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         var promises = [];
-        glob(projectPath + '/**/*.spec.js').then((files) => {
+        glob(projectPath + '/**/*.vis.js').then((files) => {
             files.forEach((element) => {
                 var scenario = require(element);
-                promises.push(scenario.config);
+                promises.push(scenario.config(config.host, config.port));
             });
             resolve(promises);
         });

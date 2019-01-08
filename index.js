@@ -19,3 +19,4 @@ export { FilesystemUsed } from './src/components/filesystem/filesystem-used/file
 // Memory components
 export { MemoryActualUsed } from './src/components/memory/actual-used/actual-used';
 export { MemoryFree } from './src/components/memory/memory-free/memory-free';
+export { MemoryRam } from './src/components/memory/ram/ram';

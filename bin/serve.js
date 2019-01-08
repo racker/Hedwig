@@ -11,6 +11,6 @@ app.use('/', express.static(CONFIG.srcComponents));
 app.use('/dist', express.static(CONFIG.distDir));
 
 // Start Server
-const server = app.listen(4700, () => {
-    console.log('🚀 serving at http://127.0.0.1:4700');
+const server = app.listen(CONFIG.port, () => {
+    console.log(`🚀 serving at ${CONFIG.host}:${CONFIG.port}`);
 });

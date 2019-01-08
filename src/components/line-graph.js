@@ -102,6 +102,8 @@ export class LineGraph extends HTMLElement {
                switch(true) {
                     case unit === 'count':
                         return d;
+                    case unit === 'b':
+                        return d + ' b';
                     case unit === 'kb':
                         return d + ' kb';
                     default:

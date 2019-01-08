@@ -1,6 +1,7 @@
 export { Defaults } from './src/components/defaults';
 export { LineGraph } from './src/components/line-graph';
 
+// CPU components
 export { CpuMaxUsage } from './src/components/cpu/cpu-max-usage/cpu-max-usage';
 export { SystemUsage } from './src/components/cpu/system-usage/system-usage';
 export { AverageUsage } from './src/components/cpu/average-usage/average-usage';
@@ -12,6 +13,9 @@ export { StolenPercent } from './src/components/cpu/stolen-percent/stolen-percen
 export { CpuCount } from './src/components/cpu/cpu-count/cpu-count';
 export { IdlePercent } from './src/components/cpu/idle-percent/idle-percent';
 
+// Filesystem components
 export { FilesystemUsed } from './src/components/filesystem/filesystem-used/filesystem-used';
 
+// Memory components
 export { MemoryActualUsed } from './src/components/memory/actual-used/actual-used';
+export { MemoryFree } from './src/components/memory/memory-free/memory-free';

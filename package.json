@@ -9,8 +9,11 @@
     "preinstall": "npm run build",
     "build": "rollup -c",
     "dev": "rollup -c -w",
-    "test": " ./node_modules/karma/bin/karma start",
-    "pretest": "npm run build"
+    "unit_test": "./node_modules/karma/bin/karma start",
+    "visual_test": "npm run serve | node backstop.js --test",
+    "pretest": "npm run build",
+    "serve": "node ./bin/serve.js",
+    "reference": "npm run serve | node backstop.js --reference"
   },
   "files": [
     "dist"
@@ -22,6 +25,10 @@
   "devDependencies": {
     "@babel/core": "7.1.6",
     "babelrc-rollup": "3.0.0",
+    "backstopjs": "3.8.5",
+    "express": "4.16.4",
+    "glob": "7.1.3",
+    "glob-promise": "^3.4.0",
     "jasmine": "3.3.0",
     "jasmine-core": "3.3.0",
     "jsdoc": "3.5.5",

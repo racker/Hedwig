@@ -47,7 +47,7 @@ module.exports = function(config) {
         // use dolts reporter, as travis terminal does not support escaping sequences
         // possible values: 'dots', 'progress', 'junit', 'teamcity'
         // CLI --reporters progress
-        //reporters : ['coverage', 'spec']
+        reporters : ['coverage', 'spec']
 
     });
 };

@@ -19,9 +19,15 @@ npm install
     a UMD build, suitable for use in any environment (including the browser, as a `<script>` tag), that includes the external dependency. This corresponds to the `"browser"` field in package.json
     an ES module bundle, suitable for use in other people's libraries and applications, that `import`s the external dependency. This corresponds to the `"module"` field in package.json
 
-`npm test` builds the library, then tests it.
+## Testing
 
-## Additional Dependecies
+Currently this project is handling visual regression testing with [BackstopJS](https://github.com/garris/BackstopJS) to create new reference files for the project run the command `npm run reference`.
+
+This places images in the folder `test/backstop_data/bitmaps_reference`.
+
+Once reference files are created, if none previously existed, you can now test graphs `npm run visual_test` builds the library, then tests it. If the page report html file doesn't open automatically you can view at `test/backstop_data/html_report/index.html`
+
+## Notable Dependecies
 
 * [babel](https://github.com/rollup/rollup-starter-lib/tree/babel) — illustrates writing the source code in ES2015 and transpiling it for older environments with [Babel](https://babeljs.io/)
 * [rollup-plugin-babel](https://github.com/rollup/rollup-plugin-babel) -

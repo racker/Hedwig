@@ -8,7 +8,7 @@
       <br>
       <p>
         Tag: <br>
-        <pre><code class='html'>&lt;cpu-count data-height="200" data-width="400" data={{ someBoundData }} &gt;&lt;/cpu-count&gt;</code></pre>
+        <pre><code class='html'>&lt;cpu-count data-height="200" data-unit="count" data-width="400" data={{ someBoundData }} &gt;&lt;/cpu-count&gt;</code></pre>
       </p>
       <br>
       <p>Sample data structure</p>
@@ -70,7 +70,7 @@
                 }
                 ];
 
-              document.write('<cpu-count data-height="200" data-width="400" data-graph=' + JSON.stringify(mock) + '></cpu-count>');
+              document.write('<cpu-count data-height="200" data-unit="count" data-width="400" data-graph=' + JSON.stringify(mock) + '></cpu-count>');
           </script>
 
           <p>Options</p>

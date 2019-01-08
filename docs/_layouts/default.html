@@ -36,7 +36,7 @@
         <hx-reveal id="section-1" open>
 
           {% include nav.html %}
-          
+
         </hx-reveal>
         <!-- end:Product Navigation -->
       </nav>
@@ -45,7 +45,7 @@
       <main role="main" id="content">
         <hx-panel class="hxSpan-12-xs">
           <hx-panelbody class="hxBox hxMd">
-            
+
             {% include intro.html %}
 
             <div id='components'>
@@ -53,25 +53,33 @@
             </div>
             <br><br>
 
-            {% include cpu-system-usage.html %}
+            {% include cpu/cpu-system-usage.html %}
 
-            {% include cpu-average-usage.html %}
+            {% include cpu/cpu-average-usage.html %}
 
-            {% include cpu-wait-average.html %} 
-           
-            {% include cpu-irq-average.html %}
+            {% include cpu/cpu-wait-average.html %}
 
-            {% include cpu-min-usage.html %}
+            {% include cpu/cpu-irq-average.html %}
 
-            {% include cpu-max-usage.html %}
-            
-            {% include cpu-user-usage.html %}
+            {% include cpu/cpu-min-usage.html %}
 
-            {% include cpu-count.html %}
+            {% include cpu/cpu-max-usage.html %}
 
-            {% include cpu-stolen-percent.html %}
+            {% include cpu/cpu-user-usage.html %}
 
-            {% include cpu-idle-percent.html %}
+            {% include cpu/cpu-count.html %}
+
+            {% include cpu/cpu-stolen-percent.html %}
+
+            {% include cpu/cpu-idle-percent.html %}
+
+
+            <br/><br/><hr />
+
+            {% include filesystem/filesystem-used.html %}
+
+
+
           </hx-panelbody>
         </hx-panel>
       </main>

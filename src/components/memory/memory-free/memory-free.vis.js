@@ -3,8 +3,8 @@ var scenarioConfig = {};
 scenarioConfig.config = (host, port) =>
 {
     return {
-        "label": `Memory - memory-actual-used`,
-        "url": `${host}:${port}/memory/actual-used/index.html`,
+        "label": `Memory - memory-free`,
+        "url": `${host}:${port}/memory/memory-free/index.html`,
         "referenceUrl": ``,
         "readyEvent": ``,
         "readySelector": ``,

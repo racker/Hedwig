@@ -1,12 +1,12 @@
 import { Defaults } from "../../defaults";
 
 /**
- * @name MemoryActualUsed
+ * @name MemoryFree
  * @extends HTMLElement
  * @description 
- * Graph component that represents the actual memory used
+ * Graph component representing the amount of free memory
  */
-export class MemoryActualUsed extends HTMLElement {
+export class MemoryFree extends HTMLElement {
 
     constructor() {
         super();
@@ -40,7 +40,7 @@ export class MemoryActualUsed extends HTMLElement {
  
         var results = [];
         for (var i = 0; i < data.length; i++) {
-            var item = data[i].memory_actual_used;
+            var item = data[i].memory_free;
             results.push(item);
         }
         return results;
@@ -103,4 +103,4 @@ export class MemoryActualUsed extends HTMLElement {
     }
 }
 
-customElements.define('memory-actual-used', MemoryActualUsed);
+customElements.define('memory-free', MemoryFree);

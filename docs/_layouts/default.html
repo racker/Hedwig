@@ -73,15 +73,16 @@
 
             {% include cpu/cpu-idle-percent.html %}
 
-
             <br/><hr /><br/>
 
             {% include filesystem/filesystem-used.html %}
 
+            {% include filesystem/filesystem-free-files.html %}
+
             <br/><hr /><br/>
 
             {% include memory/memory-actual-used.html %}
-            
+
             {% include memory/memory-free.html %}
 
 

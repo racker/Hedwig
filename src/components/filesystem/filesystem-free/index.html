@@ -1,0 +1,37 @@
+<html>
+    <head>
+        <script type="text/javascript" src="../../../../dist/hedwig-main.umd.js"></script>
+    </head>
+    <body>
+        <script>
+            var mock = [
+            {
+                    "filesystem_free": {
+                        "time": "2018-12-24T18:58:21Z",
+                        "value": 4.55716456E8
+                    }
+                },
+                {
+                    "filesystem_free": {
+                        "time": "2018-12-25T23:58:21Z",
+                        "value": 4.00116456E8
+                    }
+                },
+                {
+                    "filesystem_free": {
+                        "time": "2018-12-26T02:58:21Z",
+                        "value": 3.87716456E8
+                    }
+                },
+                {
+                    "filesystem_free": {
+                        "time": "2018-12-27T10:58:21Z",
+                        "value": 3.55716456E8
+                    }
+                }
+            ];
+
+            document.write('<filesystem-free data-height="400" data-width="1000" data-unit="kb" data-graph=' + JSON.stringify(mock) + '></cpu-idle-percent>');
+        </script>
+    </body>
+</html>

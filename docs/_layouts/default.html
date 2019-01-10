@@ -91,8 +91,6 @@
 
             {% include memory/memory-actual-used.html %}
 
-            {% include memory/memory-actual-free.html %}
-
             {% include memory/memory-free.html %}
 
             {% include memory/memory-ram.html %}
@@ -120,12 +118,21 @@
       <a href="https://www.rackspace.com/information/legal/privacystatement">Privacy Policy</a>
     </nav>
   </footer>
-
+<!-- intelligently load ES5 Adapter (if needed) -->
+<span id="ce-es5-adapter">
+  <script>
+    if (!window.customElements) {
+      var elAdapter = document.querySelector('#ce-es5-adapter');
+      elAdapter.parentElement.removeChild(elAdapter);
+    }
+  </script>
+  <script src="https://unpkg.com/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js"></script>
+</span>
   <!--
     DO NOT BUNDLE: ES5-compiled assets specifically for use in the browser.
     Provides additional polyfills and automatically initializes HelixUI.
   -->
-  <script src="assets/scripts/helix-ui.browser.min.js"></script>
+  <script src="assets/scripts/helix-ui.browser.js"></script>
   <a id="bottom"></a>
 </body>
 </html>

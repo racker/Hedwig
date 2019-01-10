@@ -1,0 +1,112 @@
+<div id='memory-ram'>
+        <h3>Memory RAM</h3>
+        <div>
+          <p>
+            Description:<br><br>
+            The amount of ram utilization
+          </p>
+          <br>
+          <p>
+            Tag: <br>
+            <pre><code class='html'>&lt;memory-ram data-height="200" data-width="400" data-unit="b" data=[someBoundData] &gt;&lt;/memory-ram&gt;</code></pre>
+          </p>
+          <br>
+          <p>Sample data structure</p>
+          <pre><code>
+    [{ 
+        "memory_ram": {
+            "time": "2018-11-24T18:58:21Z",
+            "value": 546
+        }
+    },
+    {
+        "memory_ram": {
+            "time": "2018-11-25T23:58:21Z",
+            "value": 286
+        }
+    },
+    {
+        "memory_ram": {
+            "time": "2018-11-26T02:58:21Z",
+            "value": 951
+        }
+    },
+    {
+        "memory_ram": {
+            "time": "2018-11-27T10:58:21Z",
+            "value": 759
+        }
+    }]
+            </code></pre>
+            <br><br>
+            <p>
+                Renders: <br>
+              </p>
+              <script>
+                var mock = [{ 
+                    "memory_ram": {
+                        "time": "2018-11-24T18:58:21Z",
+                        "value": 546
+                    }
+                },
+                {
+                    "memory_ram": {
+                        "time": "2018-11-25T23:58:21Z",
+                        "value": 286
+                    }
+                },
+                {
+                    "memory_ram": {
+                        "time": "2018-11-26T02:58:21Z",
+                        "value": 951
+                    }
+                },
+                {
+                    "memory_ram": {
+                        "time": "2018-11-27T10:58:21Z",
+                        "value": 759
+                    }
+                }];
+    
+                  document.write('<memory-ram data-height="200" data-width="400" data-unit="mb" data-graph=' + JSON.stringify(mock) + '></memory-ram>');
+              </script>
+    
+              <p>Options</p>
+              <table class='hxTable hxTable--condensed'>
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Required</th>
+                    <th>Default Value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Margin</td>
+                    <td>no</td>
+                    <td>{ top: 50, right: 50, bottom: 50, left: 50 }</td>
+                  </tr>
+                  <tr>
+                    <td>Height</td>
+                    <td>no</td>
+                    <td>200</td>
+                  </tr>
+                  <tr>
+                    <td>Weight</td>
+                    <td>no</td>
+                    <td>600</td>
+                  </tr>
+                  <tr>
+                      <td>Line Color</td>
+                      <td>no</td>
+                      <td>#0c7c84</td>
+                    </tr>
+                    <tr>
+                      <td>Unit</td>
+                      <td>no</td>
+                      <td>mb</td>
+                    </tr>
+                </tbody>
+              </table>
+        </div>
+    </div>

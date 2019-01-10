@@ -22,3 +22,4 @@ export { FilesystemFreeFiles } from './src/components/filesystem/filesystem-free
 export { MemoryActualUsed } from './src/components/memory/actual-used/actual-used';
 export { MemoryFree } from './src/components/memory/memory-free/memory-free';
 export { MemoryRam } from './src/components/memory/ram/ram';
+export { MemorySwapPageIn } from './src/components/memory/swap-page-in/swap-page-in';

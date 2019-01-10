@@ -12,7 +12,7 @@
   <script src="https://cdn.jsdelivr.net/npm/vue@2.5.21/dist/vue.js"></script>
   <script src="app.js"></script>
 </head>
-<body class="hxHorizontal" id="top">
+<body class="hxVertical" id="top">
   <!-- Accessibility: This link should be the first item in tab order. -->
   <a href="#content">Skip to main content</a>
 
@@ -86,6 +86,8 @@
             {% include memory/memory-free.html %}
 
             {% include memory/memory-ram.html %}
+
+            {% include memory/memory-swap-page-in.html %}
 
 
           </hx-panelbody>

@@ -6270,7 +6270,7 @@
        * @name parseData
        * @param {Object} data
        * @description
-       * Parses data into an array while converting stripping the 
+       * Parses data into an array while converting stripping the
        * measurement key
        */
 
@@ -6377,7 +6377,7 @@
        * @name parseData
        * @param {Object} data
        * @description
-       * Parses data into an array while converting stripping the 
+       * Parses data into an array while converting stripping the
        * measurement key
        */
 
@@ -6484,7 +6484,7 @@
        * @name parseData
        * @param {Object} data
        * @description
-       * Parses data into an array while converting stripping the 
+       * Parses data into an array while converting stripping the
        * measurement key
        */
 
@@ -6591,7 +6591,7 @@
        * @name parseData
        * @param {Object} data
        * @description
-       * Parses data into an array while converting stripping the 
+       * Parses data into an array while converting stripping the
        * measurement key
        */
 
@@ -6698,7 +6698,7 @@
        * @name parseData
        * @param {Object} data
        * @description
-       * Parses data into an array while converting stripping the 
+       * Parses data into an array while converting stripping the
        * measurement key
        */
 
@@ -6805,7 +6805,7 @@
        * @name parseData
        * @param {Object} data
        * @description
-       * Parses data into an array while converting stripping the 
+       * Parses data into an array while converting stripping the
        * measurement key
        */
 
@@ -6912,7 +6912,7 @@
        * @name parseData
        * @param {Object} data
        * @description
-       * Parses data into an array while converting stripping the 
+       * Parses data into an array while converting stripping the
        * measurement key
        */
 
@@ -7019,7 +7019,7 @@
        * @name parseData
        * @param {Object} data
        * @description
-       * Parses data into an array while converting stripping the 
+       * Parses data into an array while converting stripping the
        * measurement key
        */
 
@@ -7126,7 +7126,7 @@
        * @name parseData
        * @param {Object} data
        * @description
-       * Parses data into an array while converting stripping the 
+       * Parses data into an array while converting stripping the
        * measurement key
        */
 
@@ -7233,7 +7233,7 @@
        * @name parseData
        * @param {Object} data
        * @description
-       * Parses data into an array while converting stripping the 
+       * Parses data into an array while converting stripping the
        * measurement key
        */
 
@@ -7636,7 +7636,7 @@
     /**
      * @name MemoryActualUsed
      * @extends HTMLElement
-     * @description 
+     * @description
      * Graph component that represents the actual memory used
      */
 
@@ -7664,7 +7664,7 @@
        * @name parseData
        * @param {Object} data
        * @description
-       * Parses data into an array while converting stripping the 
+       * Parses data into an array while converting stripping the
        * measurement key
        */
 
@@ -7743,7 +7743,7 @@
     /**
      * @name MemoryFree
      * @extends HTMLElement
-     * @description 
+     * @description
      * Graph component representing the amount of free memory
      */
 
@@ -7771,7 +7771,7 @@
        * @name parseData
        * @param {Object} data
        * @description
-       * Parses data into an array while converting stripping the 
+       * Parses data into an array while converting stripping the
        * measurement key
        */
 
@@ -7850,7 +7850,7 @@
     /**
      * @name MemoryRam
      * @extends HTMLElement
-     * @description 
+     * @description
      * Graph component representing RAM utilization
      */
 
@@ -7878,7 +7878,7 @@
        * @name parseData
        * @param {Object} data
        * @description
-       * Parses data into an array while converting stripping the 
+       * Parses data into an array while converting stripping the
        * measurement key
        */
 
@@ -7957,7 +7957,7 @@
     /**
      * @name MemorySwapPageIn
      * @extends HTMLElement
-     * @description 
+     * @description
      * Graph component representing memory swap page in utilization
      */
 
@@ -7986,7 +7986,7 @@
        * @name parseData
        * @param {Object} data
        * @description
-       * Parses data into an array while converting stripping the 
+       * Parses data into an array while converting stripping the
        * measurement key
        */
 
@@ -8063,13 +8063,23 @@
     customElements.define('memory-swap-page-in', MemorySwapPageIn);
 
     /**
+<<<<<<< HEAD
      * @name MemorySwapUsed
      * @extends HTMLElement
-     * @description 
+     * @description
      * Graph component representing memory swap used utilization
      */
 
     class MemorySwapUsed extends HTMLElement {
+=======
+     * @name MemoryUsed
+     * @extends HTMLElement
+     * @description
+     * Graph component representing amount of used memory
+     */
+
+    class MemoryUsed extends HTMLElement {
+>>>>>>> MNRVA-91
       constructor() {
         super();
       }
@@ -8094,7 +8104,11 @@
        * @name parseData
        * @param {Object} data
        * @description
-       * Parses data into an array while converting stripping the 
+<<<<<<< HEAD
+       * Parses data into an array while converting stripping the
+=======
+       * Parses data into an array while converting stripping the
+>>>>>>> MNRVA-91
        * measurement key
        */
 
@@ -8104,7 +8118,11 @@
         var results = [];
 
         for (var i = 0; i < data.length; i++) {
+<<<<<<< HEAD
           var item = data[i].memory_swap_used;
+=======
+          var item = data[i].memory_used;
+>>>>>>> MNRVA-91
           results.push(item);
         }
 
@@ -8169,6 +8187,7 @@
 
     }
     customElements.define('memory-swap-used', MemorySwapUsed);
+    customElements.define('memory-used', MemoryUsed);
 
     exports.Defaults = Defaults;
     exports.LineGraph = LineGraph;
@@ -8190,6 +8209,7 @@
     exports.MemoryRam = MemoryRam;
     exports.MemorySwapPageIn = MemorySwapPageIn;
     exports.MemorySwapUsed = MemorySwapUsed;
+    exports.MemoryUsed = MemoryUsed;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 

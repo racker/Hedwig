@@ -19,6 +19,7 @@ export { FilesystemFreeFiles } from './src/components/filesystem/filesystem-free
 export { FilesystemFiles } from './src/components/filesystem/filesystem-files/filesystem-files';
 export { FilesystemAvail } from './src/components/filesystem/filesystem-avail/filesystem-avail';
 export { FilesystemFree } from './src/components/filesystem/filesystem-free/filesystem-free';
+export { FilesystemTotal } from './src/components/filesystem/filesystem-total/filesystem-total';
 
 // Memory components
 export { MemoryActualUsed } from './src/components/memory/actual-used/actual-used';

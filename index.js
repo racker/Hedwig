@@ -27,3 +27,4 @@ export { MemorySwapPageIn } from './src/components/memory/swap-page-in/swap-page
 export { MemorySwapUsed } from './src/components/memory/swap-used/swap-used';
 export { MemoryUsed } from './src/components/memory/used/used';
 export { MemorySwapTotal } from './src/components/memory/swap-total/swap-total';
+export { MemorySwapPageOut } from './src/components/memory/swap-page-out/swap-page-out';

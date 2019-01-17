@@ -17,7 +17,7 @@ export { IdlePercent } from './src/components/cpu/idle-percent/idle-percent';
 export { FilesystemUsed } from './src/components/filesystem/filesystem-used/filesystem-used';
 export { FilesystemFreeFiles } from './src/components/filesystem/filesystem-free-files/filesystem-free-files';
 export { FilesystemFiles } from './src/components/filesystem/filesystem-files/filesystem-files';
-
+export { FilesystemAvail } from './src/components/filesystem/filesystem-avail/filesystem-avail';
 
 // Memory components
 export { MemoryActualUsed } from './src/components/memory/actual-used/actual-used';

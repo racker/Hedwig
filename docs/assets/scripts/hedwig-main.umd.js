@@ -7526,6 +7526,7 @@
     customElements.define('filesystem-free-files', FilesystemFreeFiles);
 
     /**
+<<<<<<< HEAD
      * @name FilesystemFiles
      * @description
      * Graph representing number of inodes on the filesystem
@@ -7533,6 +7534,16 @@
      */
 
     class FilesystemFiles extends HTMLElement {
+=======
+     * @name FilesystemAvail
+     * @description
+     * Graph representing available space on the filesystem in kb for
+     * the current user
+     * @extends HTMLElement
+     */
+
+    class FilesystemAvail extends HTMLElement {
+>>>>>>> filesys_availability_MNRVA-74
       constructor() {
         super();
       }
@@ -7550,7 +7561,11 @@
         this.defaults.height = (this.dataset.height || defaults.graphHeight) - this.defaults.margin.top - this.defaults.margin.bottom;
         this.defaults.width = (this.dataset.width || defaults.graphWidth) - this.defaults.margin.left - this.defaults.margin.right;
         this.defaults.lineColor = this.dataset.lineColor || defaults.lineColor;
+<<<<<<< HEAD
         this.defaults.unit = this.dataset.unit || 'count';
+=======
+        this.defaults.unit = this.dataset.unit || 'kb';
+>>>>>>> filesys_availability_MNRVA-74
         this.render();
       }
       /**
@@ -7567,7 +7582,11 @@
         var results = [];
 
         for (var i = 0; i < data.length; i++) {
+<<<<<<< HEAD
           var item = data[i].filesystem_files;
+=======
+          var item = data[i].filesystem_avail;
+>>>>>>> filesys_availability_MNRVA-74
           results.push(item);
         }
 
@@ -7631,7 +7650,11 @@
       }
 
     }
+<<<<<<< HEAD
     customElements.define('filesystem-files', FilesystemFiles);
+=======
+    customElements.define('filesystem-avail', FilesystemAvail);
+>>>>>>> filesys_availability_MNRVA-74
 
     /**
      * @name MemoryActualUsed
@@ -8616,7 +8639,11 @@
     exports.IdlePercent = IdlePercent;
     exports.FilesystemUsed = FilesystemUsed;
     exports.FilesystemFreeFiles = FilesystemFreeFiles;
+<<<<<<< HEAD
     exports.FilesystemFiles = FilesystemFiles;
+=======
+    exports.FilesystemAvail = FilesystemAvail;
+>>>>>>> filesys_availability_MNRVA-74
     exports.MemoryActualUsed = MemoryActualUsed;
     exports.MemoryActualFree = MemoryActualFree;
     exports.MemoryFree = MemoryFree;

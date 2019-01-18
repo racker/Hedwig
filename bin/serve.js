@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 'use strict';
 const CONFIG = require('../_config');
-const path = require('path');
 const express = require('express');
 
 // Create Express App

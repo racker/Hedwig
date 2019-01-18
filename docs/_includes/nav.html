@@ -1,24 +1,33 @@
-<h4 style='padding-left: 20px;'>CPU</h4>
-<a href="#cpu-system-usage">cpu system usage</a>
-<a href="#cpu-average-usage">cpu average usage</a>
-<a href="#cpu-wait-average">cpu wait average</a>
-<a href="#cpu-irq-average">cpu irq average</a>
-<a href="#cpu-min-usage">cpu min usage</a>
-<a href="#cpu-max-usage">cpu max usage</a>
-<a href="#cpu-user-usage">cpu user usage</a>
-<a href="#cpu-count">cpu count</a>
-<a href="#cpu-stolen-percent">cpu stolen percent</a>
-<a href="#cpu-idle-percent">cpu idle percent</a>
-<br/>
-<h4 style='padding-left: 20px;'>Filesystem</h4>
+<hx-disclosure aria-controls="cpu">CPU
+    <hx-icon class="toggle-icon" type="angle-down"></hx-icon>
+</hx-disclosure>
+<hx-reveal id="cpu">
+    <a href="#cpu-system-usage">cpu system usage</a>
+    <a href="#cpu-average-usage">cpu average usage</a>
+    <a href="#cpu-wait-average">cpu wait average</a>
+    <a href="#cpu-irq-average">cpu irq average</a>
+    <a href="#cpu-min-usage">cpu min usage</a>
+    <a href="#cpu-max-usage">cpu max usage</a>
+    <a href="#cpu-user-usage">cpu user usage</a>
+    <a href="#cpu-count">cpu count</a>
+    <a href="#cpu-stolen-percent">cpu stolen percent</a>
+    <a href="#cpu-idle-percent">cpu idle percent</a>
+</hx-reveal>
+<hx-disclosure aria-controls="filesystem">Filesystem
+    <hx-icon class="toggle-icon" type="angle-down"></hx-icon>
+</hx-disclosure>
+<hx-reveal id="filesystem">
 <a href="#filesystem-used">filesystem used</a>
 <a href="#filesystem-free-files">filesystem free files</a>
 <a href="#filesystem-files">filesystem files</a>
 <a href="#filesystem-avail">filesystem available</a>
 <a href="#filesystem-free">filesystem free</a>
 <a href="#filesystem-total">filesystem total</a>
-<br>
-<h4 style='padding-left: 20px;'>Memory</h4>
+</hx-reveal>
+<hx-disclosure aria-controls="memory">Memory
+    <hx-icon class="toggle-icon" type="angle-down"></hx-icon>
+</hx-disclosure>
+<hx-reveal id="memory">
 <a href='#memory-actual-used'>memory actual used</a>
 <a href='#memory-actual-free'>memory actual free</a>
 <a href='#memory-free'>memory free</a>
@@ -28,3 +37,4 @@
 <a href='#memory-used'>memory used</a>
 <a href='#memory-swap-total'>memory swap total</a>
 <a href='#memory-swap-page-out'>memory swap page out</a>
+</hx-reveal>

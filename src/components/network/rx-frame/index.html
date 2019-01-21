@@ -1,0 +1,37 @@
+<html>
+    <head>
+        <script src="../../../../dist/hedwig-main.umd.js"></script>
+    </head>
+    <body>
+        <script>
+            var mock = [
+                {
+                    "network_rx_frame": {
+                        "time": "2018-11-24T18:58:21Z",
+                        "value": 0.0
+                    }
+                },
+                {
+                    "network_rx_frame": {
+                        "time": "2018-11-25T23:58:21Z",
+                        "value": 0.0
+                    }
+                },
+                {
+                    "network_rx_frame": {
+                        "time": "2018-11-26T02:58:21Z",
+                        "value": 0.0
+                    }
+                },
+                {
+                    "network_rx_frame": {
+                        "time": "2018-11-27T10:58:21Z",
+                        "value": 0.0
+                    }
+                }
+            ];
+
+            document.write('<network-rx-frame data-height="400" data-unit="frames" data-width="1000" data-graph=' + JSON.stringify(mock) + '></network-rx-frame>');
+        </script>
+    </body>
+</html>

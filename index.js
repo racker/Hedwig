@@ -31,3 +31,6 @@ export { MemorySwapUsed } from './src/components/memory/swap-used/swap-used';
 export { MemoryUsed } from './src/components/memory/used/used';
 export { MemorySwapTotal } from './src/components/memory/swap-total/swap-total';
 export { MemorySwapPageOut } from './src/components/memory/swap-page-out/swap-page-out';
+
+// Network components
+export { NetworkRxFrame } from './src/components/network/rx-frame/rx-frame';

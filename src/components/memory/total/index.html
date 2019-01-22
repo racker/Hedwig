@@ -1,0 +1,37 @@
+<html>
+    <head>
+        <script src="../../../../dist/hedwig-main.umd.js"></script>
+    </head>
+    <body>
+        <script>
+            var mock = [
+                {
+                    "memory_total": {
+                        "time": "2018-11-24T18:58:21Z",
+                        "value": 165
+                    }
+                },
+                {
+                    "memory_total": {
+                        "time": "2018-11-25T23:58:21Z",
+                        "value": 210
+                    }
+                },
+                {
+                    "memory_total": {
+                        "time": "2018-11-26T02:58:21Z",
+                        "value": 328
+                    }
+                },
+                {
+                    "memory_total": {
+                        "time": "2018-11-27T10:58:21Z",
+                        "value": 39
+                    }
+                }
+            ];
+
+            document.write('<memory-total data-height="400" data-unit="b" data-width="1000" data-graph=' + JSON.stringify(mock) + '></memory-total>');
+        </script>
+    </body>
+</html>

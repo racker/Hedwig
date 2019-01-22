@@ -2,6 +2,7 @@ const glob = require('glob-promise');
 const backstop = require('backstopjs');
 var args = require('minimist')(process.argv.slice(2));
 const componentPath = './src/components';
+const killServer = require('./bin/stop');
 const config = require('./_config');
 
 const projectConfig = (scenarios) => {
@@ -9,6 +10,7 @@ const projectConfig = (scenarios) => {
  };
 
 let commandToRun = "";
+let singleRun = args.singleRun;
 
 if( args.reference ) {
     commandToRun = "reference";
@@ -37,6 +39,13 @@ function getScenariosForProject(projectPath) {
 
 getScenariosForProject(componentPath).then((scenarios) => {
     if( "" !== commandToRun ) {
-        backstop(commandToRun, { config: projectConfig(scenarios) });
+        backstop(commandToRun, { config: projectConfig(scenarios) }).then(
+            () => {
+                if (singleRun) {
+                    killServer.stop(config.host, config.port);
+                }
+        }, () => {
+            killServer.stop(config.host, config.port);
+        });
     }
 });

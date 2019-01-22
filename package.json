@@ -13,7 +13,7 @@
     "visual-tests": "node backstop.js --test --singleRun",
     "pretest": "npm run build",
     "serve": "node ./bin/serve.js",
-    "reference": "node backstop.js --reference --singleRun"
+    "references": "node backstop.js --reference --singleRun"
   },
   "files": [
     "dist"

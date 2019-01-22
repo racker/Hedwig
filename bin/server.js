@@ -5,7 +5,6 @@ const express = require('express');
 
 // Create Express App
 const app = express();
-app.use('/hedwig', express.static(CONFIG.srcComponents));
 app.use('/', express.static(CONFIG.srcComponents));
 app.use('/dist', express.static(CONFIG.distDir));
 

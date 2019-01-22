@@ -4,7 +4,7 @@ scenarioConfig.config = (host, port) =>
 {
     return {
         "label": `Network - rx frame`,
-        "url": `${host}:${port}/memory/actual-free/index.html`,
+        "url": `${host}:${port}/network/rx-frame/index.html`,
         "referenceUrl": ``,
         "readyEvent": ``,
         "readySelector": ``,

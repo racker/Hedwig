@@ -24,7 +24,7 @@ export class NetworkRxBytes extends HTMLElement {
         this.defaults.height = (this.dataset.height || defaults.graphHeight) - this.defaults.margin.top - this.defaults.margin.bottom;
         this.defaults.width = (this.dataset.width || defaults.graphWidth) - this.defaults.margin.left - this.defaults.margin.right;
         this.defaults.lineColor = this.dataset.lineColor || defaults.lineColor;
-        this.defaults.unit = this.dataset.unit || 'frames';
+        this.defaults.unit = this.dataset.unit || 'b';
 
         this.render();
     }

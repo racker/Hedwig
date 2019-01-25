@@ -36,3 +36,4 @@ export { MemoryTotal } from './src/components/memory/total/total';
 // Network components
 export { NetworkRxFrame } from './src/components/network/rx-frame/rx-frame';
 export { NetworkRxErrors } from './src/components/network/rx-errors/rx-errors';
+export { NetworkTxBytes } from './src/components/network/tx-bytes/tx-bytes';

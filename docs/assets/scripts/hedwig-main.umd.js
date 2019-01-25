@@ -6232,6 +6232,9 @@
             case unit === 'frames':
               return d + ' frames/s';
 
+            case unit === 'errors':
+              return d + ' errors/s';
+
             default:
               return d * 100 + '%';
           }
@@ -9147,6 +9150,7 @@
     customElements.define('network-rx-frame', NetworkRxFrame);
 
     /**
+<<<<<<< HEAD
      * @name NetworkRxBytes
      * @extends HTMLElement
      * @description
@@ -9154,6 +9158,15 @@
      */
 
     class NetworkRxBytes extends HTMLElement {
+=======
+     * @name NetworkRxErrors
+     * @extends HTMLElement
+     * @description
+     * Graph component representing received errors
+     */
+
+    class NetworkRxErrors extends HTMLElement {
+>>>>>>> origin
       constructor() {
         super();
       }
@@ -9171,7 +9184,11 @@
         this.defaults.height = (this.dataset.height || defaults.graphHeight) - this.defaults.margin.top - this.defaults.margin.bottom;
         this.defaults.width = (this.dataset.width || defaults.graphWidth) - this.defaults.margin.left - this.defaults.margin.right;
         this.defaults.lineColor = this.dataset.lineColor || defaults.lineColor;
+<<<<<<< HEAD
         this.defaults.unit = this.dataset.unit || 'frames';
+=======
+        this.defaults.unit = this.dataset.unit || 'errors';
+>>>>>>> origin
         this.render();
       }
       /**
@@ -9188,7 +9205,11 @@
         var results = [];
 
         for (var i = 0; i < data.length; i++) {
+<<<<<<< HEAD
           var item = data[i].network_rx_bytes;
+=======
+          var item = data[i].network_rx_errors;
+>>>>>>> origin
           results.push(item);
         }
 
@@ -9252,7 +9273,11 @@
       }
 
     }
+<<<<<<< HEAD
     customElements.define('network-rx-bytes', NetworkRxBytes);
+=======
+    customElements.define('network-rx-errors', NetworkRxErrors);
+>>>>>>> origin
 
     exports.Defaults = Defaults;
     exports.LineGraph = LineGraph;
@@ -9283,7 +9308,11 @@
     exports.MemorySwapPageOut = MemorySwapPageOut;
     exports.MemoryTotal = MemoryTotal;
     exports.NetworkRxFrame = NetworkRxFrame;
+<<<<<<< HEAD
     exports.NetworkRxBytes = NetworkRxBytes;
+=======
+    exports.NetworkRxErrors = NetworkRxErrors;
+>>>>>>> origin
 
     Object.defineProperty(exports, '__esModule', { value: true });
 

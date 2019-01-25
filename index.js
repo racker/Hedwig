@@ -35,5 +35,9 @@ export { MemoryTotal } from './src/components/memory/total/total';
 
 // Network components
 export { NetworkRxFrame } from './src/components/network/rx-frame/rx-frame';
+export { NetworkRxDropped } from './src/components/network/rx-dropped/rx-dropped';
+export { NetworkRxBytes } from './src/components/network/rx-bytes/rx-bytes';
+export { NetworkRxOverruns } from './src/components/network/rx-overruns/rx-overruns';
 export { NetworkRxErrors } from './src/components/network/rx-errors/rx-errors';
 export { NetworkTxBytes } from './src/components/network/tx-bytes/tx-bytes';
+export { NetworkRxPackets } from './src/components/network/rx-packets/rx-packets';

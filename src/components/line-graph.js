@@ -110,8 +110,12 @@ export class LineGraph extends HTMLElement {
                         return d + ' mb';
                     case unit === 'frames':
                         return d + ' frames/s';
+                    case unit === 'overruns':
+                        return d + ' overruns/s';
                     case unit === 'errors':
                         return d + ' errors/s';
+                    case unit === 'packets':
+                        return d + ' packets/s';
                     default:
                         return (d * 100) + '%';
                }

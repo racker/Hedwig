@@ -10,10 +10,10 @@
     "build": "rollup -c",
     "dev": "rollup -c -w",
     "unit-test": "./node_modules/karma/bin/karma start",
-    "visual-tests": "node backstop.js --test --singleRun",
+    "visual-test": "node backstop.js --test --singleRun",
     "pretest": "npm run build",
-    "serve": "node ./bin/serve.js",
-    "references": "node backstop.js --reference --singleRun"
+    "serve": "node -e 'require('./bin/server.js').start()'",
+    "reference": "node backstop.js --reference --singleRun"
   },
   "files": [
     "dist"

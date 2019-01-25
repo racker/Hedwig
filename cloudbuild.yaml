@@ -3,7 +3,7 @@ steps:
     args: ['install']
 
   - name: 'gcr.io/$PROJECT_ID/minerva-testing:latest'
-    args: ["npm", "run", "visual-tests"]
+    args: ["npm", "run", "visual-test"]
 
   - name: 'gcr.io/cloud-builders/gsutil'
     args: ["rsync", "-r", "test", "gs://hedwig-backstop.mnrva-deploy.dev.monplat.rackspace.net/$REPO_NAME/$BRANCH_NAME/$COMMIT_SHA/"]

@@ -116,6 +116,8 @@ export class LineGraph extends HTMLElement {
                         return d + ' errors/s';
                     case unit === 'packets':
                         return d + ' packets/s';
+                    case unit === 'collisions':
+                        return d + ' collisions/s';
                     default:
                         return (d * 100) + '%';
                }

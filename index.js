@@ -39,6 +39,8 @@ export { NetworkRxDropped } from './src/components/network/rx-dropped/rx-dropped
 export { NetworkRxBytes } from './src/components/network/rx-bytes/rx-bytes';
 export { NetworkRxOverruns } from './src/components/network/rx-overruns/rx-overruns';
 export { NetworkRxErrors } from './src/components/network/rx-errors/rx-errors';
-export { NetworkTxBytes } from './src/components/network/tx-bytes/tx-bytes';
 export { NetworkRxPackets } from './src/components/network/rx-packets/rx-packets';
+
+export { NetworkTxBytes } from './src/components/network/tx-bytes/tx-bytes';
+export { NetworkTxCollisions } from './src/components/network/tx-collisions/tx-collisions';
 export { NetworkTxCarrier } from './src/components/network/tx-carrier/tx-carrier';

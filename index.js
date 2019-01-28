@@ -41,3 +41,4 @@ export { NetworkRxOverruns } from './src/components/network/rx-overruns/rx-overr
 export { NetworkRxErrors } from './src/components/network/rx-errors/rx-errors';
 export { NetworkTxBytes } from './src/components/network/tx-bytes/tx-bytes';
 export { NetworkRxPackets } from './src/components/network/rx-packets/rx-packets';
+export { NetworkTxDropped } from './src/components/network/tx-dropped/tx-dropped';

@@ -1,14 +1,14 @@
-<div id='network-rx-dropped'>
-    <h3>Network RX Dropped</h3>
+<div id='network-tx-dropped'>
+    <h3>Network TX Dropped</h3>
     <div>
       <p>
         Description:<br><br>
-        The number of packets received and subsequently dropped over the interface.
+        The number of packets transmitted and subsequently dropped over the interface.
       </p>
       <br>
       <p>
         Tag: <br>
-        <pre><code class='html'>&lt;network-rx-dropped data-height="200" data-width="400" data-unit="packets" data=[someBoundData] &gt;&lt;/network-rx-dropped&gt;</code></pre>
+        <pre><code class='html'>&lt;network-tx-dropped data-height="200" data-width="400" data-unit="packets" data=[someBoundData] &gt;&lt;/network-tx-dropped&gt;</code></pre>
       </p>
       <br>
       <p>Sample data structure</p>
@@ -68,7 +68,7 @@
                     }
                 }];
 
-              document.write('<network-rx-dropped data-height="200" data-width="400" data-unit="packets" data-graph=' + JSON.stringify(mock) + '></network-rx-dropped>');
+              document.write('<network-tx-dropped data-height="200" data-width="400" data-unit="packets" data-graph=' + JSON.stringify(mock) + '></network-tx-dropped>');
           </script>
 
           <p>Options</p>

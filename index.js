@@ -45,3 +45,4 @@ export { NetworkTxDropped } from './src/components/network/tx-dropped/tx-dropped
 export { NetworkTxBytes } from './src/components/network/tx-bytes/tx-bytes';
 export { NetworkTxCollisions } from './src/components/network/tx-collisions/tx-collisions';
 export { NetworkTxCarrier } from './src/components/network/tx-carrier/tx-carrier';
+export { NetworkTxPackets } from './src/components/network/tx-packets/tx-packets';

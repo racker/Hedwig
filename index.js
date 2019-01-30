@@ -46,3 +46,4 @@ export { NetworkTxBytes } from './src/components/network/tx-bytes/tx-bytes';
 export { NetworkTxCollisions } from './src/components/network/tx-collisions/tx-collisions';
 export { NetworkTxCarrier } from './src/components/network/tx-carrier/tx-carrier';
 export { NetworkTxOverruns } from './src/components/network/tx-overruns/tx-overruns';
+export { NetworkTxPackets } from './src/components/network/tx-packets/tx-packets';

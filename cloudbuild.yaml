@@ -3,6 +3,9 @@ steps:
     args: ['install']
 
   - name: 'gcr.io/$PROJECT_ID/minerva-testing:latest'
+    args: ["npm", "run", "reference"]
+
+  - name: 'gcr.io/$PROJECT_ID/minerva-testing:latest'
     args: ["npm", "run", "visual-test"]
 
   - name: 'gcr.io/cloud-builders/gsutil'

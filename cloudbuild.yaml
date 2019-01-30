@@ -10,3 +10,6 @@ steps:
 
   - name: 'gcr.io/cloud-builders/gsutil'
     args: ["rsync", "-r", "test", "gs://hedwig-backstop.mnrva-deploy.dev.monplat.rackspace.net/$REPO_NAME/$BRANCH_NAME/$COMMIT_SHA/"]
+
+  - name: 'alpine'
+    args: ["echo", "gs://hedwig-backstop.mnrva-deploy.dev.monplat.rackspace.net/$REPO_NAME/$BRANCH_NAME/$COMMIT_SHA/"]

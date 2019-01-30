@@ -5,7 +5,7 @@ scenarioConfig.config = (host, port) =>
     return {
         "label": `CPU - Count`,
         "url": `${host}:${port}/cpu/cpu-count/index.html`,
-        "referenceUrl": ``,
+        "referenceUrl": `hedwig-backstop.mnrva-deploy.dev.monplat.rackspace.net/${process.env.REPO_NAME}/${process.env.BRANCH_NAME}/${process.env.COMMIT_SHA}/`,
         "readyEvent": ``,
         "readySelector": ``,
         "delay": 0,

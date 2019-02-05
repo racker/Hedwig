@@ -1,10 +1,14 @@
 import babel from 'rollup-plugin-babel';
+import json from 'rollup-plugin-json';
 import resolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
 import pkg from './package.json';
 
 let babelPlugin = babel({
-    exclude: 'node_modules/**/*',
+	exclude: [
+		'node_modules/**/*',
+		'*.json'
+	]
 });
 
 export default [
@@ -17,9 +21,10 @@ export default [
 			format: 'umd'
 		},
 		plugins: [
-			babelPlugin,
+			json(),
 			resolve(), // so Rollup can find any dependecies
-			commonjs() // so Rollup can convert any dependencies to an ES module
+			commonjs(), // so Rollup can convert any dependencies to an ES module
+			babelPlugin
 		]
 	},
 	{
@@ -30,12 +35,12 @@ export default [
 			format: 'umd'
 		},
 		plugins: [
-			babelPlugin,
+			json(),
 			resolve(), // so Rollup can find any dependecies
-			commonjs() // so Rollup can convert any dependencies to an ES module
+			commonjs(), // so Rollup can convert any dependencies to an ES module
+			babelPlugin
 		]
 	},
-
 	// CommonJS (for Node) and ES module (for bundlers) build.
 	// (We could have three entries in the configuration array
 	// instead of two, but it's quicker to generate multiple
@@ -48,6 +53,9 @@ export default [
 		output: [
 			{ file: pkg.main, format: 'cjs' },
 			{ file: pkg.module, format: 'es' }
+		],
+		plugins: [
+			json()
 		]
 	}
 ];

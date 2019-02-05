@@ -1,0 +1,29 @@
+<html>
+    <head>
+        <script type="text/javascript" src="../../../../dist/hedwig-main.umd.js"></script>
+    </head>
+    <body>
+        <script>
+            var mock = [
+                {
+                    "idle_percent_average": 15.3,
+                    "time": "2018-11-24T18:58:21Z"
+                },
+                {
+                    "idle_percent_average": 15.3,
+                    "time": "2018-11-25T23:58:21Z"
+                },
+                {
+                    "idle_percent_average": 15.3,
+                    "time": "2018-11-26T02:58:21Z"
+                },
+                {
+                    "idle_percent_average": 35.2,
+                    "time": "2018-11-27T10:58:21Z"
+                }
+            ];
+
+            document.write('<hedwig-graph data-type="cpu-idle-percent" data-unit="%" data data-height="400" data-width="1000" data-graph=' + JSON.stringify(mock) + '></hedwig-graph>');
+        </script>
+    </body>
+</html>

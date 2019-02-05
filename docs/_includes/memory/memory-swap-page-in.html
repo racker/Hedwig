@@ -8,34 +8,26 @@
           <br>
           <p>
             Tag: <br>
-            <pre><code class='html'>&lt;memory-swap-page-in data-height="200" data-width="400" data-unit="b" data=[someBoundData] &gt;&lt;/memory-swap-page-in&gt;</code></pre>
+            <pre><code class='html'>&lt;hedwig-graph data-type="memory-swap-page-in" data-height="200" data-width="400" data-unit="b" data=[someBoundData] &gt;&lt;/hedwig-graph&gt;</code></pre>
           </p>
           <br>
           <p>Sample data structure</p>
           <pre><code>
-    [{ 
-        "memory_swap_page_in": {
-            "time": "2018-11-24T18:58:21Z",
-            "value": 4567
-        }
+    [{
+        "swap_page_in": 0,
+        "time": "2018-11-24T18:58:21Z"
     },
     {
-        "memory_swap_page_in": {
-            "time": "2018-11-25T23:58:21Z",
-            "value": 2861
-        }
+        "swap_page_in": 3334,
+        "time": "2018-11-25T23:58:21Z"
     },
     {
-        "memory_swap_page_in": {
-            "time": "2018-11-26T02:58:21Z",
-            "value": 9515
-        }
+        "swap_page_in": 8718,
+        "time": "2018-11-26T02:58:21Z"
     },
     {
-        "memory_swap_page_in": {
-            "time": "2018-11-27T10:58:21Z",
-            "value": 7597
-        }
+        "swap_page_in": 4542,
+        "time": "2018-11-27T10:58:21Z"
     }]
             </code></pre>
             <br><br>
@@ -43,34 +35,27 @@
                 Renders: <br>
               </p>
               <script>
-                var mock = [{ 
-                    "memory_swap_page_in": {
-                        "time": "2018-11-24T18:58:21Z",
-                        "value": 4567
-                    }
+                var mock = [
+                {
+                    "swap_page_in": 0,
+                    "time": "2018-11-24T18:58:21Z"
                 },
                 {
-                    "memory_swap_page_in": {
-                        "time": "2018-11-25T23:58:21Z",
-                        "value": 2861
-                    }
+                    "swap_page_in": 3334,
+                    "time": "2018-11-25T23:58:21Z"
                 },
                 {
-                    "memory_swap_page_in": {
-                        "time": "2018-11-26T02:58:21Z",
-                        "value": 9515
-                    }
+                    "swap_page_in": 8718,
+                    "time": "2018-11-26T02:58:21Z"
                 },
                 {
-                    "memory_swap_page_in": {
-                        "time": "2018-11-27T10:58:21Z",
-                        "value": 7597
-                    }
+                    "swap_page_in": 4542,
+                    "time": "2018-11-27T10:58:21Z"
                 }];
-    
-                  document.write('<memory-swap-page-in data-height="200" data-width="400" data-unit="mb" data-graph=' + JSON.stringify(mock) + '></memory-swap-page-in>');
+
+                  document.write('<hedwig-graph data-type="memory-swap-page-in" data-height="200" data-width="400" data-unit="mb" data-graph=' + JSON.stringify(mock) + '></hedwig-graph>');
               </script>
-    
+
               <p>Options</p>
               <table class='hxTable hxTable--condensed'>
                 <thead>
@@ -81,6 +66,11 @@
                   </tr>
                 </thead>
                 <tbody>
+                    <tr>
+                      <td>Type</td>
+                      <td>yes</td>
+                      <td>memory-swap-page-in</td>
+                    </tr>
                   <tr>
                     <td>Margin</td>
                     <td>no</td>

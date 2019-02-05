@@ -20,7 +20,7 @@ module.exports = (options) => {
         ],
         "scenarios": options.scenarios,
         "paths": {
-            "bitmaps_reference": `test/backstop_references`,
+            "bitmaps_reference": `test/backstop_data/bitmaps_references`,
             "bitmaps_test": `test/backstop_data/bitmaps_test`,
             "casper_scripts": `test/backstop_data/casper_scripts`,
             "html_report": `test/backstop_data/html_report`,

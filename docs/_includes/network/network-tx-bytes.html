@@ -8,34 +8,26 @@
       <br>
       <p>
         Tag: <br>
-        <pre><code class='html'>&lt;network-tx-bytes data-height="200" data-width="400" data-unit="b" data=[someBoundData] &gt;&lt;/network-tx-bytes&gt;</code></pre>
+        <pre><code class='html'>&lt;hedwig-graph data-type="network-tx-bytes" data-height="200" data-width="400" data-unit="b" data=[someBoundData] &gt;&lt;/hedwig-graph&gt;</code></pre>
       </p>
       <br>
       <p>Sample data structure</p>
       <pre><code>
 [{
-    "network_tx_bytes": {
-        "time": "2018-11-24T18:58:21Z",
-        "value": 1.3828936888877E14
-    }
+    "tx_bytes": 38208664000,
+    "time": "2018-11-24T18:58:21Z"
 },
 {
-    "network_tx_bytes": {
-        "time": "2018-11-25T23:58:21Z",
-        "value": 4.5928936654877E14
-    }
+    "tx_bytes":  706733675404,
+    "time": "2018-11-25T23:58:21Z"
 },
 {
-    "network_tx_bytes": {
-        "time": "2018-11-26T02:58:21Z",
-        "value": 2.9152936902877E14
-    }
+    "tx_bytes":  42731090409339,
+    "time": "2018-11-26T02:58:21Z"
 },
 {
-    "network_tx_bytes": {
-        "time": "2018-11-27T10:58:21Z",
-        "value": 5.7128936444877E14
-    }
+    "tx_bytes":  18243894940708,
+    "time": "2018-11-27T10:58:21Z"
 }]
         </code></pre>
         <br><br>
@@ -44,31 +36,23 @@
           </p>
           <script>
             var mock = [{
-                    "network_tx_bytes": {
-                        "time": "2018-11-24T18:58:21Z",
-                        "value": 1.3828936888877E14
-                    }
+                    "tx_bytes": 38208664000,
+                    "time": "2018-11-24T18:58:21Z"
                 },
                 {
-                    "network_tx_bytes": {
-                        "time": "2018-11-25T23:58:21Z",
-                        "value": 4.5928936654877E14
-                    }
+                    "tx_bytes":  706733675404,
+                    "time": "2018-11-25T23:58:21Z"
                 },
                 {
-                    "network_tx_bytes": {
-                        "time": "2018-11-26T02:58:21Z",
-                        "value": 2.9152936902877E14
-                    }
+                    "tx_bytes":  42731090409339,
+                    "time": "2018-11-26T02:58:21Z"
                 },
                 {
-                    "network_tx_bytes": {
-                        "time": "2018-11-27T10:58:21Z",
-                        "value": 5.7128936444877E14
-                    }
+                    "tx_bytes":  18243894940708,
+                    "time": "2018-11-27T10:58:21Z"
                 }];
 
-              document.write('<network-tx-bytes data-height="200" data-width="400" data-unit="b" data-graph=' + JSON.stringify(mock) + '></network-tx-bytes>');
+              document.write('<hedwig-graph data-type="network-tx-bytes" data-height="200" data-width="400" data-unit="b" data-graph=' + JSON.stringify(mock) + '></hedwig-graph>');
           </script>
 
           <p>Options</p>
@@ -81,6 +65,11 @@
               </tr>
             </thead>
             <tbody>
+                <tr>
+                  <td>Type</td>
+                  <td>yes</td>
+                  <td>network-tx-bytes</td>
+                </tr>
               <tr>
                 <td>Margin</td>
                 <td>no</td>

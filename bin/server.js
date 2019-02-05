@@ -5,7 +5,7 @@ const express = require('express');
 
 // Create Express App
 const app = express();
-app.use('/', express.static(CONFIG.srcComponents));
+app.use('/', express.static(CONFIG.demoComponents));
 app.use('/dist', express.static(CONFIG.distDir));
 
 let server = {};

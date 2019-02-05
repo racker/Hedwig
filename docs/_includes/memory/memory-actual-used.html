@@ -8,34 +8,27 @@
           <br>
           <p>
             Tag: <br>
-            <pre><code class='html'>&lt;memory-actual-used data-height="200" data-width="400" data-unit="b" data={{ someBoundData }} &gt;&lt;/memory-actual-used&gt;</code></pre>
+            <pre><code class='html'>&lt;hedwig-graph data-type="memory-actual-used" data-height="200" data-width="400" data-unit="b" data={{ someBoundData }} &gt;&lt;/hedwig-graph&gt;</code></pre>
           </p>
           <br>
           <p>Sample data structure</p>
           <pre><code>
-    [{ 
-        "memory_actual_used": {
-            "time": "2018-11-24T18:58:21Z",
-            "value": 846
-        }
+    [
+    {
+        "actual_used": 846,
+        "time": "2018-11-24T18:58:21Z"
     },
     {
-        "memory_actual_used": {
-            "time": "2018-11-25T23:58:21Z",
-            "value": 786
-        }
+        "actual_used": 786,
+        "time": "2018-11-25T23:58:21Z"
     },
     {
-        "memory_actual_used": {
-            "time": "2018-11-26T02:58:21Z",
-            "value": 651
-        }
+        "actual_used": 651,
+        "time": "2018-11-26T02:58:21Z"
     },
     {
-        "memory_actual_used": {
-            "time": "2018-11-27T10:58:21Z",
-            "value": 859
-        }
+        "actual_used": 859,
+        "time": "2018-11-27T10:58:21Z"
     }]
             </code></pre>
             <br><br>
@@ -44,35 +37,26 @@
               </p>
               <script>
                   var mock = [
-                    { 
-                        "memory_actual_used": {
-                            "time": "2018-11-24T18:58:21Z",
-                            "value": 846
-                        }
-                    },
-                    {
-                        "memory_actual_used": {
-                            "time": "2018-11-25T23:58:21Z",
-                            "value": 786
-                        }
-                    },
-                    {
-                        "memory_actual_used": {
-                            "time": "2018-11-26T02:58:21Z",
-                            "value": 651
-                        }
-                    },
-                    {
-                        "memory_actual_used": {
-                            "time": "2018-11-27T10:58:21Z",
-                            "value": 859
-                        }
-                    }
-                  ];
-    
-                  document.write('<memory-actual-used data-height="200" data-width="400" data-unit="kb" data-graph=' + JSON.stringify(mock) + '></memory-actual-used>');
+                {
+                    "actual_used": 846,
+                    "time": "2018-11-24T18:58:21Z"
+                },
+                {
+                    "actual_used": 786,
+                    "time": "2018-11-25T23:58:21Z"
+                },
+                {
+                    "actual_used": 651,
+                    "time": "2018-11-26T02:58:21Z"
+                },
+                {
+                    "actual_used": 859,
+                    "time": "2018-11-27T10:58:21Z"
+                }];
+
+                  document.write('<hedwig-graph data-type="memory-actual-used" data-height="200" data-width="400" data-unit="kb" data-graph=' + JSON.stringify(mock) + '></hedwig-graph>');
               </script>
-    
+
               <p>Options</p>
               <table class='hxTable hxTable--condensed'>
                 <thead>
@@ -83,6 +67,11 @@
                   </tr>
                 </thead>
                 <tbody>
+                  <tr>
+                    <td>Type</td>
+                    <td>yes</td>
+                    <td>memory-actual-used</td>
+                  </tr>
                   <tr>
                     <td>Margin</td>
                     <td>no</td>

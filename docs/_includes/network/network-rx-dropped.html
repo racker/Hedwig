@@ -8,34 +8,26 @@
       <br>
       <p>
         Tag: <br>
-        <pre><code class='html'>&lt;network-rx-dropped data-height="200" data-width="400" data-unit="packets" data=[someBoundData] &gt;&lt;/network-rx-dropped&gt;</code></pre>
+        <pre><code class='html'>&lt;hedwig-graph data-type="network-rx-dropped" data-height="200" data-width="400" data-unit="packets" data=[someBoundData] &gt;&lt;/hedwig-graph&gt;</code></pre>
       </p>
       <br>
       <p>Sample data structure</p>
       <pre><code>
 [{
-    "network_rx_dropped": {
-        "time": "2018-11-24T18:58:21Z",
-        "value": 0.0
-    }
+    "rx_dropped": 0.0,
+    "time": "2018-11-24T18:58:21Z"
 },
 {
-    "network_rx_dropped": {
-        "time": "2018-11-25T23:58:21Z",
-        "value": 0.0
-    }
+    "rx_dropped": 0.0,
+    "time": "2018-11-25T23:58:21Z"
 },
 {
-    "network_rx_dropped": {
-        "time": "2018-11-26T02:58:21Z",
-        "value": 0.0
-    }
+    "rx_dropped": 0.0,
+    "time": "2018-11-26T02:58:21Z"
 },
 {
-    "network_rx_dropped": {
-        "time": "2018-11-27T10:58:21Z",
-        "value": 0.0
-    }
+    "rx_dropped": 0.0,
+    "time": "2018-11-27T10:58:21Z"
 }]
         </code></pre>
         <br><br>
@@ -44,31 +36,23 @@
           </p>
           <script>
             var mock = [{
-                    "network_rx_dropped": {
-                        "time": "2018-11-24T18:58:21Z",
-                        "value": 0.0
-                    }
+                    "rx_dropped": 0.0,
+                    "time": "2018-11-24T18:58:21Z"
                 },
                 {
-                    "network_rx_dropped": {
-                        "time": "2018-11-25T23:58:21Z",
-                        "value": 0.0
-                    }
+                    "rx_dropped": 0.0,
+                    "time": "2018-11-25T23:58:21Z"
                 },
                 {
-                    "network_rx_dropped": {
-                        "time": "2018-11-26T02:58:21Z",
-                        "value": 0.0
-                    }
+                    "rx_dropped": 0.0,
+                    "time": "2018-11-26T02:58:21Z"
                 },
                 {
-                    "network_rx_dropped": {
-                        "time": "2018-11-27T10:58:21Z",
-                        "value": 0.0
-                    }
+                    "rx_dropped": 0.0,
+                    "time": "2018-11-27T10:58:21Z"
                 }];
 
-              document.write('<network-rx-dropped data-height="200" data-width="400" data-unit="packets" data-graph=' + JSON.stringify(mock) + '></network-rx-dropped>');
+              document.write('<hedwig-graph data-type="network-rx-dropped" data-height="200" data-width="400" data-unit="packets" data-graph=' + JSON.stringify(mock) + '></hedwig-graph>');
           </script>
 
           <p>Options</p>
@@ -81,6 +65,11 @@
               </tr>
             </thead>
             <tbody>
+                <tr>
+                  <td>Type</td>
+                  <td>yes</td>
+                  <td>network-rx-dropped</td>
+                </tr>
               <tr>
                 <td>Margin</td>
                 <td>no</td>

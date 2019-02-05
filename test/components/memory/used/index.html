@@ -1,0 +1,29 @@
+<html>
+    <head>
+        <script src="../../../../dist/hedwig-main.umd.js"></script>
+    </head>
+    <body>
+        <script>
+            var mock = [
+                {
+                    "used": 865,
+                    "time": "2018-11-24T18:58:21Z"
+                },
+                {
+                    "used": 810,
+                    "time": "2018-11-25T23:58:21Z"
+                },
+                {
+                    "used": 928,
+                    "time": "2018-11-26T02:58:21Z"
+                },
+                {
+                    "used": 539,
+                    "time": "2018-11-27T10:58:21Z"
+                }
+            ];
+
+            document.write('<hedwig-graph data-type="memory-used" data-height="400" data-unit="b" data-width="1000" data-graph=' + JSON.stringify(mock) + '></hedwig-graph>');
+        </script>
+    </body>
+</html>

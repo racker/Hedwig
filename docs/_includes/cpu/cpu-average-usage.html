@@ -8,34 +8,26 @@
       <br>
       <p>
         Tag: <br>
-        <pre><code class='html'>&lt;cpu-average-usage data-height="200" data-width="400" data={{ someBoundData }} &gt;&lt;/cpu-average-usage&gt;</code></pre>
+        <pre><code class='html'>&lt;hedwig-graph data-type="cpu-average-usage" data-height="200" data-width="400" data={{ someBoundData }} &gt;&lt;/hedwig-graph&gt;</code></pre>
       </p>
       <br>
       <p>Sample data structure</p>
       <pre><code>
 [{
-"cpu_usage_average": {
-"time": "2018-11-24T18:58:21Z",
-"value": .37
-}
+    "usage_average": .37,
+    "time": "2018-11-24T18:58:21Z"
 },
 {
-"cpu_usage_average": {
-"time": "2018-11-25T23:58:21Z",
-"value": 0.50
-}
+    "usage_average": 0.50,
+    "time": "2018-11-25T23:58:21Z"
 },
 {
-"cpu_usage_average": {
-"time": "2018-11-26T02:58:21Z",
-"value": 1.80
-}
+    "usage_average": .80,
+    "time": "2018-11-26T02:58:21Z"
 },
 {
-"cpu_usage_average": {
-"time": "2018-11-27T10:58:21Z",
-"value": 0.12
-}
+    "usage_average": 0.12,
+    "time": "2018-11-27T10:58:21Z"
 }]
         </code></pre>
         <br><br>
@@ -44,33 +36,24 @@
           </p>
           <script>
               var mock = [
-              {
-                  "cpu_usage_average": {
-                      "time": "2018-11-24T18:58:21Z",
-                      "value": .37
-                  }
-              },
-              {
-                  "cpu_usage_average": {
-                      "time": "2018-11-25T23:58:21Z",
-                      "value": 0.50
-                  }
-              },
-              {
-                  "cpu_usage_average": {
-                      "time": "2018-11-26T02:58:21Z",
-                      "value": 1.80
-                  }
-              },
-              {
-                  "cpu_usage_average": {
-                      "time": "2018-11-27T10:58:21Z",
-                      "value": 0.12
-                  }
-              }
-              ];
+                {
+                    "usage_average": .37,
+                    "time": "2018-11-24T18:58:21Z"
+                },
+                {
+                    "usage_average": 0.50,
+                    "time": "2018-11-25T23:58:21Z"
+                },
+                {
+                    "usage_average": .80,
+                    "time": "2018-11-26T02:58:21Z"
+                },
+                {
+                    "usage_average": 0.12,
+                    "time": "2018-11-27T10:58:21Z"
+                }];
 
-              document.write('<cpu-average-usage data-height="200" data-width="400" data-graph=' + JSON.stringify(mock) + '></cpu-system-usage>');
+              document.write('<hedwig-graph data-type="cpu-average-usage" data-height="200" data-width="400" data-graph=' + JSON.stringify(mock) + '></hedwig-graph>');
           </script>
 
           <p>Options</p>
@@ -83,6 +66,11 @@
               </tr>
             </thead>
             <tbody>
+                <tr>
+                  <td>Type</td>
+                  <td>yes</td>
+                  <td>cpu-average-usage</td>
+                </tr>
               <tr>
                 <td>Margin</td>
                 <td>no</td>

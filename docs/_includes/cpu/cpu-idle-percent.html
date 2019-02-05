@@ -8,69 +8,51 @@
       <br>
       <p>
         Tag: <br>
-        <pre><code class='html'>&lt;cpu-idle-percent data-height="200" data-width="400" data={{ someBoundData }} &gt;&lt;/cpu-idle-percent&gt;</code></pre>
+        <pre><code class='html'>&lt;hedwig-graph data-type="cpu-idle-percent" data-height="200" data-width="400" data={{ someBoundData }} &gt;&lt;/hedwig-graph&gt;</code></pre>
       </p>
       <br>
       <p>Sample data structure</p>
       <pre><code>
-[{ 
-"cpu_idle_percent_average": {
-"time": "2018-11-24T18:58:21Z",
-"value": .15
-}
+[{
+    "idle_percent_average": 15.3,
+    "time": "2018-11-24T18:58:21Z"
 },
 {
-"cpu_idle_percent_average": {
-"time": "2018-11-25T23:58:21Z",
-"value": 0.15
-}
+    "idle_percent_average": 15.3,
+    "time": "2018-11-25T23:58:21Z"
 },
 {
-"cpu_idle_percent_average": {
-"time": "2018-11-26T02:58:21Z",
-"value": .15
-}
+    "idle_percent_average": 15.3,
+    "time": "2018-11-26T02:58:21Z"
 },
 {
-"cpu_idle_percent_average": {
-"time": "2018-11-27T10:58:21Z",
-"value": .35
-}
-}]    
+    "idle_percent_average": 35.2,
+    "time": "2018-11-27T10:58:21Z"
+}]
         </code></pre>
         <br><br>
         <p>
             Renders: <br>
           </p>
           <script>
-                var mock = [
-                { 
-                    "cpu_idle_percent_average": {
-                        "time": "2018-11-24T18:58:21Z",
-                        "value": .15
-                    }
+                var mock = [{
+                    "idle_percent_average": 15.3,
+                    "time": "2018-11-24T18:58:21Z"
                 },
                 {
-                    "cpu_idle_percent_average": {
-                        "time": "2018-11-25T23:58:21Z",
-                        "value": 0.15
-                    }
+                    "idle_percent_average": 15.3,
+                    "time": "2018-11-25T23:58:21Z"
                 },
                 {
-                    "cpu_idle_percent_average": {
-                        "time": "2018-11-26T02:58:21Z",
-                        "value": .15
-                    }
+                    "idle_percent_average": 15.3,
+                    "time": "2018-11-26T02:58:21Z"
                 },
                 {
-                    "cpu_idle_percent_average": {
-                        "time": "2018-11-27T10:58:21Z",
-                        "value": .35
-                    }
-                }
-                ];
-  
-              document.write('<cpu-idle-percent data-height="200" data-width="400" data-graph=' + JSON.stringify(mock) + '></cpu-idle-percent>');
+                    "idle_percent_average": 35.2,
+                    "time": "2018-11-27T10:58:21Z"
+                }];
+
+              document.write('<hedwig-graph data-type="cpu-idle-percent" data-height="200" data-width="400" data-graph=' + JSON.stringify(mock) + '></hedwig-graph>');
           </script>
 
           <p>Options</p>
@@ -83,6 +65,11 @@
               </tr>
             </thead>
             <tbody>
+                <tr>
+                  <td>Type</td>
+                  <td>yes</td>
+                  <td>cpu-idle-percent</td>
+                </tr>
               <tr>
                 <td>Margin</td>
                 <td>no</td>

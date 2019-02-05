@@ -8,34 +8,26 @@
       <br>
       <p>
         Tag: <br>
-        <pre><code class='html'>&lt;cpu-max-usage data-height="200" data-width="400" data={{ someBoundData }} &gt;&lt;/cpu-max-usage&gt;</code></pre>
+        <pre><code class='html'>&lt;hedwig-graph data-type="cpu-max-usage" data-height="200" data-width="400" data={{ someBoundData }} &gt;&lt;/hedwig-graph&gt;</code></pre>
       </p>
       <br>
       <p>Sample data structure</p>
       <pre><code>
 [{
-"cpu_max_cpu_usage": {
-"time": "2018-12-12T18:58:21Z",
-"value": .98
-}
+    "max_cpu_usage": 37.43,
+    "time": "2018-11-24T18:58:21Z"
 },
 {
-"cpu_max_cpu_usage": {
-"time": "2018-12-13T23:58:21Z",
-"value": 0.78
-}
+    "max_cpu_usage": 50.87,
+    "time": "2018-11-25T23:58:21Z"
 },
 {
-"cpu_max_cpu_usage": {
-"time": "2018-12-14T02:58:21Z",
-"value": .33
-}
+    "max_cpu_usage": 66.19,
+    "time": "2018-11-26T02:58:21Z"
 },
 {
-"cpu_max_cpu_usage": {
-"time": "2018-12-16T10:58:21Z",
-"value": .47
-}
+    "max_cpu_usage": 12.65,
+    "time": "2018-11-27T10:58:21Z"
 }]
         </code></pre>
         <br><br>
@@ -44,33 +36,25 @@
           </p>
           <script>
               var mock = [
-              {
-                  "cpu_max_cpu_usage": {
-                      "time": "2018-12-12T18:58:21Z",
-                      "value": .98
-                  }
-              },
-              {
-                  "cpu_max_cpu_usage": {
-                      "time": "2018-12-13T23:58:21Z",
-                      "value": 0.78
-                  }
-              },
-              {
-                  "cpu_max_cpu_usage": {
-                      "time": "2018-12-14T02:58:21Z",
-                      "value": .33
-                  }
-              },
-              {
-                  "cpu_max_cpu_usage": {
-                      "time": "2018-12-16T10:58:21Z",
-                      "value": .47
-                  }
-              }
+                {
+                    "max_cpu_usage": 37.43,
+                    "time": "2018-11-24T18:58:21Z"
+                },
+                {
+                    "max_cpu_usage": 50.87,
+                    "time": "2018-11-25T23:58:21Z"
+                },
+                {
+                    "max_cpu_usage": 66.19,
+                    "time": "2018-11-26T02:58:21Z"
+                },
+                {
+                    "max_cpu_usage": 12.65,
+                    "time": "2018-11-27T10:58:21Z"
+                }
               ];
 
-              document.write('<cpu-max-usage data-height="200" data-width="400" data-graph=' + JSON.stringify(mock) + '></cpu-max-usage>');
+              document.write('<hedwig-graph data-type="cpu-max-usage" data-height="200" data-width="400" data-graph=' + JSON.stringify(mock) + '></hedwig-graph>');
           </script>
 
           <p>Options</p>
@@ -83,6 +67,11 @@
               </tr>
             </thead>
             <tbody>
+                <tr>
+                  <td>Type</td>
+                  <td>yes</td>
+                  <td>cpu-max-usage</td>
+                </tr>
               <tr>
                 <td>Margin</td>
                 <td>no</td>

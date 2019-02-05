@@ -8,34 +8,26 @@
       <br>
       <p>
         Tag: <br>
-        <pre><code class='html'>&lt;network-tx-collisions data-height="200" data-width="400" data-unit="collisions" data=[someBoundData] &gt;&lt;/network-tx-collisions&gt;</code></pre>
+        <pre><code class='html'>&lt;hedwig-graph data-type="network-tx-collisions" data-height="200" data-width="400" data-unit="collisions" data=[someBoundData] &gt;&lt;/hedwig-graph&gt;</code></pre>
       </p>
       <br>
       <p>Sample data structure</p>
       <pre><code>
 [{
-    "network_tx_collisions": {
-        "time": "2018-12-24T18:58:21Z",
-        "value": 0.0
-    }
+    "tx_collisions":  0.0,
+    "time": "2018-11-24T18:58:21Z"
 },
 {
-    "network_tx_collisions": {
-        "time": "2018-12-25T23:58:21Z",
-        "value": 0.0
-    }
+    "tx_collisions":   0.0,
+    "time": "2018-11-25T23:58:21Z"
 },
 {
-    "network_tx_collisions": {
-        "time": "2018-12-26T02:58:21Z",
-        "value": 0.0
-    }
+    "tx_collisions":   0.0,
+    "time": "2018-11-26T02:58:21Z"
 },
 {
-    "network_tx_collisions": {
-        "time": "2018-12-27T10:58:21Z",
-        "value": 0.0
-    }
+    "tx_collisions":   0.0,
+    "time": "2018-11-27T10:58:21Z"
 }]
         </code></pre>
         <br><br>
@@ -44,31 +36,23 @@
           </p>
           <script>
             var mock = [{
-                    "network_tx_collisions": {
-                        "time": "2018-12-24T18:58:21Z",
-                        "value": 0.0
-                    }
+                    "tx_collisions":  0.0,
+                    "time": "2018-11-24T18:58:21Z"
                 },
                 {
-                    "network_tx_collisions": {
-                        "time": "2018-12-25T23:58:21Z",
-                        "value": 0.0
-                    }
+                    "tx_collisions":   0.0,
+                    "time": "2018-11-25T23:58:21Z"
                 },
                 {
-                    "network_tx_collisions": {
-                        "time": "2018-12-26T02:58:21Z",
-                        "value": 0.0
-                    }
+                    "tx_collisions":   0.0,
+                    "time": "2018-11-26T02:58:21Z"
                 },
                 {
-                    "network_tx_collisions": {
-                        "time": "2018-12-27T10:58:21Z",
-                        "value": 0.0
-                    }
+                    "tx_collisions":   0.0,
+                    "time": "2018-11-27T10:58:21Z"
                 }];
 
-              document.write('<network-tx-collisions data-height="200" data-width="400" data-unit="collisions" data-graph=' + JSON.stringify(mock) + '></network-tx-collisions>');
+              document.write('<hedwig-graph data-type="network-tx-collisions" data-height="200" data-width="400" data-unit="collisions" data-graph=' + JSON.stringify(mock) + '></hedwig-graph>');
           </script>
 
           <p>Options</p>
@@ -81,6 +65,11 @@
               </tr>
             </thead>
             <tbody>
+                <tr>
+                  <td>Type</td>
+                  <td>yes</td>
+                  <td>network-tx-collisions</td>
+                </tr>
               <tr>
                 <td>Margin</td>
                 <td>no</td>

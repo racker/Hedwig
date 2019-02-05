@@ -8,34 +8,26 @@
       <br>
       <p>
         Tag: <br>
-        <pre><code class='html'>&lt;filesystem-free data-height="200" data-width="400" data-unit="kb" data={{ someBoundData }} &gt;&lt;/filesystem-used&gt;</code></pre>
+        <pre><code class='html'>&lt;hedwig-graph data-type="filesystem-free" data-height="200" data-width="400" data-unit="kb" data={{ someBoundData }} &gt;&lt;/hedwig-graph&gt;</code></pre>
       </p>
       <br>
       <p>Sample data structure</p>
       <pre><code>
 [{
-    "filesystem_free": {
-        "time": "2018-12-24T18:58:21Z",
-        "value": 4.55716456E8
-    }
+    "free": 82693348,
+    "time": "2018-11-24T18:58:21Z"
 },
 {
-    "filesystem_free": {
-        "time": "2018-12-25T23:58:21Z",
-        "value": 4.00116456E8
-    }
+    "free": 79534320,
+    "time": "2018-11-25T23:58:21Z"
 },
 {
-    "filesystem_free": {
-        "time": "2018-12-26T02:58:21Z",
-        "value": 3.87716456E8
-    }
+    "free": 78534382,
+    "time": "2018-11-26T02:58:21Z"
 },
 {
-    "filesystem_free": {
-        "time": "2018-12-27T10:58:21Z",
-        "value": 3.55716456E8
-    }
+    "free": 75534031,
+    "time": "2018-11-27T10:58:21Z"
 }]
         </code></pre>
         <br><br>
@@ -44,33 +36,24 @@
           </p>
           <script>
               var mock = [
-              {
-                    "filesystem_free": {
-                        "time": "2018-12-24T18:58:21Z",
-                        "value": 4.55716456E8
-                    }
+                {
+                    "free": 82693348,
+                    "time": "2018-11-24T18:58:21Z"
                 },
                 {
-                    "filesystem_free": {
-                        "time": "2018-12-25T23:58:21Z",
-                        "value": 4.00116456E8
-                    }
+                    "free": 79534320,
+                    "time": "2018-11-25T23:58:21Z"
                 },
                 {
-                    "filesystem_free": {
-                        "time": "2018-12-26T02:58:21Z",
-                        "value": 3.87716456E8
-                    }
+                    "free": 78534382,
+                    "time": "2018-11-26T02:58:21Z"
                 },
                 {
-                    "filesystem_free": {
-                        "time": "2018-12-27T10:58:21Z",
-                        "value": 3.55716456E8
-                    }
-              }
-              ];
+                    "free": 75534031,
+                    "time": "2018-11-27T10:58:21Z"
+                }];
 
-              document.write('<filesystem-free data-height="200" data-width="400" data-unit="kb" data-graph=' + JSON.stringify(mock) + '></filesystem-used>');
+              document.write('<hedwig-graph data-type="filesystem-free" data-height="200" data-width="400" data-unit="kb" data-graph=' + JSON.stringify(mock) + '></hedwig-graph>');
           </script>
 
           <p>Options</p>
@@ -83,6 +66,11 @@
               </tr>
             </thead>
             <tbody>
+                <tr>
+                  <td>Type</td>
+                  <td>yes</td>
+                  <td>filesystem-free</td>
+                </tr>
               <tr>
                 <td>Margin</td>
                 <td>no</td>

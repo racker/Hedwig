@@ -35,6 +35,10 @@ export class AxisLeft {
                 return d + ' packets/s';
             case unit === 'collisions':
                 return d + ' collisions/s';
+            case unit === 'other':
+                return d + ' days';
+            case unit === 'milliseconds':
+                return d + ' ms';
             default:
                 return d + '%';
        }

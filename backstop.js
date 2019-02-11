@@ -1,7 +1,7 @@
 const glob = require('glob-promise');
 const backstop = require('backstopjs');
 var args = require('minimist')(process.argv.slice(2));
-const componentPath = './src/components';
+const componentPath = './test/components';
 const config = require('./_config');
 const server = require('./bin/server');
 

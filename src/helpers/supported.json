@@ -152,6 +152,62 @@
         "network-tx-packets" : {
             "key" : "tx_packets",
             "unit": "packets"
+        },
+        "http-bytes" : {
+            "key" : "bytes",
+            "unit": "b"
+        },
+        "http-cert-bits" : {
+            "key" : "cert_bits",
+            "unit": "b"
+        },
+        "http-cert-end" : {
+            "key" : "cert_end",
+            "unit": "other"
+        },
+        "http-cert-end-in" : {
+            "key" : "cert_end_in",
+            "unit": "other"
+        },
+        "http-cert-start" : {
+            "key" : "cert_start",
+            "unit": "other"
+        },
+        "http-code-100" : {
+            "key" : "code_100",
+            "unit": "count"
+        },
+        "http-code-200" : {
+            "key" : "code_200",
+            "unit": "count"
+        },
+        "http-code-300" : {
+            "key" : "code_300",
+            "unit": "count"
+        },
+        "http-code-400" : {
+            "key" : "code_400",
+            "unit": "count"
+        },
+        "http-code-500" : {
+            "key" : "code_500",
+            "unit": "count"
+        },
+        "http-duration" : {
+            "key" : "duration",
+            "unit": "milliseconds"
+        },
+        "http-truncated" : {
+            "key" : "truncated",
+            "unit": "b"
+        },
+        "http-tt-connect" : {
+            "key" : "tt_connect",
+            "unit": "milliseconds"
+        },
+        "http-tt-firstbyte" : {
+            "key" : "tt_firstbyte",
+            "unit": "milliseconds"
         }
     }
 }

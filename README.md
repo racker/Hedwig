@@ -19,7 +19,7 @@ npm install
     a UMD build, suitable for use in any environment (including the browser, as a `<script>` tag), that includes the external dependency. This corresponds to the `"browser"` field in package.json
     an ES module bundle, suitable for use in other people's libraries and applications, that `import`s the external dependency. This corresponds to the `"module"` field in package.json
 
-## Documenation
+## Documentation
 
 The project uses [Jekyll](https://github.com/jekyll/jekyll) to generate a static site for documenting the library's intended usage and install instructions. In order to run this you must have both [Ruby](https://www.ruby-lang.org/en/documentation/installation) & [Ruby Gems](https://rubygems.org/pages/download) installed on your system. To check you have both installed run commands:
 

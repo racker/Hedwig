@@ -8,7 +8,7 @@
   "scripts": {
     "build": "./node_modules/rollup/bin/rollup -c",
     "dev": "./node_modules/rollup/bin/rollup -c -w",
-    "postinstall": "npm run build",
+    "install": "npm run build",
     "unit-test": "./node_modules/karma/bin/karma start",
     "visual-test": "node backstop.js --test --singleRun",
     "pretest": "npm run build",

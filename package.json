@@ -37,13 +37,13 @@
     "karma-coverage": "1.1.2",
     "karma-jasmine": "2.0.1",
     "karma-spec-reporter": "0.0.32",
-    "karma-webpack": "3.0.5",
+    "karma-webpack": "4.0.2",
     "puppeteer": "1.18.1",
     "rollup": "1.17.0",
     "rollup-plugin-babel": "4.3.3",
     "rollup-plugin-commonjs": "9.1.0",
     "rollup-plugin-json": "3.1.0",
     "rollup-plugin-node-resolve": "3.0.0",
-    "webpack": "4.35.3"
+    "webpack": "4.38.0"
   }
 }

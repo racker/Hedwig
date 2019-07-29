@@ -6189,8 +6189,8 @@
 
 
       connectedCallback() {
-        this.innerHTML = '<svg></svg>';
-        var svg = document.querySelector('svg');
+        this.innerHTML = '<svg id="linechart"></svg>';
+        var svg = document.querySelector('#linechart');
         var data = JSON.parse(this.dataset.graph);
         this.attachShadow({
           mode: 'open'

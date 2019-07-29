@@ -6,9 +6,9 @@
   "browser": "dist/hedwig-main.umd.js",
   "docs": "docs/assets/scripts/hedwig-main.umd.js",
   "scripts": {
+    "preinstall": "npm install rollup@1.17.0 --save-dev --save-exact && npm run build",
     "build": "./node_modules/rollup/bin/rollup -c",
     "dev": "./node_modules/rollup/bin/rollup -c -w",
-    "install": "npm run build",
     "unit-test": "./node_modules/karma/bin/karma start",
     "visual-test": "node backstop.js --test --singleRun",
     "pretest": "npm run build",

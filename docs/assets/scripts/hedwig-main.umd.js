@@ -6189,8 +6189,9 @@
 
 
       connectedCallback() {
-        this.innerHTML = '<svg id="linechart"></svg>';
-        var svg = document.querySelector('#linechart');
+        let id = 'hedwig-' + btoa(Math.random()).substr(5, 5);
+        this.innerHTML = `<svg id='${id}'></svg>`;
+        var svg = document.querySelector(`#${id}`);
         var data = JSON.parse(this.dataset.graph);
         this.attachShadow({
           mode: 'open'

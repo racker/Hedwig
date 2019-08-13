@@ -39,6 +39,8 @@ export class AxisLeft {
                 return d + ' days';
             case unit === 'milliseconds':
                 return d + ' ms';
+            case unit === 'seconds':
+                return d + ' s';
             default:
                 return d + '%';
        }

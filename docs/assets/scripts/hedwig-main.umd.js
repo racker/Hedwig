@@ -6183,6 +6183,9 @@
           case unit === 'milliseconds':
             return d + ' ms';
 
+          case unit === 'seconds':
+            return d + ' s';
+
           default:
             return d + '%';
         }
@@ -6489,6 +6492,14 @@
     	"http-tt-firstbyte": {
     		key: "tt_firstbyte",
     		unit: "milliseconds"
+    	},
+    	"ping-available": {
+    		key: "available",
+    		unit: "percent"
+    	},
+    	"ping-average": {
+    		key: "average",
+    		unit: "seconds"
     	}
     };
 

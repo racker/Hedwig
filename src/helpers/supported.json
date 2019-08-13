@@ -1,213 +1,220 @@
 {
-    "graphs" :
-        {
-        "cpu-average-usage" : {
-            "key" : "usage_average",
-            "unit": "%"
-        },
-        "cpu-count" : {
-            "key" : "cpu_count",
-            "unit": "count"
-        },
-        "cpu-max-usage" : {
-            "key" : "max_cpu_usage",
-            "unit": "%"
-        },
-        "cpu-idle-percent" : {
-            "key" : "idle_percent_average",
-            "unit": "%"
-        },
-        "cpu-irq-average" : {
-            "key" : "irq_percent_average",
-            "unit": "%"
-        },
-        "cpu-min-usage" : {
-            "key" : "min_cpu_usage",
-            "unit": "%"
-        },
-        "cpu-stolen-percent" : {
-            "key" : "stolen_percent_average",
-            "unit": "%"
-        },
-        "cpu-system-usage" : {
-            "key" : "sys_percent_average",
-            "unit": "%"
-        },
-        "cpu-user-usage" : {
-            "key" : "user_percent_average",
-            "unit": "%"
-        },
-        "cpu-wait-average" : {
-            "key" : "wait_percent_average",
-            "unit": "%"
-        },
-        "filesystem-avail" : {
-            "key" : "avail",
-            "unit": "kb"
-        },
-        "filesystem-files" : {
-            "key" : "files",
-            "unit": "kb"
-        },
-        "filesystem-free" : {
-            "key" : "free",
-            "unit": "kb"
-        },
-        "filesystem-free-files" : {
-            "key" : "free_files",
-            "unit": "count"
-        },
-        "filesystem-total" : {
-            "key" : "total",
-            "unit": "kb"
-        },
-        "filesystem-used" : {
-            "key" : "used",
-            "unit": "kb"
-        },
-        "memory-actual-free" : {
-            "key" : "actual_free",
-            "unit": "b"
-        },
-        "memory-actual-used" : {
-            "key" : "actual_used",
-            "unit": "b"
-        },
-        "memory-free" : {
-            "key" : "free",
-            "unit": "b"
-        },
-        "memory-ram" : {
-            "key" : "ram",
-            "unit": "mb"
-        },
-        "memory-swap-page-in" : {
-            "key" : "swap_page_in",
-            "unit": "b"
-        },
-        "memory-swap-page-out" : {
-            "key" : "swap_page_out",
-            "unit": "b"
-        },
-        "memory-swap-total" : {
-            "key" : "swap-total",
-            "unit": "b"
-        },
-        "memory-swap-used" : {
-            "key" : "swap_used",
-            "unit": "b"
-        },
-        "memory-total" : {
-            "key" : "total",
-            "unit": "b"
-        },
-        "memory-used" : {
-            "key" : "used",
-            "unit": "b"
-        },
-        "network-rx-bytes" : {
-            "key" : "rx_bytes",
-            "unit": "b"
-        },
-        "network-rx-dropped" : {
-            "key" : "rx_dropped",
-            "unit": "packets"
-        },
-        "network-rx-errors" : {
-            "key" : "rx_errors",
-            "unit": "errors"
-        },
-        "network-rx-frame" : {
-            "key" : "rx_frame",
-            "unit": "frames"
-        },
-        "network-rx-overruns" : {
-            "key" : "rx_overruns",
-            "unit": "overruns"
-        },
-        "network-rx-packets" : {
-            "key" : "rx_packets",
-            "unit": "packets"
-        },
-        "network-tx-bytes" : {
-            "key" : "tx_bytes",
-            "unit": "b"
-        },
-        "network-tx-carrier" : {
-            "key" : "tx_carrier",
-            "unit": "errors"
-        },
-        "network-tx-collisions" : {
-            "key" : "tx_collisions",
-            "unit": "collisions"
-        },
-        "network-tx-dropped" : {
-            "key" : "tx_dropped",
-            "unit": "packets"
-        },
-        "network-tx-overruns" : {
-            "key" : "tx_overruns",
-            "unit": "overruns"
-        },
-        "network-tx-packets" : {
-            "key" : "tx_packets",
-            "unit": "packets"
-        },
-        "http-bytes" : {
-            "key" : "bytes",
-            "unit": "b"
-        },
-        "http-cert-bits" : {
-            "key" : "cert_bits",
-            "unit": "b"
-        },
-        "http-cert-end" : {
-            "key" : "cert_end",
-            "unit": "other"
-        },
-        "http-cert-end-in" : {
-            "key" : "cert_end_in",
-            "unit": "other"
-        },
-        "http-cert-start" : {
-            "key" : "cert_start",
-            "unit": "other"
-        },
-        "http-code-100" : {
-            "key" : "code_100",
-            "unit": "count"
-        },
-        "http-code-200" : {
-            "key" : "code_200",
-            "unit": "count"
-        },
-        "http-code-300" : {
-            "key" : "code_300",
-            "unit": "count"
-        },
-        "http-code-400" : {
-            "key" : "code_400",
-            "unit": "count"
-        },
-        "http-code-500" : {
-            "key" : "code_500",
-            "unit": "count"
-        },
-        "http-duration" : {
-            "key" : "duration",
-            "unit": "milliseconds"
-        },
-        "http-truncated" : {
-            "key" : "truncated",
-            "unit": "b"
-        },
-        "http-tt-connect" : {
-            "key" : "tt_connect",
-            "unit": "milliseconds"
-        },
-        "http-tt-firstbyte" : {
-            "key" : "tt_firstbyte",
-            "unit": "milliseconds"
-        }
+  "graphs": {
+    "cpu-average-usage": {
+      "key": "usage_average",
+      "unit": "%"
+    },
+    "cpu-count": {
+      "key": "cpu_count",
+      "unit": "count"
+    },
+    "cpu-max-usage": {
+      "key": "max_cpu_usage",
+      "unit": "%"
+    },
+    "cpu-idle-percent": {
+      "key": "idle_percent_average",
+      "unit": "%"
+    },
+    "cpu-irq-average": {
+      "key": "irq_percent_average",
+      "unit": "%"
+    },
+    "cpu-min-usage": {
+      "key": "min_cpu_usage",
+      "unit": "%"
+    },
+    "cpu-stolen-percent": {
+      "key": "stolen_percent_average",
+      "unit": "%"
+    },
+    "cpu-system-usage": {
+      "key": "sys_percent_average",
+      "unit": "%"
+    },
+    "cpu-user-usage": {
+      "key": "user_percent_average",
+      "unit": "%"
+    },
+    "cpu-wait-average": {
+      "key": "wait_percent_average",
+      "unit": "%"
+    },
+    "filesystem-avail": {
+      "key": "avail",
+      "unit": "kb"
+    },
+    "filesystem-files": {
+      "key": "files",
+      "unit": "kb"
+    },
+    "filesystem-free": {
+      "key": "free",
+      "unit": "kb"
+    },
+    "filesystem-free-files": {
+      "key": "free_files",
+      "unit": "count"
+    },
+    "filesystem-total": {
+      "key": "total",
+      "unit": "kb"
+    },
+    "filesystem-used": {
+      "key": "used",
+      "unit": "kb"
+    },
+    "memory-actual-free": {
+      "key": "actual_free",
+      "unit": "b"
+    },
+    "memory-actual-used": {
+      "key": "actual_used",
+      "unit": "b"
+    },
+    "memory-free": {
+      "key": "free",
+      "unit": "b"
+    },
+    "memory-ram": {
+      "key": "ram",
+      "unit": "mb"
+    },
+    "memory-swap-page-in": {
+      "key": "swap_page_in",
+      "unit": "b"
+    },
+    "memory-swap-page-out": {
+      "key": "swap_page_out",
+      "unit": "b"
+    },
+    "memory-swap-total": {
+      "key": "swap-total",
+      "unit": "b"
+    },
+    "memory-swap-used": {
+      "key": "swap_used",
+      "unit": "b"
+    },
+    "memory-total": {
+      "key": "total",
+      "unit": "b"
+    },
+    "memory-used": {
+      "key": "used",
+      "unit": "b"
+    },
+    "network-rx-bytes": {
+      "key": "rx_bytes",
+      "unit": "b"
+    },
+    "network-rx-dropped": {
+      "key": "rx_dropped",
+      "unit": "packets"
+    },
+    "network-rx-errors": {
+      "key": "rx_errors",
+      "unit": "errors"
+    },
+    "network-rx-frame": {
+      "key": "rx_frame",
+      "unit": "frames"
+    },
+    "network-rx-overruns": {
+      "key": "rx_overruns",
+      "unit": "overruns"
+    },
+    "network-rx-packets": {
+      "key": "rx_packets",
+      "unit": "packets"
+    },
+    "network-tx-bytes": {
+      "key": "tx_bytes",
+      "unit": "b"
+    },
+    "network-tx-carrier": {
+      "key": "tx_carrier",
+      "unit": "errors"
+    },
+    "network-tx-collisions": {
+      "key": "tx_collisions",
+      "unit": "collisions"
+    },
+    "network-tx-dropped": {
+      "key": "tx_dropped",
+      "unit": "packets"
+    },
+    "network-tx-overruns": {
+      "key": "tx_overruns",
+      "unit": "overruns"
+    },
+    "network-tx-packets": {
+      "key": "tx_packets",
+      "unit": "packets"
+    },
+    "http-bytes": {
+      "key": "bytes",
+      "unit": "b"
+    },
+    "http-cert-bits": {
+      "key": "cert_bits",
+      "unit": "b"
+    },
+    "http-cert-end": {
+      "key": "cert_end",
+      "unit": "other"
+    },
+    "http-cert-end-in": {
+      "key": "cert_end_in",
+      "unit": "other"
+    },
+    "http-cert-start": {
+      "key": "cert_start",
+      "unit": "other"
+    },
+    "http-code-100": {
+      "key": "code_100",
+      "unit": "count"
+    },
+    "http-code-200": {
+      "key": "code_200",
+      "unit": "count"
+    },
+    "http-code-300": {
+      "key": "code_300",
+      "unit": "count"
+    },
+    "http-code-400": {
+      "key": "code_400",
+      "unit": "count"
+    },
+    "http-code-500": {
+      "key": "code_500",
+      "unit": "count"
+    },
+    "http-duration": {
+      "key": "duration",
+      "unit": "milliseconds"
+    },
+    "http-truncated": {
+      "key": "truncated",
+      "unit": "b"
+    },
+    "http-tt-connect": {
+      "key": "tt_connect",
+      "unit": "milliseconds"
+    },
+    "http-tt-firstbyte": {
+      "key": "tt_firstbyte",
+      "unit": "milliseconds"
+    },
+    "ping-available": {
+      "key": "available",
+      "unit": "percent"
+    },
+    "ping-average": {
+      "key": "average",
+      "unit": "seconds"
     }
+  }
 }

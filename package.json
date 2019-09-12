@@ -6,9 +6,9 @@
   "browser": "dist/hedwig-main.umd.js",
   "docs": "docs/assets/scripts/hedwig-main.umd.js",
   "scripts": {
-    "preinstall": "npm run build",
-    "build": "rollup -c",
-    "dev": "rollup -c -w",
+    "preinstall": "npm install rollup@1.17.0 --save-dev --save-exact && npm run build",
+    "build": "./node_modules/rollup/bin/rollup -c",
+    "dev": "./node_modules/rollup/bin/rollup -c -w",
     "unit-test": "./node_modules/karma/bin/karma start",
     "visual-test": "node backstop.js --test --singleRun",
     "pretest": "npm run build",
@@ -23,7 +23,7 @@
     "d3": "5.7.0"
   },
   "devDependencies": {
-    "@babel/core": "7.1.6",
+    "@babel/core": "7.5.4",
     "babelrc-rollup": "3.0.0",
     "backstopjs": "3.8.5",
     "express": "4.16.4",
@@ -31,19 +31,19 @@
     "glob-promise": "3.4.0",
     "jasmine": "3.3.0",
     "jasmine-core": "3.3.0",
-    "jsdoc": "3.5.5",
-    "karma": "3.1.1",
+    "jsdoc": "3.6.3",
+    "karma": "4.2.0",
     "karma-chrome-launcher": "2.2.0",
     "karma-coverage": "1.1.2",
     "karma-jasmine": "2.0.1",
     "karma-spec-reporter": "0.0.32",
-    "karma-webpack": "3.0.5",
-    "puppeteer": "1.10.0",
-    "rollup": "0.67.3",
-    "rollup-plugin-babel": "4.0.3",
+    "karma-webpack": "4.0.2",
+    "puppeteer": "1.18.1",
+    "rollup": "1.17.0",
+    "rollup-plugin-babel": "4.3.3",
     "rollup-plugin-commonjs": "9.1.0",
     "rollup-plugin-json": "3.1.0",
     "rollup-plugin-node-resolve": "3.0.0",
-    "webpack": "4.26.1"
+    "webpack": "4.38.0"
   }
 }

@@ -9,6 +9,7 @@ import { AxisLeft } from './helpers/axisConverter';
  */
 export class LineGraph extends HTMLElement {
 
+
     constructor() {
         super();
     }
@@ -19,8 +20,9 @@ export class LineGraph extends HTMLElement {
      * Call back for when the component is attached to the DOM
      */
     connectedCallback() {
-        this.innerHTML = '<svg></svg>';
-        var svg = document.querySelector('svg');
+        let id = 'hedwig-' + btoa(Math.random()).substr(5, 5);
+        this.innerHTML = `<svg id='${id}'></svg>`;
+        var svg = document.querySelector(`#${id}`);
         var data = JSON.parse(this.dataset.graph);
 
         this.attachShadow({ mode: 'open' });

@@ -38,19 +38,15 @@ export class GraphEngine extends HTMLElement {
      * @description
      * Parses data into an array while converting stripping the
      * measurement key
+     * @returns {Array} of formatted objects
 */
-    parseData(data, keyValue) {
+    parseData(data) {
         data = JSON.parse(data);
-        let results = [];
-        for (var i = 0; i < data.length; i++) {
-            var item = data[i];
-            var itemPush = {
-                time: item.time,
-                value: item[keyValue]
-            };
-         results.push(itemPush);
-        }
-        return results;
+        const structured = data.map(item => ({
+            time: item.time,
+            value: item.mean
+        }));
+        return structured;
     }
 
 
@@ -67,8 +63,9 @@ export class GraphEngine extends HTMLElement {
             " data-width=" + this.defaults.width +
             " data-graph=" + JSON.stringify(this.graphData) +
             " data-unit=" + (this.graphInfo.unit || this.defaults.unit) +
-            " data-line-color=" + this.defaults.lineColor + "></lineGraph>";
-          }
+            " data-line-color=" + this.defaults.lineColor +
+            " data-field=" + this.defaults.field + "></lineGraph>";
+        }
     }
 
     /**
@@ -77,8 +74,8 @@ export class GraphEngine extends HTMLElement {
      * @param {string} data This param is stringified JSON data setting
      */
     dataPoints(data){
-        this.graphInfo = new FindInfo().info(this.dataset.type);
-        this.graphData = this.parseData(data, this.graphInfo.key);
+        this.graphInfo = new FindInfo().info(this.dataset.type, this.dataset.field);
+        this.graphData = this.parseData(data);
     }
 
     /**

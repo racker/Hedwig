@@ -51,119 +51,119 @@
             </div>
             <br><br>
 
-            {% include cpu/cpu-system-usage.html %}
+            {% include cpu/maas_cpu-system-usage.html %}
 
-            {% include cpu/cpu-average-usage.html %}
+            {% include cpu/maas_cpu-average-usage.html %}
 
-            {% include cpu/cpu-wait-average.html %}
+            {% include cpu/maas_cpu-wait-average.html %}
 
-            {% include cpu/cpu-irq-average.html %}
+            {% include cpu/maas_cpu-irq-average.html %}
 
-            {% include cpu/cpu-min-usage.html %}
+            {% include cpu/maas_cpu-min-usage.html %}
 
-            {% include cpu/cpu-max-usage.html %}
+            {% include cpu/maas_cpu-max-usage.html %}
 
-            {% include cpu/cpu-user-usage.html %}
+            {% include cpu/maas_cpu-user-usage.html %}
 
-            {% include cpu/cpu-count.html %}
+            {% include cpu/maas_cpu-count.html %}
 
-            {% include cpu/cpu-stolen-percent.html %}
+            {% include cpu/maas_cpu-stolen-percent.html %}
 
-            {% include cpu/cpu-idle-percent.html %}
-
-            <br/><hr /><br/>
-
-            {% include filesystem/filesystem-used.html %}
-
-            {% include filesystem/filesystem-free-files.html %}
-
-            {% include filesystem/filesystem-files.html %}
-
-            {% include filesystem/filesystem-avail.html %}
-
-            {% include filesystem/filesystem-free.html %}
-
-            {% include filesystem/filesystem-total.html %}
+            {% include cpu/maas_cpu-idle-percent.html %}
 
             <br/><hr /><br/>
 
-            {% include memory/memory-actual-used.html %}
+            {% include filesystem/maas_filesystem-used.html %}
 
-            {% include memory/memory-actual-free.html %}
+            {% include filesystem/maas_filesystem-free-files.html %}
 
-            {% include memory/memory-free.html %}
+            {% include filesystem/maas_filesystem-files.html %}
 
-            {% include memory/memory-ram.html %}
+            {% include filesystem/maas_filesystem-avail.html %}
 
-            {% include memory/memory-swap-page-in.html %}
+            {% include filesystem/maas_filesystem-free.html %}
 
-            {% include memory/memory-swap-used.html %}
-
-            {% include memory/memory-used.html %}
-
-            {% include memory/memory-swap-total.html %}
-
-            {% include memory/memory-swap-page-out.html %}
-
-            {% include memory/memory-total.html %}
+            {% include filesystem/maas_filesystem-total.html %}
 
             <br/><hr /><br/>
 
-            {% include network/network-rx-frame.html %}
+            {% include memory/maas_memory-actual-used.html %}
 
-            {% include network/network-rx-dropped.html %}
+            {% include memory/maas_memory-actual-free.html %}
 
-            {% include network/network-rx-bytes.html %}
+            {% include memory/maas_memory-free.html %}
 
-            {% include network/network-rx-overruns.html %}
+            {% include memory/maas_memory-ram.html %}
 
-            {% include network/network-rx-errors.html %}
+            {% include memory/maas_memory-swap-page-in.html %}
 
-            {% include network/network-rx-packets.html %}
+            {% include memory/maas_memory-swap-used.html %}
 
-            {% include network/network-tx-bytes.html %}
+            {% include memory/maas_memory-used.html %}
 
-            {% include network/network-tx-dropped.html %}
+            {% include memory/maas_memory-swap-total.html %}
 
-            {% include network/network-tx-collisions.html %}
+            {% include memory/maas_memory-swap-page-out.html %}
 
-            {% include network/network-tx-carrier.html %}
-
-            {% include network/network-tx-overruns.html %}
-
-            {% include network/network-tx-packets.html %}
+            {% include memory/maas_memory-total.html %}
 
             <br/><hr /><br/>
 
-            {% include http/http-bytes.html %}
+            {% include network/maas_network-rx-frame.html %}
 
-            {% include http/http-cert-bits.html %}
+            {% include network/maas_network-rx-dropped.html %}
 
-            {% include http/http-cert-end.html %}
+            {% include network/maas_network-rx-bytes.html %}
 
-            {% include http/http-code-100.html %}
+            {% include network/maas_network-rx-overruns.html %}
 
-            {% include http/http-code-200.html %}
+            {% include network/maas_network-rx-errors.html %}
 
-            {% include http/http-code-300.html %}
+            {% include network/maas_network-rx-packets.html %}
 
-            {% include http/http-code-400.html %}
+            {% include network/maas_network-tx-bytes.html %}
 
-            {% include http/http-code-500.html %}
+            {% include network/maas_network-tx-dropped.html %}
 
-            {% include http/http-duration.html %}
+            {% include network/maas_network-tx-collisions.html %}
 
-            {% include http/http-truncated.html %}
+            {% include network/maas_network-tx-carrier.html %}
 
-            {% include http/http-tt-connect.html %}
+            {% include network/maas_network-tx-overruns.html %}
 
-            {% include http/http-tt-firstbyte.html %}
+            {% include network/maas_network-tx-packets.html %}
 
             <br/><hr /><br/>
 
-            {% include ping/ping-available.html %}
+            {% include http/maas_http-bytes.html %}
 
-            {% include ping/ping-average.html %}
+            {% include http/maas_http-cert-bits.html %}
+
+            {% include http/maas_http-cert-end.html %}
+
+            {% include http/maas_http-code-100.html %}
+
+            {% include http/maas_http-code-200.html %}
+
+            {% include http/maas_http-code-300.html %}
+
+            {% include http/maas_http-code-400.html %}
+
+            {% include http/maas_http-code-500.html %}
+
+            {% include http/maas_http-duration.html %}
+
+            {% include http/maas_http-truncated.html %}
+
+            {% include http/maas_http-tt-connect.html %}
+
+            {% include http/maas_http-tt-firstbyte.html %}
+
+            <br/><hr /><br/>
+
+            {% include ping/maas_ping-available.html %}
+
+            {% include ping/maas_ping-average.html %}
 
           </hx-panelbody>
         </hx-panel>

@@ -1,0 +1,102 @@
+<div id='maas_cpu-stolen-percent'>
+    <h3>MAAS CPU Stolen Percent</h3>
+    <div>
+      <p>
+        Description:<br><br>
+        Displays the percentage of the average stolen CPU amount over time
+      </p>
+      <br>
+      <p>
+        Tag: <br>
+        <pre><code class='html'>&lt;hedwig-graph data-type="MAAS_cpu" data-field="stolen_percent_average" data-height="200" data-width="400" data="[ someBoundData ]" &gt;&lt;/hedwig-graph&gt;</code></pre>
+      </p>
+      <br>
+      <p>Sample data structure</p>
+      <pre><code>
+[{
+    "mean": 4.3,
+    "time": "2018-11-24T18:58:21Z"
+},
+{
+    "mean": 25.67,
+    "time": "2018-11-25T23:58:21Z"
+},
+{
+    "mean": 37.12,
+    "time": "2018-11-26T02:58:21Z"
+},
+{
+    "mean": 5.78,
+    "time": "2018-11-27T10:58:21Z"
+}]
+        </code></pre>
+        <br><br>
+        <p>
+            Renders: <br>
+          </p>
+          <script>
+                var mock = [
+                {
+                    "mean": 4.3,
+                    "time": "2018-11-24T18:58:21Z"
+                },
+                {
+                    "mean": 25.67,
+                    "time": "2018-11-25T23:58:21Z"
+                },
+                {
+                    "mean": 37.12,
+                    "time": "2018-11-26T02:58:21Z"
+                },
+                {
+                    "mean": 5.78,
+                    "time": "2018-11-27T10:58:21Z"
+                }];
+
+              document.write('<hedwig-graph data-type="MAAS_cpu" data-field="stolen_percent_average"  data-height="200" data-width="400" data-graph=' + JSON.stringify(mock) + '></hedwig-graph>');
+          </script>
+
+          <p>Options</p>
+          <table class='hxTable hxTable--condensed'>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Required</th>
+                <th>Default Value</th>
+              </tr>
+            </thead>
+            <tbody>
+                <tr>
+                  <td>Type</td>
+                  <td>yes</td>
+                  <td>MAAS_cpu</td>
+                </tr>
+                <tr>
+                  <td>Field</td>
+                  <td>yes</td>
+                  <td>stolen_percent_average</td>
+                </tr>
+              <tr>
+                <td>Margin</td>
+                <td>no</td>
+                <td>{ top: 50, right: 50, bottom: 50, left: 50 }</td>
+              </tr>
+              <tr>
+                <td>Height</td>
+                <td>no</td>
+                <td>200</td>
+              </tr>
+              <tr>
+                <td>Weight</td>
+                <td>no</td>
+                <td>600</td>
+              </tr>
+              <tr>
+                  <td>Line Color</td>
+                  <td>no</td>
+                  <td>#0c7c84</td>
+                </tr>
+            </tbody>
+          </table>
+    </div>
+</div>

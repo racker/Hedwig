@@ -79,7 +79,7 @@ export class LineGraph extends HTMLElement {
 
         // Create Y linear scale
         var yScale = d3.scaleLinear()
-            .domain([0, d3.max(data, function(d) {
+            .domain([0, d3.max(data, function (d) {
                 return d.value;
             })])
             .range([height, 0]);
@@ -95,15 +95,15 @@ export class LineGraph extends HTMLElement {
 
         // Add everything to the SVG
         svg.append("g")
-           .attr("class", "x axis")
-           .attr("transform", "translate(0," + height + ")")
-           .call(d3.axisBottom(xScale).ticks(data.length));
+            .attr("class", "x axis")
+            .attr("transform", "translate(0," + height + ")")
+            .call(d3.axisBottom(xScale).ticks(data.length));
 
         svg.append("g")
-           .attr("class", "y axis")
-           .call(d3.axisLeft(yScale).ticks(data.length).tickFormat((d) => {
-              return new AxisLeft().convert(unit, d);
-           }));
+            .attr("class", "y axis")
+            .call(d3.axisLeft(yScale).ticks(data.length).tickFormat((d) => {
+                return new AxisLeft().convert(unit, d);
+            }));
 
         svg.append("path")
             .datum(data)

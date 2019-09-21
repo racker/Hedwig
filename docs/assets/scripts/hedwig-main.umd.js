@@ -6266,221 +6266,241 @@
     customElements.define('line-graph', LineGraph);
 
     var graphs = {
-    	"cpu-average-usage": {
-    		key: "usage_average",
-    		unit: "%"
+    	MAAS_cpu: {
+    		metric: [
+    			{
+    				field: "usage_average",
+    				unit: "%"
+    			},
+    			{
+    				field: "cpu_count",
+    				unit: "count"
+    			},
+    			{
+    				field: "max_cpu_usage",
+    				unit: "%"
+    			},
+    			{
+    				field: "idle_percent_average",
+    				unit: "%"
+    			},
+    			{
+    				field: "irq_percent_average",
+    				unit: "%"
+    			},
+    			{
+    				field: "min_cpu_usage",
+    				unit: "%"
+    			},
+    			{
+    				field: "stolen_percent_average",
+    				unit: "%"
+    			},
+    			{
+    				field: "sys_percent_average",
+    				unit: "%"
+    			},
+    			{
+    				field: "user_percent_average",
+    				unit: "%"
+    			},
+    			{
+    				field: "wait_percent_average",
+    				unit: "%"
+    			}
+    		]
     	},
-    	"cpu-count": {
-    		key: "cpu_count",
-    		unit: "count"
+    	MAAS_filesystem: {
+    		metric: [
+    			{
+    				field: "avail",
+    				unit: "kb"
+    			},
+    			{
+    				field: "files",
+    				unit: "kb"
+    			},
+    			{
+    				field: "free",
+    				unit: "kb"
+    			},
+    			{
+    				field: "free_files",
+    				unit: "count"
+    			},
+    			{
+    				field: "used",
+    				unit: "kb"
+    			},
+    			{
+    				field: "total",
+    				unit: "kb"
+    			}
+    		]
     	},
-    	"cpu-max-usage": {
-    		key: "max_cpu_usage",
-    		unit: "%"
+    	MAAS_memory: {
+    		metric: [
+    			{
+    				field: "actual_free",
+    				unit: "b"
+    			},
+    			{
+    				field: "actual_used",
+    				unit: "b"
+    			},
+    			{
+    				field: "free",
+    				unit: "b"
+    			},
+    			{
+    				field: "ram",
+    				unit: "mb"
+    			},
+    			{
+    				field: "swap_page_in",
+    				unit: "b"
+    			},
+    			{
+    				field: "swap_page_out",
+    				unit: "b"
+    			},
+    			{
+    				field: "swap-total",
+    				unit: "b"
+    			},
+    			{
+    				field: "swap_used",
+    				unit: "b"
+    			},
+    			{
+    				field: "total",
+    				unit: "b"
+    			},
+    			{
+    				field: "used",
+    				unit: "b"
+    			}
+    		]
     	},
-    	"cpu-idle-percent": {
-    		key: "idle_percent_average",
-    		unit: "%"
+    	MAAS_network: {
+    		metric: [
+    			{
+    				field: "rx_bytes",
+    				unit: "b"
+    			},
+    			{
+    				field: "rx_dropped",
+    				unit: "packets"
+    			},
+    			{
+    				field: "rx_bytes",
+    				unit: "b"
+    			},
+    			{
+    				field: "rx_bytes",
+    				unit: "b"
+    			},
+    			{
+    				field: "rx_errors",
+    				unit: "errors"
+    			},
+    			{
+    				field: "rx_frame",
+    				unit: "frames"
+    			},
+    			{
+    				field: "rx_overruns",
+    				unit: "overruns"
+    			},
+    			{
+    				field: "rx_packets",
+    				unit: "packets"
+    			},
+    			{
+    				field: "tx_bytes",
+    				unit: "b"
+    			},
+    			{
+    				field: "tx_carrier",
+    				unit: "errors"
+    			},
+    			{
+    				field: "tx_collisions",
+    				unit: "collisions"
+    			},
+    			{
+    				field: "tx_dropped",
+    				unit: "packets"
+    			},
+    			{
+    				field: "tx_overruns",
+    				unit: "overruns"
+    			},
+    			{
+    				field: "tx_packets",
+    				unit: "packets"
+    			}
+    		]
     	},
-    	"cpu-irq-average": {
-    		key: "irq_percent_average",
-    		unit: "%"
-    	},
-    	"cpu-min-usage": {
-    		key: "min_cpu_usage",
-    		unit: "%"
-    	},
-    	"cpu-stolen-percent": {
-    		key: "stolen_percent_average",
-    		unit: "%"
-    	},
-    	"cpu-system-usage": {
-    		key: "sys_percent_average",
-    		unit: "%"
-    	},
-    	"cpu-user-usage": {
-    		key: "user_percent_average",
-    		unit: "%"
-    	},
-    	"cpu-wait-average": {
-    		key: "wait_percent_average",
-    		unit: "%"
-    	},
-    	"filesystem-avail": {
-    		key: "avail",
-    		unit: "kb"
-    	},
-    	"filesystem-files": {
-    		key: "files",
-    		unit: "kb"
-    	},
-    	"filesystem-free": {
-    		key: "free",
-    		unit: "kb"
-    	},
-    	"filesystem-free-files": {
-    		key: "free_files",
-    		unit: "count"
-    	},
-    	"filesystem-total": {
-    		key: "total",
-    		unit: "kb"
-    	},
-    	"filesystem-used": {
-    		key: "used",
-    		unit: "kb"
-    	},
-    	"memory-actual-free": {
-    		key: "actual_free",
-    		unit: "b"
-    	},
-    	"memory-actual-used": {
-    		key: "actual_used",
-    		unit: "b"
-    	},
-    	"memory-free": {
-    		key: "free",
-    		unit: "b"
-    	},
-    	"memory-ram": {
-    		key: "ram",
-    		unit: "mb"
-    	},
-    	"memory-swap-page-in": {
-    		key: "swap_page_in",
-    		unit: "b"
-    	},
-    	"memory-swap-page-out": {
-    		key: "swap_page_out",
-    		unit: "b"
-    	},
-    	"memory-swap-total": {
-    		key: "swap-total",
-    		unit: "b"
-    	},
-    	"memory-swap-used": {
-    		key: "swap_used",
-    		unit: "b"
-    	},
-    	"memory-total": {
-    		key: "total",
-    		unit: "b"
-    	},
-    	"memory-used": {
-    		key: "used",
-    		unit: "b"
-    	},
-    	"network-rx-bytes": {
-    		key: "rx_bytes",
-    		unit: "b"
-    	},
-    	"network-rx-dropped": {
-    		key: "rx_dropped",
-    		unit: "packets"
-    	},
-    	"network-rx-errors": {
-    		key: "rx_errors",
-    		unit: "errors"
-    	},
-    	"network-rx-frame": {
-    		key: "rx_frame",
-    		unit: "frames"
-    	},
-    	"network-rx-overruns": {
-    		key: "rx_overruns",
-    		unit: "overruns"
-    	},
-    	"network-rx-packets": {
-    		key: "rx_packets",
-    		unit: "packets"
-    	},
-    	"network-tx-bytes": {
-    		key: "tx_bytes",
-    		unit: "b"
-    	},
-    	"network-tx-carrier": {
-    		key: "tx_carrier",
-    		unit: "errors"
-    	},
-    	"network-tx-collisions": {
-    		key: "tx_collisions",
-    		unit: "collisions"
-    	},
-    	"network-tx-dropped": {
-    		key: "tx_dropped",
-    		unit: "packets"
-    	},
-    	"network-tx-overruns": {
-    		key: "tx_overruns",
-    		unit: "overruns"
-    	},
-    	"network-tx-packets": {
-    		key: "tx_packets",
-    		unit: "packets"
-    	},
-    	"http-bytes": {
-    		key: "bytes",
-    		unit: "b"
-    	},
-    	"http-cert-bits": {
-    		key: "cert_bits",
-    		unit: "b"
-    	},
-    	"http-cert-end": {
-    		key: "cert_end",
-    		unit: "other"
-    	},
-    	"http-cert-end-in": {
-    		key: "cert_end_in",
-    		unit: "other"
-    	},
-    	"http-cert-start": {
-    		key: "cert_start",
-    		unit: "other"
-    	},
-    	"http-code-100": {
-    		key: "code_100",
-    		unit: "count"
-    	},
-    	"http-code-200": {
-    		key: "code_200",
-    		unit: "count"
-    	},
-    	"http-code-300": {
-    		key: "code_300",
-    		unit: "count"
-    	},
-    	"http-code-400": {
-    		key: "code_400",
-    		unit: "count"
-    	},
-    	"http-code-500": {
-    		key: "code_500",
-    		unit: "count"
-    	},
-    	"http-duration": {
-    		key: "duration",
-    		unit: "milliseconds"
-    	},
-    	"http-truncated": {
-    		key: "truncated",
-    		unit: "b"
-    	},
-    	"http-tt-connect": {
-    		key: "tt_connect",
-    		unit: "milliseconds"
-    	},
-    	"http-tt-firstbyte": {
-    		key: "tt_firstbyte",
-    		unit: "milliseconds"
-    	},
-    	"ping-available": {
-    		key: "available",
-    		unit: "percent"
-    	},
-    	"ping-average": {
-    		key: "average",
-    		unit: "seconds"
+    	MAAS_http: {
+    		metric: [
+    			{
+    				field: "bytes",
+    				unit: "b"
+    			},
+    			{
+    				field: "cert-bits",
+    				unit: "b"
+    			},
+    			{
+    				field: "cert-end",
+    				unit: "other"
+    			},
+    			{
+    				field: "cert_end_in",
+    				unit: "other"
+    			},
+    			{
+    				field: "cert_start",
+    				unit: "other"
+    			},
+    			{
+    				field: "code_100",
+    				unit: "count"
+    			},
+    			{
+    				field: "code_200",
+    				unit: "count"
+    			},
+    			{
+    				field: "code_300",
+    				unit: "count"
+    			},
+    			{
+    				field: "code_400",
+    				unit: "count"
+    			},
+    			{
+    				field: "code_500",
+    				unit: "count"
+    			},
+    			{
+    				field: "duration",
+    				unit: "milliseconds"
+    			},
+    			{
+    				field: "truncated",
+    				unit: "b"
+    			},
+    			{
+    				field: "tt_connect",
+    				unit: "milliseconds"
+    			},
+    			{
+    				field: "tt_firstbyte",
+    				unit: "milliseconds"
+    			}
+    		]
     	}
     };
 
@@ -6499,22 +6519,24 @@
        * @description
        * Function to get the info on graph type from JSON
        * @param {string} type
+       * @returns {object}
        */
 
 
-      info(type) {
+      info(type, field) {
         let supportedInfo;
 
         if (type === "" || type === undefined) {
           return;
         }
 
-        Object.keys(this.supported).find(key => {
-          if (key === type) {
-            supportedInfo = this.supported[key];
-            return supportedInfo;
-          }
-        });
+        if (field === "" || field === undefined) {
+          throw new Error('Missing field attribute');
+        }
+
+        let supported = Object.keys(this.supported).find(key => key === type);
+        let metrics = this.supported[supported].metric;
+        supportedInfo = metrics.find(key => key.field === field);
 
         if (supportedInfo === undefined) {
           throw new Error("Unknown graph data-type!");
@@ -6559,23 +6581,17 @@
        * @description
        * Parses data into an array while converting stripping the
        * measurement key
+       * @returns {Array} of formatted objects
       */
 
 
-      parseData(data, keyValue) {
+      parseData(data) {
         data = JSON.parse(data);
-        let results = [];
-
-        for (var i = 0; i < data.length; i++) {
-          var item = data[i];
-          var itemPush = {
-            time: item.time,
-            value: item[keyValue]
-          };
-          results.push(itemPush);
-        }
-
-        return results;
+        const structured = data.map(item => ({
+          time: item.time,
+          value: item.mean
+        }));
+        return structured;
       }
       /**
        * @name render
@@ -6587,7 +6603,7 @@
 
       render() {
         if (this.graphData && this.defaults) {
-          this.innerHTML = "<line-graph data-margin=" + JSON.stringify(this.defaults.margin) + " data-height=" + this.defaults.height + " data-width=" + this.defaults.width + " data-graph=" + JSON.stringify(this.graphData) + " data-unit=" + (this.graphInfo.unit || this.defaults.unit) + " data-line-color=" + this.defaults.lineColor + "></lineGraph>";
+          this.innerHTML = "<line-graph data-margin=" + JSON.stringify(this.defaults.margin) + " data-height=" + this.defaults.height + " data-width=" + this.defaults.width + " data-graph=" + JSON.stringify(this.graphData) + " data-unit=" + (this.graphInfo.unit || this.defaults.unit) + " data-line-color=" + this.defaults.lineColor + " data-field=" + this.defaults.field + "></lineGraph>";
         }
       }
       /**
@@ -6598,8 +6614,8 @@
 
 
       dataPoints(data) {
-        this.graphInfo = new FindInfo().info(this.dataset.type);
-        this.graphData = this.parseData(data, this.graphInfo.key);
+        this.graphInfo = new FindInfo().info(this.dataset.type, this.dataset.field);
+        this.graphData = this.parseData(data);
       }
       /**
        * @name disconnectedCallback

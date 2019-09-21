@@ -30,9 +30,17 @@
       Just add a component tag to your page and add any data-* attributes for configuration
     </p>
     <br>
-    <pre><code class='html'>&lt;hedwig-graph data-type="cpu-system-usage" data-height="200" data-width="400" data={{ someBoundData }} &gt;&lt;/hedwig-graph&gt;</code></pre>
+    <pre><code class='html'>&lt;hedwig-graph data-type="MAAS_cpu" data-field="usage_average" data-height="200" data-width="400" data='[someBoundData]' &gt;&lt;/hedwig-graph&gt;</code></pre>
     <br>
     <p>This will render the graph, taking in the data and mapping according to the components perscribed data format.</p>
+    <br/>
+    <p>
+        <em>data-type</em><br/>This is required for the graph to render, the value must correspond
+      with the list of accepted measurement names.
+      <br/><br/>
+      <em>data-field</em><br/> This is required for the graph to render, the value must correspond with the matching
+      field name for the measurement.
+    </p>
   </div>
   <br><br>
   <hr>

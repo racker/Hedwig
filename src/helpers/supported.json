@@ -177,11 +177,11 @@
           "unit": "b"
         },
         {
-          "field": "cert-bits",
+          "field": "cert_bits",
           "unit": "b"
         },
         {
-          "field": "cert-end",
+          "field": "cert_end",
           "unit": "other"
         },
         {

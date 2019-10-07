@@ -8,8 +8,6 @@ import { FindInfo } from "./helpers/supportedInfo";
  * Base graph
  */
 export class GraphEngine extends HTMLElement {
-
-
     constructor() {
         super();
     }
@@ -39,16 +37,30 @@ export class GraphEngine extends HTMLElement {
      * Parses data into an array while converting stripping the
      * measurement key
      * @returns {Array} of formatted objects
-*/
+    */
     parseData(data) {
         data = JSON.parse(data);
-        const structured = data.map(item => ({
-            time: item.time,
-            value: item.mean
-        }));
-        return structured;
-    }
+        let uniqueGroups = [];
+        let grouping = this.dataset.group;
+        data.map((item) => {
+            // if grouping is specified find unique groups
+            let group = item[grouping];
+            const index = uniqueGroups.findIndex((i) => i === group);
+            if (index === -1) {
+                uniqueGroups.push(group);
+            }
+        });
 
+        // now that we have grouping we will filter and map our datapoints
+        return uniqueGroups.map((group) => {
+            return {
+                group,
+                datapoints: data.filter(d => d[grouping] === group).map((d) => {
+                    return { time: d.time, value: +d.mean }
+                })
+            }
+        });
+    }
 
     /**
      * @name render

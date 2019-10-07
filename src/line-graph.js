@@ -9,7 +9,6 @@ import { AxisLeft } from './helpers/axisConverter';
  */
 export class LineGraph extends HTMLElement {
 
-
     constructor() {
         super();
     }
@@ -27,19 +26,21 @@ export class LineGraph extends HTMLElement {
 
         this.attachShadow({ mode: 'open' });
         this.shadowRoot.appendChild(svg);
-        this.renderGraph(this.parseData(data), svg);
+        this.renderGraph(this.parseDate(data), svg);
     }
 
     /**
-     * @name parseData
-     * @param {Object} data
+     * @name parseDate
+     * @param {Array} data
      * @description
-     * Parses data so that dates are javascript date objects
+     * Parses dates so they are javascript date objects
      * which is required for d3js
      */
-    parseData(data) {
+    parseDate(data) {
         for (var i = 0; i < data.length; i++) {
-            data[i].time = new Date(data[i].time);
+            data[i].datapoints.forEach((d) => {
+                d.time = new Date(d.time);
+            })
         }
         return data;
     }
@@ -53,65 +54,82 @@ export class LineGraph extends HTMLElement {
 
     /**
      * @name renderGraph
-     * @param {Object} data
+     * @param {Array} data
+     * @param {innerHTML} el
      * @description
      * Renders the graph using d3js
      */
     renderGraph(data, el) {
         // Setup the margins and height, width
         var margin = JSON.parse(this.dataset.margin);
-        var height = this.dataset.height;
-        var width = this.dataset.width;
+        var height = parseInt(this.dataset.height);
+        var width = parseInt(this.dataset.width);
         var unit = this.dataset.unit;
 
-        // Setup the svg element in the DOM
-        var svg = d3.select(el)
-            .style("width", parseInt(width) + parseInt(margin.left) + parseInt(margin.right))
-            .style("height", parseInt(height) + parseInt(margin.top) + parseInt(margin.bottom))
+          // Create X time scale
+          var xScale = d3.scaleTime()
+            .domain(d3.extent(data[0].datapoints, d => d.time))
+            .range([0, width-margin.bottom]);
+
+          // Create Y linear scale
+          var yScale = d3.scaleLinear()
+            .domain([0, d3.max(data[0].datapoints, d => d.value)])
+            .range([height-margin.left, 0]);
+
+          // Setup the svg element in the DOM
+          var svg = d3.select(el)
+            .style("width", width + margin.left + +margin.right)
+            .style("height", height + +margin.top + +margin.bottom)
             .append('g')
-            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+            .attr("transform", `translate(${margin.top}, ${margin.left})`);
 
+          // Create the lines
+          var line = d3.line()
+            .x(d => xScale(d.time))
+            .y(d => yScale(d.value));
 
-        // Create X time scale
-        var xScale = d3.scaleTime()
-            .domain([data[0].time, data[data.length - 1].time])
-            .range([0, width]);
+            // add element for line and add class name
+          let lines = svg.append('g')
+            .attr('class', 'lines');
 
-        // Create Y linear scale
-        var yScale = d3.scaleLinear()
-            .domain([0, d3.max(data, function (d) {
-                return d.value;
-            })])
-            .range([height, 0]);
+          // add the lines for each collection of objects to the SVG
+          lines.selectAll('.line-group')
+            .data(data).enter()
+            .append('g')
+            .attr('class', 'line-group')
+            .append('path')
+            .attr('class', 'line')
+            .attr('d', d => line(d.datapoints))
+            .style('stroke', this.dataset.lineColor)
+            .style('fill', 'none');
+            /*
+            TODO: Color schema strategy needed to ensure lines
+            are the right colors
+            https://github.com/d3/d3-scale/blob/master/README.md#sequential-scales
+            var color = d3.scaleOrdinal(d3.schemeCategory10);
+            .style('stroke', (d, i) => color(i));
+            */
 
-        // Create the line
-        var line = d3.line()
-            .x((d, i) => {
-                return xScale(d.time);
-            })
-            .y((d) => {
-                return yScale(d.value);
-            })
+        // Configure X Axis ticks and add xScale
+        var xAxis = d3.axisBottom(xScale).ticks(5);
+        // Configure Y Axis ticks and
+        var yAxis = d3.axisLeft(yScale).ticks(5).tickFormat((d) => {
+            return new AxisLeft().convert(unit, d);
+        });
 
-        // Add everything to the SVG
+        // Add both Axis' to the SVG
         svg.append("g")
             .attr("class", "x axis")
-            .attr("transform", "translate(0," + height + ")")
-            .call(d3.axisBottom(xScale).ticks(data.length));
+            .attr("transform", `translate(0, ${height - margin.top})`)
+            .call(xAxis);
 
         svg.append("g")
             .attr("class", "y axis")
-            .call(d3.axisLeft(yScale).ticks(data.length).tickFormat((d) => {
-                return new AxisLeft().convert(unit, d);
-            }));
-
-        svg.append("path")
-            .datum(data)
-            .attr("class", "line")
-            .attr("d", line)
-            .style('stroke-width', 2)
-            .style('stroke', this.dataset.lineColor)
-            .style('fill', 'none');
+            .call(yAxis)
+            .append('text')
+            .attr("y", 15)
+            .attr("transform", "rotate(-90)")
+            .attr("fill", "#000");
     }
 }
 

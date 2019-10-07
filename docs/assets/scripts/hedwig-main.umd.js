@@ -63,6 +63,44 @@
     var ascendingBisect = bisector(ascending);
     var bisectRight = ascendingBisect.right;
 
+    function extent(values, valueof) {
+      var n = values.length,
+          i = -1,
+          value,
+          min,
+          max;
+
+      if (valueof == null) {
+        while (++i < n) { // Find the first comparable value.
+          if ((value = values[i]) != null && value >= value) {
+            min = max = value;
+            while (++i < n) { // Compare the remaining values.
+              if ((value = values[i]) != null) {
+                if (min > value) min = value;
+                if (max < value) max = value;
+              }
+            }
+          }
+        }
+      }
+
+      else {
+        while (++i < n) { // Find the first comparable value.
+          if ((value = valueof(values[i], i, values)) != null && value >= value) {
+            min = max = value;
+            while (++i < n) { // Compare the remaining values.
+              if ((value = valueof(values[i], i, values)) != null) {
+                if (min > value) min = value;
+                if (max < value) max = value;
+              }
+            }
+          }
+        }
+      }
+
+      return [min, max];
+    }
+
     var e10 = Math.sqrt(50),
         e5 = Math.sqrt(10),
         e2 = Math.sqrt(2);
@@ -6200,20 +6238,22 @@
           mode: 'open'
         });
         this.shadowRoot.appendChild(svg);
-        this.renderGraph(this.parseData(data), svg);
+        this.renderGraph(this.parseDate(data), svg);
       }
       /**
-       * @name parseData
-       * @param {Object} data
+       * @name parseDate
+       * @param {Array} data
        * @description
-       * Parses data so that dates are javascript date objects
+       * Parses dates so they are javascript date objects
        * which is required for d3js
        */
 
 
-      parseData(data) {
+      parseDate(data) {
         for (var i = 0; i < data.length; i++) {
-          data[i].time = new Date(data[i].time);
+          data[i].datapoints.forEach(d => {
+            d.time = new Date(d.time);
+          });
         }
 
         return data;
@@ -6228,7 +6268,8 @@
       disconnectedCallback() {}
       /**
        * @name renderGraph
-       * @param {Object} data
+       * @param {Array} data
+       * @param {innerHTML} el
        * @description
        * Renders the graph using d3js
        */
@@ -6237,29 +6278,38 @@
       renderGraph(data, el) {
         // Setup the margins and height, width
         var margin = JSON.parse(this.dataset.margin);
-        var height = this.dataset.height;
-        var width = this.dataset.width;
-        var unit = this.dataset.unit; // Setup the svg element in the DOM
+        var height = parseInt(this.dataset.height);
+        var width = parseInt(this.dataset.width);
+        var unit = this.dataset.unit; // Create X time scale
 
-        var svg = select(el).style("width", parseInt(width) + parseInt(margin.left) + parseInt(margin.right)).style("height", parseInt(height) + parseInt(margin.top) + parseInt(margin.bottom)).append('g').attr("transform", "translate(" + margin.left + "," + margin.top + ")"); // Create X time scale
+        var xScale = time().domain(extent(data[0].datapoints, d => d.time)).range([0, width - margin.bottom]); // Create Y linear scale
 
-        var xScale = time().domain([data[0].time, data[data.length - 1].time]).range([0, width]); // Create Y linear scale
+        var yScale = linear$1().domain([0, max(data[0].datapoints, d => d.value)]).range([height - margin.left, 0]); // Setup the svg element in the DOM
 
-        var yScale = linear$1().domain([0, max(data, function (d) {
-          return d.value;
-        })]).range([height, 0]); // Create the line
+        var svg = select(el).style("width", width + margin.left + +margin.right).style("height", height + +margin.top + +margin.bottom).append('g').attr("transform", `translate(${margin.top}, ${margin.left})`); // Create the lines
 
-        var line$1 = line().x((d, i) => {
-          return xScale(d.time);
-        }).y(d => {
-          return yScale(d.value);
-        }); // Add everything to the SVG
+        var line$1 = line().x(d => xScale(d.time)).y(d => yScale(d.value)); // add element for line and add class name
 
-        svg.append("g").attr("class", "x axis").attr("transform", "translate(0," + height + ")").call(axisBottom(xScale).ticks(data.length));
-        svg.append("g").attr("class", "y axis").call(axisLeft(yScale).ticks(data.length).tickFormat(d => {
+        let lines = svg.append('g').attr('class', 'lines'); // add the lines for each collection of objects to the SVG
+
+        lines.selectAll('.line-group').data(data).enter().append('g').attr('class', 'line-group').append('path').attr('class', 'line').attr('d', d => line$1(d.datapoints)).style('stroke', this.dataset.lineColor).style('fill', 'none');
+        /*
+        TODO: Color schema strategy needed to ensure lines
+        are the right colors
+        https://github.com/d3/d3-scale/blob/master/README.md#sequential-scales
+        var color = d3.scaleOrdinal(d3.schemeCategory10);
+        .style('stroke', (d, i) => color(i));
+        */
+        // Configure X Axis ticks and add xScale
+
+        var xAxis = axisBottom(xScale).ticks(5); // Configure Y Axis ticks and
+
+        var yAxis = axisLeft(yScale).ticks(5).tickFormat(d => {
           return new AxisLeft().convert(unit, d);
-        }));
-        svg.append("path").datum(data).attr("class", "line").attr("d", line$1).style('stroke-width', 2).style('stroke', this.dataset.lineColor).style('fill', 'none');
+        }); // Add both Axis' to the SVG
+
+        svg.append("g").attr("class", "x axis").attr("transform", `translate(0, ${height - margin.top})`).call(xAxis);
+        svg.append("g").attr("class", "y axis").call(yAxis).append('text').attr("y", 15).attr("transform", "rotate(-90)").attr("fill", "#000");
       }
 
     }
@@ -6449,11 +6499,11 @@
     				unit: "b"
     			},
     			{
-    				field: "cert-bits",
+    				field: "cert_bits",
     				unit: "b"
     			},
     			{
-    				field: "cert-end",
+    				field: "cert_end",
     				unit: "other"
     			},
     			{
@@ -6587,11 +6637,29 @@
 
       parseData(data) {
         data = JSON.parse(data);
-        const structured = data.map(item => ({
-          time: item.time,
-          value: item.mean
-        }));
-        return structured;
+        let uniqueGroups = [];
+        let grouping = this.dataset.group;
+        data.map(item => {
+          // if grouping is specified find unique groups
+          let group = item[grouping];
+          const index = uniqueGroups.findIndex(i => i === group);
+
+          if (index === -1) {
+            uniqueGroups.push(group);
+          }
+        }); // now that we have grouping we will filter and map our datapoints
+
+        return uniqueGroups.map(group => {
+          return {
+            group,
+            datapoints: data.filter(d => d[grouping] === group).map(d => {
+              return {
+                time: d.time,
+                value: +d.mean
+              };
+            })
+          };
+        });
       }
       /**
        * @name render

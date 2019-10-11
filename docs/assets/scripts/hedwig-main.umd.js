@@ -6238,25 +6238,41 @@
           mode: 'open'
         });
         this.shadowRoot.appendChild(svg);
-        this.renderGraph(this.parseDate(data), svg);
+        this.renderGraph(this.parseData(data), svg);
       }
       /**
-       * @name parseDate
+       * @name parseData
        * @param {Array} data
        * @description
-       * Parses dates so they are javascript date objects
-       * which is required for d3js
+       * Parses data into an array and converts dates into
+       * javascript date objects which is required for d3js
        */
 
 
-      parseDate(data) {
-        for (var i = 0; i < data.length; i++) {
-          data[i].datapoints.forEach(d => {
-            d.time = new Date(d.time);
-          });
-        }
+      parseData(data) {
+        let uniqueGroups = [];
+        let grouping = this.dataset.group;
+        data.map(item => {
+          // if grouping is specified find unique groups
+          let group = item[grouping];
+          const index = uniqueGroups.findIndex(i => i === group);
 
-        return data;
+          if (index === -1) {
+            uniqueGroups.push(group);
+          }
+        }); // now that we have grouping we will filter and map our datapoints
+
+        return uniqueGroups.map(group => {
+          return {
+            group,
+            datapoints: data.filter(d => d[grouping] === group).map(d => {
+              return {
+                time: new Date(d.time),
+                value: +d.mean
+              };
+            })
+          };
+        });
       }
       /**
        * @name disconnectedCallback
@@ -6626,42 +6642,6 @@
         this.render();
       }
       /**
-       * @name parseData
-       * @param {Object} data
-       * @description
-       * Parses data into an array while converting stripping the
-       * measurement key
-       * @returns {Array} of formatted objects
-      */
-
-
-      parseData(data) {
-        data = JSON.parse(data);
-        let uniqueGroups = [];
-        let grouping = this.dataset.group;
-        data.map(item => {
-          // if grouping is specified find unique groups
-          let group = item[grouping];
-          const index = uniqueGroups.findIndex(i => i === group);
-
-          if (index === -1) {
-            uniqueGroups.push(group);
-          }
-        }); // now that we have grouping we will filter and map our datapoints
-
-        return uniqueGroups.map(group => {
-          return {
-            group,
-            datapoints: data.filter(d => d[grouping] === group).map(d => {
-              return {
-                time: d.time,
-                value: +d.mean
-              };
-            })
-          };
-        });
-      }
-      /**
        * @name render
        * @description
        * Kicks off the render process after attribute value has been set & connectedcallback has run.
@@ -6670,8 +6650,8 @@
 
 
       render() {
-        if (this.graphData && this.defaults) {
-          this.innerHTML = "<line-graph data-margin=" + JSON.stringify(this.defaults.margin) + " data-height=" + this.defaults.height + " data-width=" + this.defaults.width + " data-graph=" + JSON.stringify(this.graphData) + " data-unit=" + (this.graphInfo.unit || this.defaults.unit) + " data-line-color=" + this.defaults.lineColor + " data-field=" + this.defaults.field + "></lineGraph>";
+        if (this.defaults) {
+          this.innerHTML = "<line-graph data-margin=" + JSON.stringify(this.defaults.margin) + " data-height=" + this.defaults.height + " data-width=" + this.defaults.width + " data-graph=" + this.graphData + " data-unit=" + (this.graphInfo.unit || this.defaults.unit) + " data-line-color=" + this.defaults.lineColor + " data-group=" + this.dataset.group + "></lineGraph>";
         }
       }
       /**
@@ -6683,7 +6663,7 @@
 
       dataPoints(data) {
         this.graphInfo = new FindInfo().info(this.dataset.type, this.dataset.field);
-        this.graphData = this.parseData(data);
+        this.graphData = data;
       }
       /**
        * @name disconnectedCallback

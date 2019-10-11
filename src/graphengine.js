@@ -31,52 +31,20 @@ export class GraphEngine extends HTMLElement {
     }
 
     /**
-     * @name parseData
-     * @param {Object} data
-     * @description
-     * Parses data into an array while converting stripping the
-     * measurement key
-     * @returns {Array} of formatted objects
-    */
-    parseData(data) {
-        data = JSON.parse(data);
-        let uniqueGroups = [];
-        let grouping = this.dataset.group;
-        data.map((item) => {
-            // if grouping is specified find unique groups
-            let group = item[grouping];
-            const index = uniqueGroups.findIndex((i) => i === group);
-            if (index === -1) {
-                uniqueGroups.push(group);
-            }
-        });
-
-        // now that we have grouping we will filter and map our datapoints
-        return uniqueGroups.map((group) => {
-            return {
-                group,
-                datapoints: data.filter(d => d[grouping] === group).map((d) => {
-                    return { time: d.time, value: +d.mean }
-                })
-            }
-        });
-    }
-
-    /**
      * @name render
      * @description
      * Kicks off the render process after attribute value has been set & connectedcallback has run.
      * @param {string} data this param is collected from the data-graph attribute
      */
     render () {
-        if (this.graphData && this.defaults) {
+        if (this.defaults) {
             this.innerHTML = "<line-graph data-margin=" + JSON.stringify(this.defaults.margin) +
             " data-height=" + this.defaults.height +
             " data-width=" + this.defaults.width +
-            " data-graph=" + JSON.stringify(this.graphData) +
+            " data-graph=" + this.graphData +
             " data-unit=" + (this.graphInfo.unit || this.defaults.unit) +
             " data-line-color=" + this.defaults.lineColor +
-            " data-field=" + this.defaults.field + "></lineGraph>";
+            " data-group=" + this.dataset.group + "></lineGraph>";
         }
     }
 
@@ -87,7 +55,7 @@ export class GraphEngine extends HTMLElement {
      */
     dataPoints(data){
         this.graphInfo = new FindInfo().info(this.dataset.type, this.dataset.field);
-        this.graphData = this.parseData(data);
+        this.graphData = data;
     }
 
     /**

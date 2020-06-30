@@ -4,6 +4,7 @@
 # folders
 node_modules
 dist
+_site
 coverage
 test/backstop_data
 .idea

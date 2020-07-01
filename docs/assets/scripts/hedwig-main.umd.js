@@ -7262,7 +7262,7 @@
             type: 'line'
           },
           title: {
-            text: 'My component'
+            text: 'Hedwig High chart Demo'
           },
           subtitle: {
             text: 'Source: Metrics'

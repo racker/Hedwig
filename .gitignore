@@ -4,6 +4,7 @@
 # folders
 node_modules
 dist
+docs/Gemfile.lock
 _site
 coverage
 test/backstop_data

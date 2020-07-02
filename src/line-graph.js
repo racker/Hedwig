@@ -1,35 +1,33 @@
-import * as d3 from 'd3';
+
+import Highcharts from 'highcharts/highcharts';
 import { AxisLeft } from './helpers/axisConverter';
-
-/**
- * @name LineGraph
- * @description
- * @extends HTMLElement
- * Generic line graph component for reusability
- */
 export class LineGraph extends HTMLElement {
+    
+    constructor() {
+        super();
+      }
 
-  constructor() {
-    super();
-  }
 
-  /**
-   * @name connectedCallback
-   * @description
-   * Call back for when the component is attached to the DOM
-   */
-  connectedCallback() {
-    let id = 'hedwig-' + btoa(Math.random()).substr(5, 5);
-    this.innerHTML = `<svg id='${id}'></svg>`;
-    var svg = document.querySelector(`#${id}`);
-    var data = JSON.parse(this.dataset.graph);
+      findMaxValue(data){    
+		let arr=[];
+		data.forEach(element => {
+		  element.datapoints.forEach(el => {
+			arr.push(el.value);  
+		  });    
+		});
+		return arr;
+	  }
+	  findMaxTime(data){
+		let arr=[];
+		data.forEach(element => {
+		  element.datapoints.forEach(el => {
+			arr.push(el.time);  
+		  });
+		});
+		return arr;
+	  }
 
-    this.attachShadow({ mode: 'open' });
-    this.shadowRoot.appendChild(svg);
-    this.renderGraph(this.parseData(data), svg);
-  }
-
-  /**
+      /**
    * @name parseData
    * @param {Array} data
    * @description
@@ -58,93 +56,102 @@ export class LineGraph extends HTMLElement {
       }
     });
   }
+    connectedCallback() {
+      this.innerHTML = `<div style="height: 400px,width:400px" id="container"></div>`;
+      var container = document.querySelector(`#container`);
+   
+      Highcharts.chart("container", this.optionObject());
+    this.attachShadow({ mode: 'open' });
+    this.shadowRoot.appendChild(container);
+    }
 
-  /**
-   * @name disconnectedCallback
-   * @description
-   * Call back for when the component is detached from the DOM
-   */
-  disconnectedCallback() { }
+    dataParser(data){
+        let arr=[];
+        JSON.parse(data).forEach(e =>{
+            arr.push([new Date(e.time).getTime(),e.mean])
+        })
+        return arr;
+    }
+    xcatagories(data){
+        let xcat=[]
+        return JSON.parse(data).forEach(e =>{
+            xcat.push(new Date(e.time).toDateString());
+        });
+        return xcat;
+    }
+    optionObject(){
 
-  /**
-   * @name renderGraph
-   * @param {Array} data
-   * @param {innerHTML} el
-   * @description
-   * Renders the graph using d3js
-   */
-  renderGraph(data, el) {
-    // Setup the margins and height, width
-    var margin = JSON.parse(this.dataset.margin);
-    var height = parseInt(this.dataset.height);
-    var width = parseInt(this.dataset.width);
-    var unit = this.dataset.unit;
+        return {chart: {
+            height: 300,
+            width:600,
+            type: 'line'
+        },
 
-    // Create X time scale
-    var xScale = d3.scaleTime()
-      .domain(d3.extent(data[0].datapoints, d => d.time))
-      .range([0, width - margin.bottom]);
-
-    // Create Y linear scale
-    var yScale = d3.scaleLinear()
-      .domain([0, d3.max(data[0].datapoints, d => d.value)])
-      .range([height - margin.left, 0]);
-
-    // Setup the svg element in the DOM
-    var svg = d3.select(el)
-      .style("width", width + margin.left + +margin.right)
-      .style("height", height + +margin.top + +margin.bottom)
-      .append('g')
-      .attr("transform", `translate(${margin.top}, ${margin.left})`);
-
-    // Create the lines
-    var line = d3.line()
-      .x(d => xScale(d.time))
-      .y(d => yScale(d.value));
-
-    // add element for line and add class name
-    let lines = svg.append('g')
-      .attr('class', 'lines');
-
-    // add the lines for each collection of objects to the SVG
-    lines.selectAll('.line-group')
-      .data(data).enter()
-      .append('g')
-      .attr('class', 'line-group')
-      .append('path')
-      .attr('class', 'line')
-      .attr('d', d => line(d.datapoints))
-      .style('stroke', this.dataset.lineColor)
-      .style('fill', 'none');
-    /*
-    TODO: Color schema strategy needed to ensure lines
-    are the right colors
-    https://github.com/d3/d3-scale/blob/master/README.md#sequential-scales
-    var color = d3.scaleOrdinal(d3.schemeCategory10);
-    .style('stroke', (d, i) => color(i));
-    */
-
-    // Configure X Axis ticks and add xScale
-    var xAxis = d3.axisBottom(xScale).ticks(5);
-    // Configure Y Axis ticks and
-    var yAxis = d3.axisLeft(yScale).ticks(5).tickFormat((d) => {
-      return new AxisLeft().convert(unit, d);
-    });
-
-    // Add both Axis' to the SVG
-    svg.append("g")
-      .attr("class", "x axis")
-      .attr("transform", `translate(0, ${height - margin.top})`)
-      .call(xAxis);
-
-    svg.append("g")
-      .attr("class", "y axis")
-      .call(yAxis)
-      .append('text')
-      .attr("y", 15)
-      .attr("transform", "rotate(-90)")
-      .attr("fill", "#000");
+        title: {
+            text: ''
+        },
+    
+        subtitle: {
+            text: ''
+        },
+        yAxis: {            
+            labels: {
+                formatter: function () {
+                    return  + this.axis.defaultLabelFormatter.call(this)+'%';
+                }            
+            }
+        },
+        xAxis: {
+            type: 'datetime',
+            //categories:this.xcatagories(this.getAttribute('data-graph'))
+            dateTimeLabelFormats: {
+                second: '%H:%M:%S',
+                // minute: '%H:%M',
+                // hour: '%H:%M',
+                // day: '%b. %e',
+                // week: '%b. %e',
+                // month: '%b. %y',
+                // year: '%Y'
+              }
+            
+        },
+    
+        legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'middle'
+        },
+    
+        plotOptions: {
+            series: {
+                label: {
+                    connectorAllowed: false
+                },
+            }
+        },
+        
+        series: [{
+            data: this.dataParser(this.getAttribute('data-graph'))
+        }],
+    
+        responsive: {
+            rules: [{
+                condition: {
+                    maxWidth: 200
+                },
+                chartOptions: {
+                    legend: {
+                        layout: 'horizontal',
+                        align: 'center',
+                        verticalAlign: 'bottom'
+                    }
+                }
+            }]
+        }
+    
+    }
+    }
+  
   }
-}
-
-customElements.define('line-graph', LineGraph);
+      
+  customElements.define('line-graph', LineGraph);

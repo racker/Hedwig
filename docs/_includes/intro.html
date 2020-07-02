@@ -1,136 +1,136 @@
 <div>
+  <p>
+    Hedwig is a component library for graphing monitoring data for Rackspace.
+  </p>
+  <p>
+    It is based on web components, so it can fit inside of any web UI application.
+  </p>
+</div>
+<br><br>
+<h3 id='getting-started'>How to get started</h3>
+<div>
+  To get started simply install Hedwig into your application
+</div>
+<br><br>
+<h3 id='install'>Installing Hedwig</h3>
+<div id='install'>
+  <p>
+    Install using npm
+  </p>
+  <br>
+  <pre><code class="bash">npm install rackspace/hedwig</code></pre>
+</div>
+<br><br>
+<div id='how-to'>
+  <h3>How To Use</h3>
+  <p>
+    Hedwig uses <a href='https://www.webcomponents.org/introduction'>web components</a> so it is quite easy to use.
+  </p>
+  <p>
+    Just add a component tag to your page and add any data-* attributes for configuration
+  </p>
+  <br>
+  <pre><code class='html'>&lt;hedwig-graph data-type="MAAS_cpu" data-field="usage_average" data-height="200" data-width="400" data='[someBoundData]' &gt;&lt;/hedwig-graph&gt;</code></pre>
+  <br>
+  <p>This will render the graph, taking in the data and mapping according to the components perscribed data format.</p>
+  <br/>
+  <p>
+      <em>data-type</em><br/>This is required for the graph to render, the value must correspond
+    with the list of accepted measurement names.
+    <br/><br/>
+    <em>data-field</em><br/> This is required for the graph to render, the value must correspond with the matching
+    field name for the measurement.
+  </p>
+</div>
+<br><br>
+<div id='grouping'>
+  <h3>Grouping & MultiLine Graphs</h3>
+  <p>
+    One of the features Hedwig has is the ability to create multiline graphs. This can be relevant for when
+    more than one device is wanting to be displayed in a graph or more than one monitor for a specific device.
+  </p>
+  <p>
+    For displaying a multiline graph be sure to specify the key in the JSON data that will be used to group the metrics.
+    Consider the following data:
+    <pre>
+      <code class="html">
+        [{
+          "mean": 0.99,
+          "time": "2018-11-24T18:58:21Z",
+          "device": "6221-forestofdean.prod.com"
+          },
+          {
+          "mean": 0.67,
+          "time": "2018-11-25T23:58:21Z",
+          "device": "6221-forestofdean.prod.com"
+          },
+          {
+          "mean": 0.33,
+          "time": "2018-11-26T02:58:21Z",
+          "device": "6221-forestofdean.prod.com"
+          },
+          {
+          "mean": 0.45,
+          "time": "2018-11-24T18:58:21Z",
+          "device": "7877-ministryofmagic.staging.com"
+          },
+          {
+          "mean": 0.10,
+          "time": "2018-11-25T23:58:21Z",
+          "device": "7877-ministryofmagic.staging.com"
+          },
+          {
+          "mean": 0.89,
+          "time": "2018-11-26T02:58:21Z",
+          "device": "7877-ministryofmagic.staging.com"
+          }]
+      </code>
+    </pre>
+  </p>
     <p>
-      Hedwig is a component library for graphing monitoring data for Rackspace.
-    </p>
-    <p>
-      It is based on web components, so it can fit inside of any web UI application.
-    </p>
-  </div>
-  <br><br>
-  <h3 id='getting-started'>How to get started</h3>
-  <div>
-    To get started simply install Hedwig into your application
-  </div>
-  <br><br>
-  <h3 id='install'>Installing Hedwig</h3>
-  <div id='install'>
-    <p>
-      Install using npm
-    </p>
-    <br>
-    <pre><code class="bash">npm install rackspace/hedwig</code></pre>
-  </div>
-  <br><br>
-  <div id='how-to'>
-    <h3>How To Use</h3>
-    <p>
-      Hedwig uses <a href='https://www.webcomponents.org/introduction'>web components</a> so it is quite easy to use.
-    </p>
-    <p>
-      Just add a component tag to your page and add any data-* attributes for configuration
-    </p>
-    <br>
-    <pre><code class='html'>&lt;hedwig-graph data-type="MAAS_cpu" data-field="usage_average" data-height="200" data-width="400" data='[someBoundData]' &gt;&lt;/hedwig-graph&gt;</code></pre>
-    <br>
-    <p>This will render the graph, taking in the data and mapping according to the components perscribed data format.</p>
-    <br/>
-    <p>
-        <em>data-type</em><br/>This is required for the graph to render, the value must correspond
-      with the list of accepted measurement names.
-      <br/><br/>
-      <em>data-field</em><br/> This is required for the graph to render, the value must correspond with the matching
-      field name for the measurement.
-    </p>
-  </div>
-  <br><br>
-  <div id='grouping'>
-    <h3>Grouping & MultiLine Graphs</h3>
-    <p>
-      One of the features Hedwig has is the ability to create multiline graphs. This can be relevant for when
-      more than one device is wanting to be displayed in a graph or more than one monitor for a specific device.
-    </p>
-    <p>
-      For displaying a multiline graph be sure to specify the key in the JSON data that will be used to group the metrics.
-      Consider the following data:
-      <pre>
-        <code class="html">
-          [{
-            "mean": 0.99,
-            "time": "2018-11-24T18:58:21Z",
-            "device": "6221-forestofdean.prod.com"
-            },
-            {
-            "mean": 0.67,
-            "time": "2018-11-25T23:58:21Z",
-            "device": "6221-forestofdean.prod.com"
-            },
-            {
-            "mean": 0.33,
-            "time": "2018-11-26T02:58:21Z",
-            "device": "6221-forestofdean.prod.com"
-            },
-            {
-            "mean": 0.45,
-            "time": "2018-11-24T18:58:21Z",
-            "device": "7877-ministryofmagic.staging.com"
-            },
-            {
-            "mean": 0.10,
-            "time": "2018-11-25T23:58:21Z",
-            "device": "7877-ministryofmagic.staging.com"
-            },
-            {
-            "mean": 0.89,
-            "time": "2018-11-26T02:58:21Z",
-            "device": "7877-ministryofmagic.staging.com"
-            }]
-        </code>
-      </pre>
-    </p>
-      <p>
-      If you're wanting to graph this data in a multiline format where <em>device</em> is the grouping qualifier, you'd then
-      add the <strong>data-group</strong> attribute and enter the value of the key being used for grouping.
-    </p>
-    <pre><code class='html'>&lt;hedwig-graph data-type="MAAS_cpu" data-field="usage_average" data-group="device" data-height="200" data-width="400" data='[someBoundData]' &gt;&lt;/hedwig-graph&gt;</code></pre>
-    <br>
-    <p><script>
-      var multiMocked = [{
-            "mean": 0.99,
-            "time": "2018-11-24T18:58:21Z",
-            "device": "6221-forestofdean.prod.com"
-            },
-            {
-            "mean": 0.67,
-            "time": "2018-11-25T23:58:21Z",
-            "device": "6221-forestofdean.prod.com"
-            },
-            {
-            "mean": 0.22,
-            "time": "2018-11-26T02:58:21Z",
-            "device": "6221-forestofdean.prod.com"
-            },
-            {
-            "mean": 0.56,
-            "time": "2018-11-24T18:58:21Z",
-            "device": "7877-ministryofmagic.staging.com"
-            },
-            {
-            "mean": 0.10,
-            "time": "2018-11-25T12:58:21Z",
-            "device": "7877-ministryofmagic.staging.com"
-            },
-            {
-            "mean": 0.89,
-            "time": "2018-11-26T09:58:21Z",
-            "device": "7877-ministryofmagic.staging.com"
-            }];
+    If you're wanting to graph this data in a multiline format where <em>device</em> is the grouping qualifier, you'd then
+    add the <strong>data-group</strong> attribute and enter the value of the key being used for grouping.
+  </p>
+  <pre><code class='html'>&lt;hedwig-graph data-type="MAAS_cpu" data-field="usage_average" data-group="device" data-height="200" data-width="400" data='[someBoundData]' &gt;&lt;/hedwig-graph&gt;</code></pre>
+  <br>
+  <p><script>
+    var multiMocked = [{
+          "mean": 0.99,
+          "time": "2018-11-24T18:58:21Z",
+          "device": "6221-forestofdean.prod.com"
+          },
+          {
+          "mean": 0.67,
+          "time": "2018-11-25T23:58:21Z",
+          "device": "6221-forestofdean.prod.com"
+          },
+          {
+          "mean": 0.22,
+          "time": "2018-11-26T02:58:21Z",
+          "device": "6221-forestofdean.prod.com"
+          },
+          {
+          "mean": 0.56,
+          "time": "2018-11-24T18:58:21Z",
+          "device": "7877-ministryofmagic.staging.com"
+          },
+          {
+          "mean": 0.10,
+          "time": "2018-11-25T12:58:21Z",
+          "device": "7877-ministryofmagic.staging.com"
+          },
+          {
+          "mean": 0.89,
+          "time": "2018-11-26T09:58:21Z",
+          "device": "7877-ministryofmagic.staging.com"
+          }];
 
-      document.write('<hedwig-graph data-type="MAAS_cpu" data-group="device" data-field="usage_average" data-height="300" data-width="400" data-graph=' + JSON.stringify(multiMocked) + '></hedwig-graph>');
-      document.write('<hedwig-highchart option="test"></hedwig-highchart>')
-  </script></p>
-    <p>This will render the graph, with multiline capabilities</p>
-    <br/>
+    document.write('<hedwig-graph data-type="MAAS_cpu" data-group="device" data-field="usage_average" data-height="300" data-width="400" data-graph=' + JSON.stringify(multiMocked) + '></hedwig-graph>');
+    document.write('<hedwig-highchart data-graph=' + JSON.stringify(multiMocked) + '></hedwig-highchart>')
+</script></p>
+  <p>This will render the graph, with multiline capabilities</p>
+  <br/>
 
-  </div>
-  <hr>
-  <br><br>
+</div>
+<hr>
+<br><br>

@@ -1,8 +1,9 @@
 
 import Highcharts from 'highcharts/highcharts';
 import { AxisLeft } from './helpers/axisConverter';
+
 export class LineGraph extends HTMLElement {
-    
+
     constructor() {
         super();
       }
@@ -58,9 +59,8 @@ export class LineGraph extends HTMLElement {
   }
     connectedCallback() {
       this.innerHTML = `<div style="height: 400px,width:400px" id="container"></div>`;
-      var container = document.querySelector(`#container`);
-   
-      Highcharts.chart("container", this.optionObject());
+      var container = document.querySelector(`#container`); 
+     Highcharts.chart("container", this.optionObject());
     this.attachShadow({ mode: 'open' });
     this.shadowRoot.appendChild(container);
     }
@@ -86,6 +86,9 @@ export class LineGraph extends HTMLElement {
             width:600,
             type: 'line'
         },
+        unit:{
+          value:this.getAttribute('data-unit')
+        },
 
         title: {
             text: ''
@@ -97,7 +100,8 @@ export class LineGraph extends HTMLElement {
         yAxis: {            
             labels: {
                 formatter: function () {
-                    return  + this.axis.defaultLabelFormatter.call(this)+'%';
+                  let u=new AxisLeft();
+                    return  this.axis.defaultLabelFormatter.call(this)+ u.convert(this.chart.options.unit.value);
                 }            
             }
         },

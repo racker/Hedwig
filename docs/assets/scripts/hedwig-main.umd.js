@@ -6238,6 +6238,7 @@
           mode: 'open'
         });
         this.shadowRoot.appendChild(svg);
+        console.log("this.parseData(data) ", this.parseData(data));
         this.renderGraph(this.parseData(data), svg);
       }
       /**
@@ -6330,377 +6331,6 @@
 
     }
     customElements.define('line-graph', LineGraph);
-
-    var graphs = {
-    	MAAS_cpu: {
-    		metric: [
-    			{
-    				field: "usage_average",
-    				unit: "%"
-    			},
-    			{
-    				field: "cpu_count",
-    				unit: "count"
-    			},
-    			{
-    				field: "max_cpu_usage",
-    				unit: "%"
-    			},
-    			{
-    				field: "idle_percent_average",
-    				unit: "%"
-    			},
-    			{
-    				field: "irq_percent_average",
-    				unit: "%"
-    			},
-    			{
-    				field: "min_cpu_usage",
-    				unit: "%"
-    			},
-    			{
-    				field: "stolen_percent_average",
-    				unit: "%"
-    			},
-    			{
-    				field: "sys_percent_average",
-    				unit: "%"
-    			},
-    			{
-    				field: "user_percent_average",
-    				unit: "%"
-    			},
-    			{
-    				field: "wait_percent_average",
-    				unit: "%"
-    			}
-    		]
-    	},
-    	MAAS_filesystem: {
-    		metric: [
-    			{
-    				field: "avail",
-    				unit: "kb"
-    			},
-    			{
-    				field: "files",
-    				unit: "kb"
-    			},
-    			{
-    				field: "free",
-    				unit: "kb"
-    			},
-    			{
-    				field: "free_files",
-    				unit: "count"
-    			},
-    			{
-    				field: "used",
-    				unit: "kb"
-    			},
-    			{
-    				field: "total",
-    				unit: "kb"
-    			}
-    		]
-    	},
-    	MAAS_memory: {
-    		metric: [
-    			{
-    				field: "actual_free",
-    				unit: "b"
-    			},
-    			{
-    				field: "actual_used",
-    				unit: "b"
-    			},
-    			{
-    				field: "free",
-    				unit: "b"
-    			},
-    			{
-    				field: "ram",
-    				unit: "mb"
-    			},
-    			{
-    				field: "swap_page_in",
-    				unit: "b"
-    			},
-    			{
-    				field: "swap_page_out",
-    				unit: "b"
-    			},
-    			{
-    				field: "swap-total",
-    				unit: "b"
-    			},
-    			{
-    				field: "swap_used",
-    				unit: "b"
-    			},
-    			{
-    				field: "total",
-    				unit: "b"
-    			},
-    			{
-    				field: "used",
-    				unit: "b"
-    			}
-    		]
-    	},
-    	MAAS_network: {
-    		metric: [
-    			{
-    				field: "rx_bytes",
-    				unit: "b"
-    			},
-    			{
-    				field: "rx_dropped",
-    				unit: "packets"
-    			},
-    			{
-    				field: "rx_bytes",
-    				unit: "b"
-    			},
-    			{
-    				field: "rx_bytes",
-    				unit: "b"
-    			},
-    			{
-    				field: "rx_errors",
-    				unit: "errors"
-    			},
-    			{
-    				field: "rx_frame",
-    				unit: "frames"
-    			},
-    			{
-    				field: "rx_overruns",
-    				unit: "overruns"
-    			},
-    			{
-    				field: "rx_packets",
-    				unit: "packets"
-    			},
-    			{
-    				field: "tx_bytes",
-    				unit: "b"
-    			},
-    			{
-    				field: "tx_carrier",
-    				unit: "errors"
-    			},
-    			{
-    				field: "tx_collisions",
-    				unit: "collisions"
-    			},
-    			{
-    				field: "tx_dropped",
-    				unit: "packets"
-    			},
-    			{
-    				field: "tx_overruns",
-    				unit: "overruns"
-    			},
-    			{
-    				field: "tx_packets",
-    				unit: "packets"
-    			}
-    		]
-    	},
-    	MAAS_http: {
-    		metric: [
-    			{
-    				field: "bytes",
-    				unit: "b"
-    			},
-    			{
-    				field: "cert_bits",
-    				unit: "b"
-    			},
-    			{
-    				field: "cert_end",
-    				unit: "other"
-    			},
-    			{
-    				field: "cert_end_in",
-    				unit: "other"
-    			},
-    			{
-    				field: "cert_start",
-    				unit: "other"
-    			},
-    			{
-    				field: "code_100",
-    				unit: "count"
-    			},
-    			{
-    				field: "code_200",
-    				unit: "count"
-    			},
-    			{
-    				field: "code_300",
-    				unit: "count"
-    			},
-    			{
-    				field: "code_400",
-    				unit: "count"
-    			},
-    			{
-    				field: "code_500",
-    				unit: "count"
-    			},
-    			{
-    				field: "duration",
-    				unit: "milliseconds"
-    			},
-    			{
-    				field: "truncated",
-    				unit: "b"
-    			},
-    			{
-    				field: "tt_connect",
-    				unit: "milliseconds"
-    			},
-    			{
-    				field: "tt_firstbyte",
-    				unit: "milliseconds"
-    			}
-    		]
-    	}
-    };
-
-    /**
-     * @name FindInfo
-     * @description
-     * Retrieve info on supported graph types
-     */
-
-    class FindInfo {
-      constructor() {
-        this.supported = graphs;
-      }
-      /**
-       * @name info
-       * @description
-       * Function to get the info on graph type from JSON
-       * @param {string} type
-       * @returns {object}
-       */
-
-
-      info(type, field) {
-        let supportedInfo;
-
-        if (type === "" || type === undefined) {
-          return;
-        }
-
-        if (field === "" || field === undefined) {
-          throw new Error('Missing field attribute');
-        }
-
-        let supported = Object.keys(this.supported).find(key => key === type);
-        let metrics = this.supported[supported].metric;
-        supportedInfo = metrics.find(key => key.field === field);
-
-        if (supportedInfo === undefined) {
-          throw new Error("Unknown graph data-type!");
-        }
-
-        return supportedInfo;
-      }
-
-    }
-
-    /**
-     * @name GraphEngine
-     * @extends HTMLElement
-     * @description
-     * Base graph
-     */
-
-    class GraphEngine extends HTMLElement {
-      constructor() {
-        super();
-      }
-      /**
-       * @name connectedCallback
-       * @description
-       * Call back for when the component is attached to the DOM
-       */
-
-
-      connectedCallback() {
-        this.defaults = {};
-        var defaults = new Defaults();
-        this.defaults.margin = this.dataset.margin || defaults.margin;
-        this.defaults.height = (this.dataset.height || defaults.graphHeight) - this.defaults.margin.top - this.defaults.margin.bottom;
-        this.defaults.width = (this.dataset.width || defaults.graphWidth) - this.defaults.margin.left - this.defaults.margin.right;
-        this.defaults.lineColor = this.dataset.lineColor || defaults.lineColor;
-        this.defaults.unit = this.dataset.unit;
-        this.render();
-      }
-      /**
-       * @name render
-       * @description
-       * Kicks off the render process after attribute value has been set & connectedcallback has run.
-       * @param {string} data this param is collected from the data-graph attribute
-       */
-
-
-      render() {
-        if (this.defaults) {
-          this.innerHTML = "<line-graph data-margin=" + JSON.stringify(this.defaults.margin) + " data-height=" + this.defaults.height + " data-width=" + this.defaults.width + " data-graph=" + this.graphData + " data-unit=" + (this.graphInfo.unit || this.defaults.unit) + " data-line-color=" + this.defaults.lineColor + " data-group=" + this.dataset.group + "></lineGraph>";
-        }
-      }
-      /**
-       * @name dataPoints
-       * @description Sets datapoints this.graphdata
-       * @param {string} data This param is stringified JSON data setting
-       */
-
-
-      dataPoints(data) {
-        this.graphInfo = new FindInfo().info(this.dataset.type, this.dataset.field);
-        this.graphData = data;
-      }
-      /**
-       * @name disconnectedCallback
-       * @description
-       * Call back for when the component is detached from the DOM
-       */
-
-
-      disconnectedCallback() {}
-      /**
-       * @name observedAttributes
-       * @description Sets what attributes this component will listen for.
-       * @returns {Array} an array of attribute to watch for value changes
-       */
-
-
-      static get observedAttributes() {
-        return ['data-graph'];
-      }
-      /**
-       * @name attributeChangedCallback
-       * @description This callback is fired when attribute values change for
-       * @param {string} name attribute name
-       * @param {any} oldValue original value upon page load, will most of the time be blank
-       * @param {any} newValue new value bound to the attribute
-       */
-
-
-      attributeChangedCallback(name, oldValue, newValue) {
-        if (newValue && name === "data-graph") {
-          this.dataPoints(newValue);
-          this.render();
-        }
-      }
-
-    }
-    customElements.define('hedwig-graph', GraphEngine);
 
     var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
@@ -7247,6 +6877,449 @@
 
     });
 
+    /**
+     * @name CustomLineGraph
+     * @description custom line graph - generic graph component used for different libraries for reusability
+     * @extends HTMLElement
+     * 
+     */
+
+    class CustomLineGraph extends HTMLElement {
+      constructor() {
+        super();
+      }
+      /**
+       * @name connectedCallback 
+       * @description
+       * called when (after) the element is attached to the DOM.
+       */
+
+
+      connectedCallback() {
+        var id = 'hedwig-' + btoa(Math.random()).substr(5, 5);
+        console.log("id ", id);
+        this.innerHTML = `<div style="width:100%; height:400px;" id='${id}'>`;
+        var container = document.querySelector(`#${id}`);
+        console.log("container ", container);
+        var data = JSON.parse(this.dataset.graph);
+        console.log("data JSON parse ", data);
+        console.log("this dataset.group ", this.dataset.group);
+        this.renderGraph(data, id, container);
+      }
+      /**
+       * @name renderGraph 
+       * @param data
+       * @param el
+       * @description
+       * renderGraph function to render high chart line graph on the basis of passing data into.
+       */
+
+
+      renderGraph(data, elId, el) {
+        console.log("renderGraph custom line graph ", data);
+        highcharts.chart(elId, {
+          chart: {
+            type: 'line'
+          },
+          title: {
+            text: 'Fruit Consumption'
+          },
+          xAxis: {
+            categories: ['Apples', 'Bananas', 'Oranges']
+          },
+          yAxis: {
+            title: {
+              text: 'Fruit eaten'
+            }
+          },
+          series: [{
+            name: 'Jane',
+            data: [1, 0, 4]
+          }, {
+            name: 'John',
+            data: [5, 7, 3]
+          }]
+        });
+        this.attachShadow({
+          mode: 'open'
+        });
+        this.shadowRoot.appendChild(el);
+      }
+
+    }
+    customElements.define('custom-line-graph', CustomLineGraph);
+
+    var graphs = {
+    	MAAS_cpu: {
+    		metric: [
+    			{
+    				field: "usage_average",
+    				unit: "%"
+    			},
+    			{
+    				field: "cpu_count",
+    				unit: "count"
+    			},
+    			{
+    				field: "max_cpu_usage",
+    				unit: "%"
+    			},
+    			{
+    				field: "idle_percent_average",
+    				unit: "%"
+    			},
+    			{
+    				field: "irq_percent_average",
+    				unit: "%"
+    			},
+    			{
+    				field: "min_cpu_usage",
+    				unit: "%"
+    			},
+    			{
+    				field: "stolen_percent_average",
+    				unit: "%"
+    			},
+    			{
+    				field: "sys_percent_average",
+    				unit: "%"
+    			},
+    			{
+    				field: "user_percent_average",
+    				unit: "%"
+    			},
+    			{
+    				field: "wait_percent_average",
+    				unit: "%"
+    			}
+    		]
+    	},
+    	MAAS_filesystem: {
+    		metric: [
+    			{
+    				field: "avail",
+    				unit: "kb"
+    			},
+    			{
+    				field: "files",
+    				unit: "kb"
+    			},
+    			{
+    				field: "free",
+    				unit: "kb"
+    			},
+    			{
+    				field: "free_files",
+    				unit: "count"
+    			},
+    			{
+    				field: "used",
+    				unit: "kb"
+    			},
+    			{
+    				field: "total",
+    				unit: "kb"
+    			}
+    		]
+    	},
+    	MAAS_memory: {
+    		metric: [
+    			{
+    				field: "actual_free",
+    				unit: "b"
+    			},
+    			{
+    				field: "actual_used",
+    				unit: "b"
+    			},
+    			{
+    				field: "free",
+    				unit: "b"
+    			},
+    			{
+    				field: "ram",
+    				unit: "mb"
+    			},
+    			{
+    				field: "swap_page_in",
+    				unit: "b"
+    			},
+    			{
+    				field: "swap_page_out",
+    				unit: "b"
+    			},
+    			{
+    				field: "swap-total",
+    				unit: "b"
+    			},
+    			{
+    				field: "swap_used",
+    				unit: "b"
+    			},
+    			{
+    				field: "total",
+    				unit: "b"
+    			},
+    			{
+    				field: "used",
+    				unit: "b"
+    			}
+    		]
+    	},
+    	MAAS_network: {
+    		metric: [
+    			{
+    				field: "rx_bytes",
+    				unit: "b"
+    			},
+    			{
+    				field: "rx_dropped",
+    				unit: "packets"
+    			},
+    			{
+    				field: "rx_bytes",
+    				unit: "b"
+    			},
+    			{
+    				field: "rx_bytes",
+    				unit: "b"
+    			},
+    			{
+    				field: "rx_errors",
+    				unit: "errors"
+    			},
+    			{
+    				field: "rx_frame",
+    				unit: "frames"
+    			},
+    			{
+    				field: "rx_overruns",
+    				unit: "overruns"
+    			},
+    			{
+    				field: "rx_packets",
+    				unit: "packets"
+    			},
+    			{
+    				field: "tx_bytes",
+    				unit: "b"
+    			},
+    			{
+    				field: "tx_carrier",
+    				unit: "errors"
+    			},
+    			{
+    				field: "tx_collisions",
+    				unit: "collisions"
+    			},
+    			{
+    				field: "tx_dropped",
+    				unit: "packets"
+    			},
+    			{
+    				field: "tx_overruns",
+    				unit: "overruns"
+    			},
+    			{
+    				field: "tx_packets",
+    				unit: "packets"
+    			}
+    		]
+    	},
+    	MAAS_http: {
+    		metric: [
+    			{
+    				field: "bytes",
+    				unit: "b"
+    			},
+    			{
+    				field: "cert_bits",
+    				unit: "b"
+    			},
+    			{
+    				field: "cert_end",
+    				unit: "other"
+    			},
+    			{
+    				field: "cert_end_in",
+    				unit: "other"
+    			},
+    			{
+    				field: "cert_start",
+    				unit: "other"
+    			},
+    			{
+    				field: "code_100",
+    				unit: "count"
+    			},
+    			{
+    				field: "code_200",
+    				unit: "count"
+    			},
+    			{
+    				field: "code_300",
+    				unit: "count"
+    			},
+    			{
+    				field: "code_400",
+    				unit: "count"
+    			},
+    			{
+    				field: "code_500",
+    				unit: "count"
+    			},
+    			{
+    				field: "duration",
+    				unit: "milliseconds"
+    			},
+    			{
+    				field: "truncated",
+    				unit: "b"
+    			},
+    			{
+    				field: "tt_connect",
+    				unit: "milliseconds"
+    			},
+    			{
+    				field: "tt_firstbyte",
+    				unit: "milliseconds"
+    			}
+    		]
+    	}
+    };
+
+    /**
+     * @name FindInfo
+     * @description
+     * Retrieve info on supported graph types
+     */
+
+    class FindInfo {
+      constructor() {
+        this.supported = graphs;
+      }
+      /**
+       * @name info
+       * @description
+       * Function to get the info on graph type from JSON
+       * @param {string} type
+       * @returns {object}
+       */
+
+
+      info(type, field) {
+        let supportedInfo;
+
+        if (type === "" || type === undefined) {
+          return;
+        }
+
+        if (field === "" || field === undefined) {
+          throw new Error('Missing field attribute');
+        }
+
+        let supported = Object.keys(this.supported).find(key => key === type);
+        let metrics = this.supported[supported].metric;
+        supportedInfo = metrics.find(key => key.field === field);
+
+        if (supportedInfo === undefined) {
+          throw new Error("Unknown graph data-type!");
+        }
+
+        return supportedInfo;
+      }
+
+    }
+
+    /**
+     * @name GraphEngine
+     * @extends HTMLElement
+     * @description
+     * Base graph
+     */
+
+    class GraphEngine extends HTMLElement {
+      constructor() {
+        super();
+      }
+      /**
+       * @name connectedCallback
+       * @description
+       * Call back for when the component is attached to the DOM
+       */
+
+
+      connectedCallback() {
+        this.defaults = {};
+        var defaults = new Defaults();
+        this.defaults.margin = this.dataset.margin || defaults.margin;
+        this.defaults.height = (this.dataset.height || defaults.graphHeight) - this.defaults.margin.top - this.defaults.margin.bottom;
+        this.defaults.width = (this.dataset.width || defaults.graphWidth) - this.defaults.margin.left - this.defaults.margin.right;
+        this.defaults.lineColor = this.dataset.lineColor || defaults.lineColor;
+        this.defaults.unit = this.dataset.unit;
+        this.render();
+      }
+      /**
+       * @name render
+       * @description
+       * Kicks off the render process after attribute value has been set & connectedcallback has run.
+       * @param {string} data this param is collected from the data-graph attribute
+       */
+
+
+      render() {
+        if (this.defaults) {
+          this.innerHTML = "<line-graph data-margin=" + JSON.stringify(this.defaults.margin) + " data-height=" + this.defaults.height + " data-width=" + this.defaults.width + " data-graph=" + this.graphData + " data-unit=" + (this.graphInfo.unit || this.defaults.unit) + " data-line-color=" + this.defaults.lineColor + " data-group=" + this.dataset.group + "></line-graph>";
+        }
+      }
+      /**
+       * @name dataPoints
+       * @description Sets datapoints this.graphdata
+       * @param {string} data This param is stringified JSON data setting
+       */
+
+
+      dataPoints(data) {
+        this.graphInfo = new FindInfo().info(this.dataset.type, this.dataset.field);
+        this.graphData = data;
+      }
+      /**
+       * @name disconnectedCallback
+       * @description
+       * Call back for when the component is detached from the DOM
+       */
+
+
+      disconnectedCallback() {}
+      /**
+       * @name observedAttributes
+       * @description Sets what attributes this component will listen for.
+       * @returns {Array} an array of attribute to watch for value changes
+       */
+
+
+      static get observedAttributes() {
+        return ['data-graph'];
+      }
+      /**
+       * @name attributeChangedCallback
+       * @description This callback is fired when attribute values change for
+       * @param {string} name attribute name
+       * @param {any} oldValue original value upon page load, will most of the time be blank
+       * @param {any} newValue new value bound to the attribute
+       */
+
+
+      attributeChangedCallback(name, oldValue, newValue) {
+        if (newValue && name === "data-graph") {
+          this.dataPoints(newValue);
+          this.render();
+        }
+      }
+
+    }
+    customElements.define('hedwig-graph', GraphEngine);
+
     class HighchartHedwig extends HTMLElement {
       constructor() {
         super();
@@ -7255,63 +7328,31 @@
       connectedCallback() {
         this.innerHTML = `<div style="height: 400px,width:400px" id="container"> test</div>`;
         var container = document.querySelector(`#container`);
-        highcharts.chart("container", {
-          chart: {
-            height: 300,
-            width: 600,
-            type: 'line'
-          },
-          title: {
-            text: 'Hedwig High chart Demo'
-          },
-          subtitle: {
-            text: 'Source: Metrics'
-          },
-          yAxis: {
+        highcharts.getJSON('https://cdn.jsdelivr.net/gh/highcharts/highcharts@v7.0.0/samples/data/usdeur.json', function (data) {
+          highcharts.chart("container", {
+            chart: {
+              zoomType: 'x'
+            },
             title: {
-              text: 'Number of cpus'
-            }
-          },
-          xAxis: {
-            accessibility: {
-              rangeDescription: 'Range: 2010 to 2017'
-            }
-          },
-          legend: {
-            layout: 'vertical',
-            align: 'right',
-            verticalAlign: 'middle'
-          },
-          plotOptions: {
-            series: {
-              label: {
-                connectorAllowed: false
+              text: 'Fruit Consumption'
+            },
+            xAxis: {
+              type: 'datetime'
+            },
+            yAxis: {
+              title: {
+                text: 'Exchange rate'
               }
-            }
-          },
-          series: [{
-            name: '6221-forestofdean.prod.com',
-            data: [0.45, 0.67, 0.10, 0.99],
-            color: "#F7CD9D"
-          }, {
-            name: '7877-ministryofmagic.staging.com',
-            data: [0.80, 0.33, 0.2, 0.78],
-            color: "red"
-          }],
-          responsive: {
-            rules: [{
-              condition: {
-                maxWidth: 200
-              },
-              chartOptions: {
-                legend: {
-                  layout: 'horizontal',
-                  align: 'center',
-                  verticalAlign: 'bottom'
-                }
-              }
+            },
+            legend: {
+              enabled: false
+            },
+            series: [{
+              type: 'area',
+              name: 'USD to EUR',
+              data: data
             }]
-          }
+          });
         });
         this.attachShadow({
           mode: 'open'
@@ -7322,6 +7363,7 @@
     }
     customElements.define('hedwig-highchart', HighchartHedwig);
 
+    exports.CustomLineGraph = CustomLineGraph;
     exports.Defaults = Defaults;
     exports.GraphEngine = GraphEngine;
     exports.HighchartHedwig = HighchartHedwig;

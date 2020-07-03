@@ -7,27 +7,6 @@ export class LineGraph extends HTMLElement {
     constructor() {
         super();
       }
-
-
-      findMaxValue(data){    
-		let arr=[];
-		data.forEach(element => {
-		  element.datapoints.forEach(el => {
-			arr.push(el.value);  
-		  });    
-		});
-		return arr;
-	  }
-	  findMaxTime(data){
-		let arr=[];
-		data.forEach(element => {
-		  element.datapoints.forEach(el => {
-			arr.push(el.time);  
-		  });
-		});
-		return arr;
-	  }
-
       /**
    * @name parseData
    * @param {Array} data
@@ -59,26 +38,35 @@ export class LineGraph extends HTMLElement {
   }
     connectedCallback() {
       this.innerHTML = `<div style="height: 400px,width:400px" id="container"></div>`;
-      var container = document.querySelector(`#container`); 
-     Highcharts.chart("container", this.optionObject());
-    this.attachShadow({ mode: 'open' });
-    this.shadowRoot.appendChild(container);
+      var container = document.querySelector(`#container`);
+      Highcharts.chart("container", this.optionObject());
+      this.attachShadow({
+        mode: 'open'
+      });
+      this.shadowRoot.appendChild(container);
     }
 
-    dataParser(data){
-        let arr=[];
-        JSON.parse(data).forEach(e =>{
-            arr.push([new Date(e.time).getTime(),e.mean])
+    series(data){
+      let jsonObj=JSON.parse(data);
+      let grouping=this.parseData(jsonObj);
+      let series=[]
+      grouping.forEach(e =>{
+      series.push(this.sereisData(e.group,e.datapoints));  
+      })      
+      return series;        
+    }
+
+    sereisData(name,datapoints){
+      let arr=[];
+      datapoints.forEach(e =>{
+            arr.push([new Date(e.time).getTime(),e.value])
         })
-        return arr;
+        return {
+          name,
+          data:arr,
+        };
     }
-    xcatagories(data){
-        let xcat=[]
-        return JSON.parse(data).forEach(e =>{
-            xcat.push(new Date(e.time).toDateString());
-        });
-        return xcat;
-    }
+  
     optionObject(){
 
         return {chart: {
@@ -86,17 +74,22 @@ export class LineGraph extends HTMLElement {
             width:600,
             type: 'line'
         },
+        // colors:this.getAttribute('data-line-color')?[this.getAttribute('data-line-color'),Highcharts.getOptions().colors]:Highcharts.getOptions().colors,
         unit:{
           value:this.getAttribute('data-unit')
         },
-
+        credits: {
+          enabled: false
+        },
         title: {
             text: ''
         },
-    
         subtitle: {
             text: ''
         },
+        legend: {
+          layout: 'horizontal', // default
+      },
         yAxis: {            
             labels: {
                 formatter: function () {
@@ -107,7 +100,6 @@ export class LineGraph extends HTMLElement {
         },
         xAxis: {
             type: 'datetime',
-            //categories:this.xcatagories(this.getAttribute('data-graph'))
             dateTimeLabelFormats: {
                 second: '%H:%M:%S',
                 // minute: '%H:%M',
@@ -119,13 +111,6 @@ export class LineGraph extends HTMLElement {
               }
             
         },
-    
-        legend: {
-            layout: 'vertical',
-            align: 'right',
-            verticalAlign: 'middle'
-        },
-    
         plotOptions: {
             series: {
                 label: {
@@ -134,9 +119,7 @@ export class LineGraph extends HTMLElement {
             }
         },
         
-        series: [{
-            data: this.dataParser(this.getAttribute('data-graph'))
-        }],
+        series: this.series(this.getAttribute('data-graph')),
     
         responsive: {
             rules: [{

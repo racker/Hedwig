@@ -1,34 +1,12 @@
-import * as d3 from 'd3';
-import { AxisLeft } from './helpers/axisConverter';
+import Highcharts from 'highcharts/highcharts';
+import {
+  AxisLeft
+} from './helpers/axisConverter';
 
-/**
- * @name LineGraph
- * @description
- * @extends HTMLElement
- * Generic line graph component for reusability
- */
 export class LineGraph extends HTMLElement {
-
   constructor() {
     super();
   }
-
-  /**
-   * @name connectedCallback
-   * @description
-   * Call back for when the component is attached to the DOM
-   */
-  connectedCallback() {
-    let id = 'hedwig-' + btoa(Math.random()).substr(5, 5);
-    this.innerHTML = `<svg id='${id}'></svg>`;
-    var svg = document.querySelector(`#${id}`);
-    var data = JSON.parse(this.dataset.graph);
-
-    this.attachShadow({ mode: 'open' });
-    this.shadowRoot.appendChild(svg);
-    this.renderGraph(this.parseData(data), svg);
-  }
-
   /**
    * @name parseData
    * @param {Array} data
@@ -53,98 +31,126 @@ export class LineGraph extends HTMLElement {
       return {
         group,
         datapoints: data.filter(d => d[grouping] === group).map((d) => {
-          return { time: new Date(d.time), value: +d.mean }
+          return {
+            time: new Date(d.time),
+            value: +d.mean
+          }
         })
       }
     });
   }
-
-  /**
-   * @name disconnectedCallback
-   * @description
-   * Call back for when the component is detached from the DOM
-   */
-  disconnectedCallback() { }
-
-  /**
-   * @name renderGraph
-   * @param {Array} data
-   * @param {innerHTML} el
-   * @description
-   * Renders the graph using d3js
-   */
-  renderGraph(data, el) {
-    // Setup the margins and height, width
-    var margin = JSON.parse(this.dataset.margin);
-    var height = parseInt(this.dataset.height);
-    var width = parseInt(this.dataset.width);
-    var unit = this.dataset.unit;
-
-    // Create X time scale
-    var xScale = d3.scaleTime()
-      .domain(d3.extent(data[0].datapoints, d => d.time))
-      .range([0, width - margin.bottom]);
-
-    // Create Y linear scale
-    var yScale = d3.scaleLinear()
-      .domain([0, d3.max(data[0].datapoints, d => d.value)])
-      .range([height - margin.left, 0]);
-
-    // Setup the svg element in the DOM
-    var svg = d3.select(el)
-      .style("width", width + margin.left + +margin.right)
-      .style("height", height + +margin.top + +margin.bottom)
-      .append('g')
-      .attr("transform", `translate(${margin.top}, ${margin.left})`);
-
-    // Create the lines
-    var line = d3.line()
-      .x(d => xScale(d.time))
-      .y(d => yScale(d.value));
-
-    // add element for line and add class name
-    let lines = svg.append('g')
-      .attr('class', 'lines');
-
-    // add the lines for each collection of objects to the SVG
-    lines.selectAll('.line-group')
-      .data(data).enter()
-      .append('g')
-      .attr('class', 'line-group')
-      .append('path')
-      .attr('class', 'line')
-      .attr('d', d => line(d.datapoints))
-      .style('stroke', this.dataset.lineColor)
-      .style('fill', 'none');
-    /*
-    TODO: Color schema strategy needed to ensure lines
-    are the right colors
-    https://github.com/d3/d3-scale/blob/master/README.md#sequential-scales
-    var color = d3.scaleOrdinal(d3.schemeCategory10);
-    .style('stroke', (d, i) => color(i));
-    */
-
-    // Configure X Axis ticks and add xScale
-    var xAxis = d3.axisBottom(xScale).ticks(5);
-    // Configure Y Axis ticks and
-    var yAxis = d3.axisLeft(yScale).ticks(5).tickFormat((d) => {
-      return new AxisLeft().convert(unit, d);
+  connectedCallback() {
+    this.innerHTML = `<div style="height: 400px,width:400px" id="container"></div>`;
+    var container = document.querySelector(`#container`);
+    Highcharts.chart("container", this.optionObject());
+    this.attachShadow({
+      mode: 'open'
     });
-
-    // Add both Axis' to the SVG
-    svg.append("g")
-      .attr("class", "x axis")
-      .attr("transform", `translate(0, ${height - margin.top})`)
-      .call(xAxis);
-
-    svg.append("g")
-      .attr("class", "y axis")
-      .call(yAxis)
-      .append('text')
-      .attr("y", 15)
-      .attr("transform", "rotate(-90)")
-      .attr("fill", "#000");
+    this.shadowRoot.appendChild(container);
   }
+
+  /**
+   * make series object
+   * @param {stringyfy data} data 
+   * @returns Array of objects
+   */
+  series(data) {
+    let jsonObj = JSON.parse(data);
+    let grouping = this.parseData(jsonObj);
+    let series = []
+    grouping.forEach(e => {
+      series.push(this.sereisData(e.group, e.datapoints));
+    })
+    return series;
+  }
+
+  /**
+   * 
+   * @param {name for series} name 
+   * @param {datapoints with time and value} datapoints 
+   */
+  sereisData(name, datapoints) {
+    let arr = [];
+    datapoints.forEach(e => {
+      arr.push([new Date(e.time).getTime(), e.value])
+    })
+    return {
+      name,
+      data: arr,
+    };
+  }
+
+  /**
+   * Highchart option object
+   */
+  optionObject() {
+    return {
+      chart: {
+        height: 300,
+        width: 600,
+        type: 'line'
+      },
+      // colors:this.getAttribute('data-line-color')?[this.getAttribute('data-line-color'),Highcharts.getOptions().colors]:Highcharts.getOptions().colors,
+      unit: {
+        value: this.getAttribute('data-unit')
+      },
+      // remove highchart water mark
+      credits: {
+        enabled: false
+      },
+      legend: {
+        layout: 'horizontal', // default
+      },
+      yAxis: {
+        labels: {
+          // y axis labels formatting
+          formatter: function () {
+            let u = new AxisLeft();
+            return this.axis.defaultLabelFormatter.call(this) + u.convert(this.chart.options.unit.value);
+          }
+        }
+      },
+      xAxis: {
+        type: 'datetime',
+        dateTimeLabelFormats: {
+          second: '%H:%M:%S',
+          // minute: '%H:%M',
+          // hour: '%H:%M',
+          // day: '%b. %e',
+          // week: '%b. %e',
+          // month: '%b. %y',
+          // year: '%Y'
+        }
+
+      },
+      plotOptions: {
+        series: {
+          label: {
+            connectorAllowed: false
+          },
+        }
+      },
+
+      series: this.series(this.getAttribute('data-graph')),
+
+      responsive: {
+        rules: [{
+          condition: {
+            maxWidth: 200
+          },
+          chartOptions: {
+            legend: {
+              layout: 'horizontal',
+              align: 'center',
+              verticalAlign: 'bottom'
+            }
+          }
+        }]
+      }
+
+    }
+  }
+
 }
 
 customElements.define('line-graph', LineGraph);

@@ -5,6 +5,7 @@
 node_modules
 dist
 docs/Gemfile.lock
+docs/assets/scripts
 _site
 coverage
 test/backstop_data

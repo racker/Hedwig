@@ -15,34 +15,34 @@ export class AxisLeft {
      * Function to return correct y axis tick label
      * @param {string} unit
      */
-    convert(unit, d) {
+    convert(unit) {
         switch(true) {
             case unit === 'count':
-                return d;
+                return '';
             case unit === 'b':
-                return d + ' b';
+                return ' b';
             case unit === 'kb':
-                return d + ' kb';
+                return ' kb';
             case unit === 'mb':
-                return d + ' mb';
+                return ' mb';
             case unit === 'frames':
-                return d + ' frames/s';
+                return ' frames/s';
             case unit === 'overruns':
-                return d + ' overruns/s';
+                return ' overruns/s';
             case unit === 'errors':
-                return d + ' errors/s';
+                return ' errors/s';
             case unit === 'packets':
-                return d + ' packets/s';
+                return ' packets/s';
             case unit === 'collisions':
-                return d + ' collisions/s';
+                return ' collisions/s';
             case unit === 'other':
-                return d + ' days';
+                return ' days';
             case unit === 'milliseconds':
-                return d + ' ms';
+                return ' ms';
             case unit === 'seconds':
-                return d + ' s';
+                return ' s';
             default:
-                return d + '%';
+                return '%';
        }
     }
 }

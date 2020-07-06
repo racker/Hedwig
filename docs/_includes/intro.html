@@ -30,7 +30,7 @@
       Just add a component tag to your page and add any data-* attributes for configuration
     </p>
     <br>
-    <pre><code class='html'>&lt;hedwig-graph data-type="MAAS_cpu" data-field="usage_average" data-height="200" data-width="400" data='[someBoundData]' &gt;&lt;/hedwig-graph&gt;</code></pre>
+    <pre><code class='html'>&lt;hedwig-graph data-type="MAAS_cpu" data-field="usage_average" data-height="500" data-width="600" data='[someBoundData]' &gt;&lt;/hedwig-graph&gt;</code></pre>
     <br>
     <p>This will render the graph, taking in the data and mapping according to the components perscribed data format.</p>
     <br/>
@@ -91,7 +91,7 @@
       If you're wanting to graph this data in a multiline format where <em>device</em> is the grouping qualifier, you'd then
       add the <strong>data-group</strong> attribute and enter the value of the key being used for grouping.
     </p>
-    <pre><code class='html'>&lt;hedwig-graph data-type="MAAS_cpu" data-field="usage_average" data-group="device" data-height="200" data-width="400" data='[someBoundData]' &gt;&lt;/hedwig-graph&gt;</code></pre>
+    <pre><code class='html'>&lt;hedwig-graph data-type="MAAS_cpu" data-field="usage_average" data-group="device" data-height="500" data-width="600" data='[someBoundData]' &gt;&lt;/hedwig-graph&gt;</code></pre>
     <br>
     <p><script>
       var multiMocked = [{
@@ -140,7 +140,7 @@
             "device": "123-ministryofmagic.staging.com"
             }];
 
-      document.write('<hedwig-graph data-type="MAAS_cpu" data-group="device" data-field="usage_average" data-height="300" data-width="400" data-graph=' + JSON.stringify(multiMocked) + '></hedwig-graph>');
+      document.write('<hedwig-graph data-type="MAAS_cpu" data-group="device" data-field="usage_average" data-height="500" data-width="600" data-graph=' + JSON.stringify(multiMocked) + '></hedwig-graph>');
       document.write('<hedwig-highchart option="test"></hedwig-highchart>')
   </script></p>
     <p>This will render the graph, with multiline capabilities</p>

@@ -1,13 +1,34 @@
 import Highcharts from 'highcharts/highcharts';
-import {
-  AxisLeft
-} from './helpers/axisConverter';
-
+import { AxisLeft } from './helpers/axisConverter';
 export class LineGraph extends HTMLElement {
-  constructor() {
-    super();
-  }
-  /**
+
+    constructor() {
+        super();
+        this.height;
+        this.width;
+      }
+
+
+      findMaxValue(data){
+		let arr=[];
+		data.forEach(element => {
+		  element.datapoints.forEach(el => {
+			arr.push(el.value);
+		  });
+		});
+		return arr;
+	  }
+	  findMaxTime(data){
+		let arr=[];
+		data.forEach(element => {
+		  element.datapoints.forEach(el => {
+			arr.push(el.time);
+		  });
+		});
+		return arr;
+	  }
+
+      /**
    * @name parseData
    * @param {Array} data
    * @description
@@ -39,19 +60,20 @@ export class LineGraph extends HTMLElement {
       }
     });
   }
-  connectedCallback() {
-    this.innerHTML = `<div style="height: 400px,width:400px" id="container"></div>`;
-    var container = document.querySelector(`#container`);
-    Highcharts.chart("container", this.optionObject());
-    this.attachShadow({
-      mode: 'open'
-    });
-    this.shadowRoot.appendChild(container);
+    connectedCallback() {
+      this.height = parseInt(this.dataset.height);
+      this.width = parseInt(this.dataset.width);
+      this.innerHTML = `<div id="container"></div>`;
+      var container = document.querySelector(`#container`);
+
+      Highcharts.chart("container", this.optionObject());
+      this.attachShadow({ mode: 'open' });
+      this.shadowRoot.appendChild(container);
   }
 
   /**
    * make series object
-   * @param {stringyfy data} data 
+   * @param {stringyfy data} data
    * @returns Array of objects
    */
   series(data) {
@@ -59,17 +81,17 @@ export class LineGraph extends HTMLElement {
     let grouping = this.parseData(jsonObj);
     let series = []
     grouping.forEach(e => {
-      series.push(this.sereisData(e.group, e.datapoints));
+      series.push(this.seriesData(e.group, e.datapoints));
     })
     return series;
   }
 
   /**
-   * 
-   * @param {name for series} name 
-   * @param {datapoints with time and value} datapoints 
+   *
+   * @param {name for series} name
+   * @param {datapoints with time and value} datapoints
    */
-  sereisData(name, datapoints) {
+  seriesData(name, datapoints) {
     let arr = [];
     datapoints.forEach(e => {
       arr.push([new Date(e.time).getTime(), e.value])
@@ -86,8 +108,8 @@ export class LineGraph extends HTMLElement {
   optionObject() {
     return {
       chart: {
-        height: 300,
-        width: 600,
+        height: this.height,
+        width:this.width,
         type: 'line'
       },
       // colors:this.getAttribute('data-line-color')?[this.getAttribute('data-line-color'),Highcharts.getOptions().colors]:Highcharts.getOptions().colors,

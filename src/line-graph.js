@@ -1,34 +1,15 @@
 import Highcharts from 'highcharts/highcharts';
-import { AxisLeft } from './helpers/axisConverter';
+import {
+  AxisLeft
+} from './helpers/axisConverter';
 export class LineGraph extends HTMLElement {
 
-    constructor() {
-        super();
-        this.height;
-        this.width;
-      }
-
-
-      findMaxValue(data){
-		let arr=[];
-		data.forEach(element => {
-		  element.datapoints.forEach(el => {
-			arr.push(el.value);
-		  });
-		});
-		return arr;
-	  }
-	  findMaxTime(data){
-		let arr=[];
-		data.forEach(element => {
-		  element.datapoints.forEach(el => {
-			arr.push(el.time);
-		  });
-		});
-		return arr;
-	  }
-
-      /**
+  constructor() {
+    super();
+    this.height;
+    this.width;
+  }
+  /**
    * @name parseData
    * @param {Array} data
    * @description
@@ -60,15 +41,17 @@ export class LineGraph extends HTMLElement {
       }
     });
   }
-    connectedCallback() {
-      this.height = parseInt(this.dataset.height);
-      this.width = parseInt(this.dataset.width);
-      this.innerHTML = `<div id="container"></div>`;
-      var container = document.querySelector(`#container`);
+  connectedCallback() {
+    this.height = parseInt(this.dataset.height);
+    this.width = parseInt(this.dataset.width);
+    this.innerHTML = `<div id="container"></div>`;
+    var container = document.querySelector(`#container`);
 
-      Highcharts.chart("container", this.optionObject());
-      this.attachShadow({ mode: 'open' });
-      this.shadowRoot.appendChild(container);
+    Highcharts.chart("container", this.optionObject());
+    this.attachShadow({
+      mode: 'open'
+    });
+    this.shadowRoot.appendChild(container);
   }
 
   /**
@@ -109,7 +92,7 @@ export class LineGraph extends HTMLElement {
     return {
       chart: {
         height: this.height,
-        width:this.width,
+        width: this.width,
         type: 'line'
       },
       // colors:this.getAttribute('data-line-color')?[this.getAttribute('data-line-color'),Highcharts.getOptions().colors]:Highcharts.getOptions().colors,

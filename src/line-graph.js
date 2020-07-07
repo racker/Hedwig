@@ -58,7 +58,6 @@ export class LineGraph extends HTMLElement {
   getDataLineColor(colors, groupCount) {
     // Check if there are multiple colors or only one color passed.
     var arrColor = [];
-    console.log("colors ", colors);
     if (colors.indexOf(',') > -1) {                          // split color property, check and compare length with group of lines.
       if(groupCount === 0) {                                 // check if groupcount is zero means single line. 
         if(colors.split(',')[0])                            // check if multiple colors or not.
@@ -98,7 +97,6 @@ export class LineGraph extends HTMLElement {
    * @returns Array of objects
    */
   series() {
-    // console.log(this.dataset.graph);
     let jsonObj = JSON.parse(this.dataset.graph);
     let grouping = this.parseData(jsonObj);
     let series = [];

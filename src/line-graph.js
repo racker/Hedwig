@@ -59,8 +59,9 @@ export class LineGraph extends HTMLElement {
    * @param {stringyfy data} data
    * @returns Array of objects
    */
-  series(data) {
-    let jsonObj = JSON.parse(data);
+  series() {
+    // console.log(this.dataset.graph);
+    let jsonObj = JSON.parse(this.dataset.graph);
     let grouping = this.parseData(jsonObj);
     let series = []
     grouping.forEach(e => {
@@ -95,9 +96,8 @@ export class LineGraph extends HTMLElement {
         width: this.width,
         type: 'line'
       },
-      // colors:this.getAttribute('data-line-color')?[this.getAttribute('data-line-color'),Highcharts.getOptions().colors]:Highcharts.getOptions().colors,
       unit: {
-        value: this.getAttribute('data-unit')
+        value: this.dataset.unit
       },
       // remove highchart water mark
       credits: {
@@ -119,12 +119,6 @@ export class LineGraph extends HTMLElement {
         type: 'datetime',
         dateTimeLabelFormats: {
           second: '%H:%M:%S',
-          // minute: '%H:%M',
-          // hour: '%H:%M',
-          // day: '%b. %e',
-          // week: '%b. %e',
-          // month: '%b. %y',
-          // year: '%Y'
         }
 
       },
@@ -136,7 +130,7 @@ export class LineGraph extends HTMLElement {
         }
       },
 
-      series: this.series(this.getAttribute('data-graph')),
+      series: this.series(),
 
       responsive: {
         rules: [{

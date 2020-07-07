@@ -2,10 +2,12 @@ import Highcharts from 'highcharts/highcharts';
 import {
   AxisLeft
 } from './helpers/axisConverter';
+import { color } from 'd3';
 
 export class LineGraph extends HTMLElement {
   constructor() {
     super();
+    this.lineColor = [];
   }
   /**
    * @name parseData
@@ -42,22 +44,48 @@ export class LineGraph extends HTMLElement {
   connectedCallback() {
     this.innerHTML = `<div style="height: 400px,width:400px" id="container"></div>`;
     var container = document.querySelector(`#container`);
-    /*if (this.dataset.lineColor.indexOf(',') > -1) {
-      var arrColor =  this.dataset.lineColor.split(',');
-      if(arrColor.length > 1) {
-        arrColor.forEach((value, i) => {
-          console.log("value " + value + "i " + i);
-          Highcharts.getOptions().colors[i] = value;
-        })      
-      }
-    } else {*/
-      Highcharts.getOptions().colors[0] = this.dataset.lineColor;
-    /*}*/
     Highcharts.chart("container", this.optionObject());
     this.attachShadow({
       mode: 'open'
     });
     this.shadowRoot.appendChild(container);
+  }
+
+  getDataLineColor(colors, groupCount) {
+    // Check if there are multiple colors or only one color passed.
+    var arrColor = [];
+    console.log("colors ", colors);
+    if (colors.indexOf(',') > -1) {                          // split color property, check and compare length with group of lines.
+      if(groupCount === 0) {                                 // check if groupcount is zero means single line. 
+        if(colors.split(',')[0])                            // check if multiple colors or not.
+          arrColor.push(colors.split(',')[0]);
+        else
+          arrColor.push(colors);                                // for single color or no color.
+      } else if(colors.split(',').length === groupCount) {     // CASE 1: if no. of colors passed is equal to no. of groups.
+        colors.split(',').forEach((value, i) => {
+          arrColor.push(value);
+        })
+      } else if(colors.split(',').length !== groupCount) {      // CASE2: if no. of colors not match with groups.
+          for(var i=0; i < groupCount; i++) {                 
+            if(colors.split(',')[i])                    
+              arrColor[i] = colors.split(',')[i];
+            else
+            arrColor[i] = Highcharts.getOptions().colors[i];
+          }   
+      }
+    } else {                                                     // CASE 3: when only one color is pased.
+      if(groupCount === 0) {
+        arrColor.push(colors); 
+      } else { 
+        for(var i=0; i < groupCount; i++) {
+          if(i === 0)
+            arrColor[i] = colors;
+          else
+          arrColor[i] = Highcharts.getOptions().colors[i];
+        }
+      }  
+    }  
+    return arrColor;    
   }
 
   /**
@@ -69,14 +97,19 @@ export class LineGraph extends HTMLElement {
     let jsonObj = JSON.parse(data);
     let grouping = this.parseData(jsonObj);
     let series = [];
-    grouping.forEach(e => {
+    let groupCount = 0;
+    grouping.forEach((e) => {
+      if(e.group !== undefined) {
+        groupCount++;
+      }
       series.push(this.seriesData(e.group, e.datapoints));
     })
-
-    console.log("series ", series);
-
+    var arr = this.getDataLineColor(this.dataset.lineColor, groupCount);
+    this.lineColor.push.apply(this.lineColor, arr);
+    console.log("this lnColor ", this.lineColor);
     return series;
   }
+
 
   /**
    * 
@@ -87,10 +120,10 @@ export class LineGraph extends HTMLElement {
     let arr = [];
     datapoints.forEach(e => {
       arr.push([new Date(e.time).getTime(), e.value])
-    })
+    });
     return {
       marker: {
-        lineColor : Highcharts.getOptions().colors
+        lineColor : this.lineColor
       },
       name,
       data: arr,

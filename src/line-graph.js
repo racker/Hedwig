@@ -2,12 +2,13 @@ import Highcharts from 'highcharts/highcharts';
 import {
   AxisLeft
 } from './helpers/axisConverter';
-import { color } from 'd3';
-
 export class LineGraph extends HTMLElement {
+
   constructor() {
     super();
     this.lineColor = [];
+    this.height;
+    this.width;
   }
   /**
    * @name parseData
@@ -42,8 +43,11 @@ export class LineGraph extends HTMLElement {
     });
   }
   connectedCallback() {
-    this.innerHTML = `<div style="height: 400px,width:400px" id="container"></div>`;
+    this.height = parseInt(this.dataset.height);
+    this.width = parseInt(this.dataset.width);
+    this.innerHTML = `<div id="container"></div>`;
     var container = document.querySelector(`#container`);
+
     Highcharts.chart("container", this.optionObject());
     this.attachShadow({
       mode: 'open'
@@ -90,15 +94,16 @@ export class LineGraph extends HTMLElement {
 
   /**
    * make series object
-   * @param {stringyfy data} data 
+   * @param {stringyfy data} data
    * @returns Array of objects
    */
-  series(data) {
-    let jsonObj = JSON.parse(data);
+  series() {
+    // console.log(this.dataset.graph);
+    let jsonObj = JSON.parse(this.dataset.graph);
     let grouping = this.parseData(jsonObj);
     let series = [];
-    let groupCount = 0;
-    grouping.forEach((e) => {
+    let groupCount = 0; 
+    grouping.forEach(e => {
       if(e.group !== undefined) {
         groupCount++;
       }
@@ -106,15 +111,13 @@ export class LineGraph extends HTMLElement {
     })
     var arr = this.getDataLineColor(this.dataset.lineColor, groupCount);
     this.lineColor.push.apply(this.lineColor, arr);
-    console.log("this lnColor ", this.lineColor);
     return series;
   }
 
-
   /**
-   * 
-   * @param {name for series} name 
-   * @param {datapoints with time and value} datapoints 
+   *
+   * @param {name for series} name
+   * @param {datapoints with time and value} datapoints
    */
   seriesData(name, datapoints) {
     let arr = [];
@@ -122,9 +125,6 @@ export class LineGraph extends HTMLElement {
       arr.push([new Date(e.time).getTime(), e.value])
     });
     return {
-      marker: {
-        lineColor : this.lineColor
-      },
       name,
       data: arr,
     };
@@ -136,13 +136,12 @@ export class LineGraph extends HTMLElement {
   optionObject() {
     return {
       chart: {
-        height: 300,
-        width: 600,
+        height: this.height,
+        width: this.width,
         type: 'line'
       },
-      // colors:this.getAttribute('data-line-color')?[this.getAttribute('data-line-color'),Highcharts.getOptions().colors]:Highcharts.getOptions().colors,
       unit: {
-        value: this.getAttribute('data-unit')
+        value: this.dataset.unit
       },
       // remove highchart water mark
       credits: {
@@ -164,12 +163,6 @@ export class LineGraph extends HTMLElement {
         type: 'datetime',
         dateTimeLabelFormats: {
           second: '%H:%M:%S',
-          // minute: '%H:%M',
-          // hour: '%H:%M',
-          // day: '%b. %e',
-          // week: '%b. %e',
-          // month: '%b. %y',
-          // year: '%Y'
         }
 
       },
@@ -180,8 +173,8 @@ export class LineGraph extends HTMLElement {
           },
         }
       },
-
-      series: this.series(this.getAttribute('data-graph')),
+      colors: this.lineColor,
+      series: this.series(),
 
       responsive: {
         rules: [{

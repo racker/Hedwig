@@ -1,4 +1,4 @@
-import Highcharts from 'highcharts/highcharts';
+import Highcharts, { color } from 'highcharts/highcharts';
 import {
   AxisLeft
 } from './helpers/axisConverter';
@@ -55,40 +55,12 @@ export class LineGraph extends HTMLElement {
     this.shadowRoot.appendChild(container);
   }
 
-  getDataLineColor(colors, groupCount) {
-    // Check if there are multiple colors or only one color passed.
-    var arrColor = [];
-    if (colors.indexOf(',') > -1) {                          // split color property, check and compare length with group of lines.
-      if(groupCount === 0) {                                 // check if groupcount is zero means single line. 
-        if(colors.split(',')[0])                            // check if multiple colors or not.
-          arrColor.push(colors.split(',')[0]);
-        else
-          arrColor.push(colors);                                // for single color or no color.
-      } else if(colors.split(',').length === groupCount) {     // CASE 1: if no. of colors passed is equal to no. of groups.
-        colors.split(',').forEach((value, i) => {
-          arrColor.push(value);
-        })
-      } else if(colors.split(',').length !== groupCount) {      // CASE2: if no. of colors not match with groups.
-          for(var i=0; i < groupCount; i++) {                 
-            if(colors.split(',')[i])                    
-              arrColor[i] = colors.split(',')[i];
-            else
-            arrColor[i] = Highcharts.getOptions().colors[i];
-          }   
-      }
-    } else {                                                     // CASE 3: when only one color is pased.
-      if(groupCount === 0) {
-        arrColor.push(colors); 
-      } else { 
-        for(var i=0; i < groupCount; i++) {
-          if(i === 0)
-            arrColor[i] = colors;
-          else
-          arrColor[i] = Highcharts.getOptions().colors[i];
-        }
-      }  
-    }  
-    return arrColor;    
+  getDataLineColor(colors) {
+    var arr = [];
+    var arrColor;    
+    colors.split(',').map(value => arr.push(value));
+    arrColor = [...arr, ...Highcharts.getOptions().colors];
+    this.lineColor.push.apply(this.lineColor, arrColor);
   }
 
   /**
@@ -107,8 +79,8 @@ export class LineGraph extends HTMLElement {
       }
       series.push(this.seriesData(e.group, e.datapoints));
     })
-    var arr = this.getDataLineColor(this.dataset.lineColor, groupCount);
-    this.lineColor.push.apply(this.lineColor, arr);
+
+    this.getDataLineColor(this.dataset.lineColor);
     return series;
   }
 

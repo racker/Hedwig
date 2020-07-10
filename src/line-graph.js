@@ -1,4 +1,5 @@
 import * as d3 from 'd3';
+import { Defaults } from './defaults'; 
 import { AxisLeft } from './helpers/axisConverter';
 
 /**
@@ -11,7 +12,7 @@ export class LineGraph extends HTMLElement {
 
   constructor() {
     super();
-    this.lineColor = []; 
+    this.lineColor = [];
   }
 
   /**
@@ -48,15 +49,15 @@ export class LineGraph extends HTMLElement {
         uniqueGroups.push(group);
       }
     });
-
     this.getDataLineColor(this.dataset.lineColor);
     // now that we have grouping we will filter and map our datapoints
-    return uniqueGroups.map((group) => {
+    return uniqueGroups.map((group, index) => {
       return {
         group,
         datapoints: data.filter(d => d[grouping] === group).map((d) => {
           return { time: new Date(d.time), value: +d.mean }
-        })
+        }),
+        color : this.lineColor[index]
       }
     });
 
@@ -70,9 +71,10 @@ export class LineGraph extends HTMLElement {
 
   getDataLineColor(colors) {
     var arr = [];
-    var arrColor;    
+    var arrColor;
+    var defaults = new Defaults();     
     colors.split(',').map(value => arr.push(value));
-    arrColor = [...arr, ...d3.schemeCategory10];
+    arrColor = [...arr, ...defaults.schemeCategory10Color];
     this.lineColor.push.apply(this.lineColor, arrColor);   
   }
  
@@ -107,7 +109,19 @@ export class LineGraph extends HTMLElement {
       .domain([0, d3.max(data[0].datapoints, d => d.value)])
       .range([height - margin.left, 0]);
     // create color scale for each line
-    const colorScale = d3.scaleOrdinal(this.lineColor); 
+    //const colorScale = d3.scaleOrdinal(this.lineColor); 
+
+    // create tooltip
+
+    var tooltip = d3.select(el)
+                    .append("div")
+                    .style("position", "absolute")
+                    .style("z-index", "10")
+                    .style("visibility", "hidden")
+                    .style("background", "#000")
+                    .text("a simple tooltip");
+
+
     // Setup the svg element in the DOM
     var svg = d3.select(el)
       .style("width", width + margin.left + +margin.right)
@@ -121,7 +135,7 @@ export class LineGraph extends HTMLElement {
       .x(d => xScale(d.time))
       .y(d => yScale(d.value));
 
-      colorScale.domain(data.map(d => d.group)); 
+    //colorScale.domain(data.map(d => d.group)); 
     // add element for line and add class name
     let lines = svg.append('g')
       .attr('class', 'lines');
@@ -134,8 +148,13 @@ export class LineGraph extends HTMLElement {
       .append('path')
       .attr('class', 'line')
       .attr('d', d => line(d.datapoints))
-      .style('stroke', d => colorScale(d.group))
-      .style('fill', 'none');
+      .style('stroke', d => d.color)
+      .style('fill', 'none')
+      .text(d => d.group)
+      .on("mouseover", d => { tooltip.text(d.group); return tooltip.style("visibility", "visible") })
+      .on("mousemove", d => { return tooltip.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");})
+      .on("mouseout", d => {return tooltip.style("visibility", "hidden");});
+      
     /*
     TODO: Color schema strategy needed to ensure lines
     are the right colors

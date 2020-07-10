@@ -1,3 +1,5 @@
+import * as d3 from 'd3';
+
 /**
  * @name Defaults
  * @description
@@ -9,5 +11,6 @@ export class Defaults {
         this.graphHeight = 200;
         this.graphWidth = 400;
         this.lineColor = '#0c7c84';
+        this.schemeCategory10Color = d3.schemeCategory10;
     }
 }

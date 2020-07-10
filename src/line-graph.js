@@ -11,6 +11,7 @@ export class LineGraph extends HTMLElement {
 
   constructor() {
     super();
+    this.lineColor = []; 
   }
 
   /**
@@ -48,6 +49,7 @@ export class LineGraph extends HTMLElement {
       }
     });
 
+    this.getDataLineColor(this.dataset.lineColor);
     // now that we have grouping we will filter and map our datapoints
     return uniqueGroups.map((group) => {
       return {
@@ -57,8 +59,23 @@ export class LineGraph extends HTMLElement {
         })
       }
     });
+
+   
   }
 
+  /**
+   * @name getDataLineColor
+   * @description // create function to return random color array for each line.
+   */
+
+  getDataLineColor(colors) {
+    var arr = [];
+    var arrColor;    
+    colors.split(',').map(value => arr.push(value));
+    arrColor = [...arr, ...d3.schemeCategory10];
+    this.lineColor.push.apply(this.lineColor, arrColor);   
+  }
+ 
   /**
    * @name disconnectedCallback
    * @description
@@ -89,7 +106,8 @@ export class LineGraph extends HTMLElement {
     var yScale = d3.scaleLinear()
       .domain([0, d3.max(data[0].datapoints, d => d.value)])
       .range([height - margin.left, 0]);
-
+    // create color scale for each line
+    const colorScale = d3.scaleOrdinal(this.lineColor); 
     // Setup the svg element in the DOM
     var svg = d3.select(el)
       .style("width", width + margin.left + +margin.right)
@@ -97,11 +115,13 @@ export class LineGraph extends HTMLElement {
       .append('g')
       .attr("transform", `translate(${margin.top}, ${margin.left})`);
 
+
     // Create the lines
     var line = d3.line()
       .x(d => xScale(d.time))
       .y(d => yScale(d.value));
 
+      colorScale.domain(data.map(d => d.group)); 
     // add element for line and add class name
     let lines = svg.append('g')
       .attr('class', 'lines');
@@ -114,7 +134,7 @@ export class LineGraph extends HTMLElement {
       .append('path')
       .attr('class', 'line')
       .attr('d', d => line(d.datapoints))
-      .style('stroke', this.dataset.lineColor)
+      .style('stroke', d => colorScale(d.group))
       .style('fill', 'none');
     /*
     TODO: Color schema strategy needed to ensure lines

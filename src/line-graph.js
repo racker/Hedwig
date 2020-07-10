@@ -33,31 +33,7 @@ export class LineGraph extends HTMLElement {
     this.renderGraph(this.parseData(data), svg);
   }
 
-  maxValue(data) {
-    let arr = new Set()
-    data.forEach(element => {
-      element.datapoints.forEach(el => {
-        arr.add(el.value);
-      });
-    });
-    let min= Math.min(...[...arr]);
-   if(min===0 && arr.size===1 ){
-    arr.add(-1);
-   } else if(arr.size ===1)  {
-     let tenPer= (([...arr][0]*10)/100);
-     arr.add([...arr][0]-tenPer);
-   }   
-    return [...arr];
-  }
-  maxTime(data) {
-    let arr = [];
-    data.forEach(element => {
-      element.datapoints.forEach(el => {
-        arr.push(el.time);
-      });
-    });
-    return arr;
-  }
+ 
 
   /**
    * @name parseData
@@ -113,15 +89,15 @@ export class LineGraph extends HTMLElement {
     var width = parseInt(this.dataset.width);
     var unit = this.dataset.unit;
 
-    // Create X time scale
-    var xScale = d3.scaleTime()
-      .domain(d3.extent(this.maxTime(data)))
-      .range([0, width - margin.bottom]);
+     // Create X time scale
+     var xScale = d3.scaleTime()
+     .domain(d3.extent(data[0].datapoints, d => d.time))
+     .range([0, width - margin.bottom]);
 
-    // Create Y linear scale
-    var yScale = d3.scaleLinear()
-      .domain(d3.extent(this.maxValue(data)))
-      .range([height - margin.left, 0]);
+   // Create Y linear scale
+   var yScale = d3.scaleLinear()
+     .domain([0, d3.max(data[0].datapoints, d => d.value)])
+     .range([height - margin.left, 0]);
 
     // Setup the svg element in the DOM
     var svg = d3.select(el)
@@ -182,7 +158,16 @@ export class LineGraph extends HTMLElement {
     this.setLegend(svg, height, data)
     
   }
+
+  /**
+   * 
+   * @param {d3 svg element} svg 
+   * @param {height} height 
+   * @param {data} data 
+   */
   setLegend(svg, height, data) {
+    
+  
     var color_hash = {
       0: ["apple", "green"],
       1: ["mango", "orange"],
@@ -191,6 +176,8 @@ export class LineGraph extends HTMLElement {
     var legend = svg.append("g")
       .attr("class", "legend")
       .attr('transform', `translate(0,${height-50})`)
+    
+      // create rectangle for legends
     legend.selectAll('rect')
       .data(data)
       .enter()
@@ -202,10 +189,12 @@ export class LineGraph extends HTMLElement {
       .attr("width", 10)
       .attr("height", 10)
       .style("fill", (d) => {
+        if(d.group){
         var color = color_hash[data.indexOf(d)][1];
         return color;
+        }
       })
-
+      // set text of legends
     legend.selectAll('text')
       .data(data)
       .enter()
@@ -215,7 +204,7 @@ export class LineGraph extends HTMLElement {
         return i * 20 + 38;
       })
       .text((d) => {
-        var text = color_hash[data.indexOf(d)][0];
+        var text = d.group;
         return text;
       });
   }

@@ -41,6 +41,8 @@ export class LineGraph extends HTMLElement {
   parseData(data) {
     let uniqueGroups = [];
     let grouping = this.dataset.group;
+    // get color array 
+    this.getDataLineColor(this.dataset.lineColor);
     data.map((item) => {
       // if grouping is specified find unique groups
       let group = item[grouping];
@@ -49,7 +51,6 @@ export class LineGraph extends HTMLElement {
         uniqueGroups.push(group);
       }
     });
-    this.getDataLineColor(this.dataset.lineColor);
     // now that we have grouping we will filter and map our datapoints
     return uniqueGroups.map((group, index) => {
       return {

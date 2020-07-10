@@ -1,5 +1,7 @@
 import * as d3 from 'd3';
-import { AxisLeft } from './helpers/axisConverter';
+import {
+  AxisLeft
+} from './helpers/axisConverter';
 
 /**
  * @name LineGraph
@@ -24,9 +26,37 @@ export class LineGraph extends HTMLElement {
     var svg = document.querySelector(`#${id}`);
     var data = JSON.parse(this.dataset.graph);
 
-    this.attachShadow({ mode: 'open' });
+    this.attachShadow({
+      mode: 'open'
+    });
     this.shadowRoot.appendChild(svg);
     this.renderGraph(this.parseData(data), svg);
+  }
+
+  maxValue(data) {
+    let arr = new Set()
+    data.forEach(element => {
+      element.datapoints.forEach(el => {
+        arr.add(el.value);
+      });
+    });
+    let min= Math.min(...[...arr]);
+   if(min===0 && arr.size===1 ){
+    arr.add(-1);
+   } else if(arr.size ===1)  {
+     let tenPer= (([...arr][0]*10)/100);
+     arr.add([...arr][0]-tenPer);
+   }   
+    return [...arr];
+  }
+  maxTime(data) {
+    let arr = [];
+    data.forEach(element => {
+      element.datapoints.forEach(el => {
+        arr.push(el.time);
+      });
+    });
+    return arr;
   }
 
   /**
@@ -53,7 +83,10 @@ export class LineGraph extends HTMLElement {
       return {
         group,
         datapoints: data.filter(d => d[grouping] === group).map((d) => {
-          return { time: new Date(d.time), value: +d.mean }
+          return {
+            time: new Date(d.time),
+            value: +d.mean
+          }
         })
       }
     });
@@ -64,7 +97,7 @@ export class LineGraph extends HTMLElement {
    * @description
    * Call back for when the component is detached from the DOM
    */
-  disconnectedCallback() { }
+  disconnectedCallback() {}
 
   /**
    * @name renderGraph
@@ -82,12 +115,12 @@ export class LineGraph extends HTMLElement {
 
     // Create X time scale
     var xScale = d3.scaleTime()
-      .domain(d3.extent(data[0].datapoints, d => d.time))
+      .domain(d3.extent(this.maxTime(data)))
       .range([0, width - margin.bottom]);
 
     // Create Y linear scale
     var yScale = d3.scaleLinear()
-      .domain([0, d3.max(data[0].datapoints, d => d.value)])
+      .domain(d3.extent(this.maxValue(data)))
       .range([height - margin.left, 0]);
 
     // Setup the svg element in the DOM
@@ -131,6 +164,7 @@ export class LineGraph extends HTMLElement {
       return new AxisLeft().convert(unit, d);
     });
 
+
     // Add both Axis' to the SVG
     svg.append("g")
       .attr("class", "x axis")
@@ -144,7 +178,48 @@ export class LineGraph extends HTMLElement {
       .attr("y", 15)
       .attr("transform", "rotate(-90)")
       .attr("fill", "#000");
+
+    this.setLegend(svg, height, data)
+    
   }
+  setLegend(svg, height, data) {
+    var color_hash = {
+      0: ["apple", "green"],
+      1: ["mango", "orange"],
+      2: ["cherry", "red"]
+    }
+    var legend = svg.append("g")
+      .attr("class", "legend")
+      .attr('transform', `translate(0,${height-50})`)
+    legend.selectAll('rect')
+      .data(data)
+      .enter()
+      .append("rect")
+      .attr("x", 18)
+      .attr("y", (d, i) => {
+        return i * 20 + 30;
+      })
+      .attr("width", 10)
+      .attr("height", 10)
+      .style("fill", (d) => {
+        var color = color_hash[data.indexOf(d)][1];
+        return color;
+      })
+
+    legend.selectAll('text')
+      .data(data)
+      .enter()
+      .append("text")
+      .attr("x", 36)
+      .attr("y", (d, i) => {
+        return i * 20 + 38;
+      })
+      .text((d) => {
+        var text = color_hash[data.indexOf(d)][0];
+        return text;
+      });
+  }
+
 }
 
 customElements.define('line-graph', LineGraph);

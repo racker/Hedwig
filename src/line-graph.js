@@ -112,17 +112,6 @@ export class LineGraph extends HTMLElement {
     // create color scale for each line
     //const colorScale = d3.scaleOrdinal(this.lineColor); 
 
-    // create tooltip
-
-    var tooltip = d3.select(el)
-                    .append("div")
-                    .style("position", "absolute")
-                    .style("z-index", "10")
-                    .style("visibility", "hidden")
-                    .style("background", "#000")
-                    .text("a simple tooltip");
-
-
     // Setup the svg element in the DOM
     var svg = d3.select(el)
       .style("width", width + margin.left + +margin.right)
@@ -150,11 +139,7 @@ export class LineGraph extends HTMLElement {
       .attr('class', 'line')
       .attr('d', d => line(d.datapoints))
       .style('stroke', d => d.color)
-      .style('fill', 'none')
-      .text(d => d.group)
-      .on("mouseover", d => { tooltip.text(d.group); return tooltip.style("visibility", "visible") })
-      .on("mousemove", d => { return tooltip.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");})
-      .on("mouseout", d => {return tooltip.style("visibility", "hidden");});
+      .style('fill', 'none');
       
     /*
     TODO: Color schema strategy needed to ensure lines

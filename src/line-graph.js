@@ -110,7 +110,22 @@ export class LineGraph extends HTMLElement {
       .domain([0, d3.max(data[0].datapoints, d => d.value)])
       .range([height - margin.left, 0]);
     // create color scale for each line
-    //const colorScale = d3.scaleOrdinal(this.lineColor); 
+
+        // Define a div for tooltip
+
+    var div = d3.select("body").append("div")
+    .attr("class", "tooltip")
+    .style("opacity", 0)
+    .style("position", "absolute")
+    .style("text-align", "center")
+    .style("width", "100px")
+    .style("height", "70px")
+    .style("padding", "2px")
+    .style("font", "12px sans-serif")
+    .style("background", "lightsteelblue")
+    .style("border", "0px")
+    .style("border-radius", "8px")
+    .style("pointer-events", "none");
 
     // Setup the svg element in the DOM
     var svg = d3.select(el)
@@ -125,11 +140,17 @@ export class LineGraph extends HTMLElement {
       .x(d => xScale(d.time))
       .y(d => yScale(d.value));
 
+
+
+    
+
+
     //colorScale.domain(data.map(d => d.group)); 
     // add element for line and add class name
     let lines = svg.append('g')
       .attr('class', 'lines');
 
+      console.log("data to get datapoint ", data[0].datapoints);
     // add the lines for each collection of objects to the SVG
     lines.selectAll('.line-group')
       .data(data).enter()
@@ -140,7 +161,28 @@ export class LineGraph extends HTMLElement {
       .attr('d', d => line(d.datapoints))
       .style('stroke', d => d.color)
       .style('fill', 'none');
-      
+
+    lines.selectAll('dot')
+         .data(data[0].datapoints)
+         .enter()
+         .append("circle")
+         .attr("r", 5)
+         .attr("cx", function(d) { return xScale(d.time); })		 
+         .attr("cy", function(d) { return yScale(d.value); }) 
+         .on("mouseover", function(d) {		
+          div.transition()		
+              .duration(200)		
+              .style("opacity", .9);		
+          div.html(d.time + "<br/>"  + d.value)	
+              .style("left", (d3.event.pageX) + "px")		
+              .style("top", (d3.event.pageY - 28) + "px");	
+          })					
+         .on("mouseout", function(d) {		
+          div.transition()		
+              .duration(500)		
+              .style("opacity", 0);	
+          });
+
     /*
     TODO: Color schema strategy needed to ensure lines
     are the right colors
@@ -168,7 +210,8 @@ export class LineGraph extends HTMLElement {
       .append('text')
       .attr("y", 15)
       .attr("transform", "rotate(-90)")
-      .attr("fill", "#000");
+      .attr("fill", "#000")
+      .text("Value");
   }
 }
 

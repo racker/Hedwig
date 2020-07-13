@@ -174,7 +174,6 @@ export class LineGraph extends HTMLElement {
       .attr("y", 15)
       .attr("transform", "rotate(-90)")
       .attr("fill", "#000");
-
     this.setLegend(svg, height, data)
     
   }
@@ -186,13 +185,6 @@ export class LineGraph extends HTMLElement {
    * @param {data} data 
    */
   setLegend(svg, height, data) {
-    
-  
-    var color_hash = {
-      0: ["apple", "green"],
-      1: ["mango", "orange"],
-      2: ["cherry", "red"]
-    }
     var legend = svg.append("g")
       .attr("class", "legend")
       .attr('transform', `translate(0,${height-50})`)
@@ -209,23 +201,24 @@ export class LineGraph extends HTMLElement {
       .attr("width", 10)
       .attr("height", 10)
       .style("fill", (d) => {
-        if(d.group){
-        var color = color_hash[data.indexOf(d)][1];
-        return color;
-        }
+        return d.color;
       })
       // set text of legends
     legend.selectAll('text')
       .data(data)
       .enter()
       .append("text")
+      .style("font-size",12)
       .attr("x", 36)
       .attr("y", (d, i) => {
         return i * 20 + 38;
       })
       .text((d) => {
-        var text = d.group;
-        return text;
+        if(d.group){
+          return d.group;
+      }else{
+        return this.dataset.field
+      }
       });
   }
 

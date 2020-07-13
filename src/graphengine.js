@@ -10,6 +10,7 @@ import { FindInfo } from "./helpers/supportedInfo";
 export class GraphEngine extends HTMLElement {
     constructor() {
         super();
+       
     }
 
     /**
@@ -18,6 +19,7 @@ export class GraphEngine extends HTMLElement {
      * Call back for when the component is attached to the DOM
      */
     connectedCallback() {
+       
         this.defaults = {};
         var defaults = new Defaults();
 
@@ -37,6 +39,7 @@ export class GraphEngine extends HTMLElement {
      * @param {string} data this param is collected from the data-graph attribute
      */
     render () {
+        
         if (this.defaults) {
             this.innerHTML = "<line-graph data-margin=" + JSON.stringify(this.defaults.margin) +
             " data-height=" + this.defaults.height +
@@ -44,6 +47,7 @@ export class GraphEngine extends HTMLElement {
             " data-graph=" + this.graphData +
             " data-unit=" + (this.graphInfo.unit || this.defaults.unit) +
             " data-line-color=" + this.defaults.lineColor +
+            " data-field=" + this.graphInfo.field +
             " data-group=" + this.dataset.group + "></lineGraph>";
         }
     }
@@ -54,6 +58,7 @@ export class GraphEngine extends HTMLElement {
      * @param {string} data This param is stringified JSON data setting
      */
     dataPoints(data){
+       
         this.graphInfo = new FindInfo().info(this.dataset.type, this.dataset.field);
         this.graphData = data;
     }
@@ -63,7 +68,9 @@ export class GraphEngine extends HTMLElement {
      * @description
      * Call back for when the component is detached from the DOM
      */
-    disconnectedCallback() {}
+    disconnectedCallback() {
+        
+    }
 
     /**
      * @name observedAttributes

@@ -1,7 +1,6 @@
 import * as d3 from 'd3';
-import {
-  AxisLeft
-} from './helpers/axisConverter';
+import { Defaults } from './defaults'; 
+import { AxisLeft } from './helpers/axisConverter';
 
 /**
  * @name LineGraph
@@ -13,6 +12,7 @@ export class LineGraph extends HTMLElement {
 
   constructor() {
     super();
+    this.lineColor = [];
   }
 
   /**
@@ -45,6 +45,8 @@ export class LineGraph extends HTMLElement {
   parseData(data) {
     let uniqueGroups = [];
     let grouping = this.dataset.group;
+    // get color array 
+    this.getDataLineColor(this.dataset.lineColor);
     data.map((item) => {
       // if grouping is specified find unique groups
       let group = item[grouping];
@@ -53,21 +55,34 @@ export class LineGraph extends HTMLElement {
         uniqueGroups.push(group);
       }
     });
-
     // now that we have grouping we will filter and map our datapoints
-    return uniqueGroups.map((group) => {
+    return uniqueGroups.map((group, index) => {
       return {
         group,
         datapoints: data.filter(d => d[grouping] === group).map((d) => {
-          return {
-            time: new Date(d.time),
-            value: +d.mean
-          }
-        })
+          return { time: new Date(d.time), value: +d.mean }
+        }),
+        color : this.lineColor[index]
       }
     });
+
+   
   }
 
+  /**
+   * @name getDataLineColor
+   * @description // create function to return random color array for each line.
+   */
+
+  getDataLineColor(colors) {
+    var arr = [];
+    var arrColor;
+    var defaults = new Defaults();     
+    colors.split(',').map(value => arr.push(value));
+    arrColor = [...arr, ...defaults.schemeCategory10Color];
+    this.lineColor.push.apply(this.lineColor, arrColor);   
+  }
+ 
   /**
    * @name disconnectedCallback
    * @description
@@ -94,10 +109,12 @@ export class LineGraph extends HTMLElement {
      .domain(d3.extent(data[0].datapoints, d => d.time))
      .range([0, width - margin.bottom]);
 
-   // Create Y linear scale
-   var yScale = d3.scaleLinear()
-     .domain([0, d3.max(data[0].datapoints, d => d.value)])
-     .range([height - margin.left, 0]);
+    // Create Y linear scale
+    var yScale = d3.scaleLinear()
+      .domain([0, d3.max(data[0].datapoints, d => d.value)])
+      .range([height - margin.left, 0]);
+    // create color scale for each line
+    //const colorScale = d3.scaleOrdinal(this.lineColor); 
 
     // Setup the svg element in the DOM
     var svg = d3.select(el)
@@ -106,11 +123,13 @@ export class LineGraph extends HTMLElement {
       .append('g')
       .attr("transform", `translate(${margin.top}, ${margin.left})`);
 
+
     // Create the lines
     var line = d3.line()
       .x(d => xScale(d.time))
       .y(d => yScale(d.value));
 
+    //colorScale.domain(data.map(d => d.group)); 
     // add element for line and add class name
     let lines = svg.append('g')
       .attr('class', 'lines');
@@ -123,8 +142,9 @@ export class LineGraph extends HTMLElement {
       .append('path')
       .attr('class', 'line')
       .attr('d', d => line(d.datapoints))
-      .style('stroke', this.dataset.lineColor)
+      .style('stroke', d => d.color)
       .style('fill', 'none');
+      
     /*
     TODO: Color schema strategy needed to ensure lines
     are the right colors

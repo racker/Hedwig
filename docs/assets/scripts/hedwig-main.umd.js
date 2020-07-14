@@ -6350,6 +6350,11 @@
       svg.append("g").attr("class", "x axis").attr("transform", `translate(0, ${height - margin.top})`).call(xAxis);
       svg.append("g").attr("class", "y axis").call(yAxis).append('text').attr("y", 15).attr("transform", "rotate(-90)").attr("fill", "#000");
       this.setLegend(svg, height, data);
+      this.setTitle(svg, width);
+    }
+
+    setTitle(svg, width) {
+      svg.append("text").attr("transform", `translate(-14, -23)`).attr("x", width / 2).attr("y", 0).style("text-anchor", "middle").style("font-size", 12).text("Title of Diagram");
     }
     /**
      * 

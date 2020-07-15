@@ -6354,7 +6354,11 @@
     }
 
     setTitle(svg, width) {
-      svg.append("text").attr("transform", `translate(-14, -23)`).attr("x", width / 2).attr("y", 0).style("text-anchor", "middle").style("font-size", 12).text("Title of Diagram");
+      console.log(this.dataset);
+
+      if (this.dataset.title !== 'undefined') {
+        svg.append("text").attr("transform", `translate(-14, -23)`).attr("x", width / 2).attr("y", 0).style("text-anchor", "middle").style("font-size", 12).text(this.dataset.title);
+      }
     }
     /**
      * 
@@ -6706,8 +6710,10 @@
 
 
     render() {
+      console.log(this.dataset.title);
+
       if (this.defaults) {
-        this.innerHTML = "<line-graph data-margin=" + JSON.stringify(this.defaults.margin) + " data-height=" + this.defaults.height + " data-width=" + this.defaults.width + " data-graph=" + this.graphData + " data-unit=" + (this.graphInfo.unit || this.defaults.unit) + " data-line-color=" + this.defaults.lineColor + " data-field=" + this.graphInfo.field + " data-group=" + this.dataset.group + "></lineGraph>";
+        this.innerHTML = "<line-graph data-margin=" + JSON.stringify(this.defaults.margin) + " data-height=" + this.defaults.height + " data-width=" + this.defaults.width + " data-graph=" + this.graphData + " data-unit=" + (this.graphInfo.unit || this.defaults.unit) + " data-line-color=" + this.defaults.lineColor + " data-field=" + this.graphInfo.field + " data-title=" + JSON.stringify(this.dataset.title) + " data-group=" + this.dataset.group + "></lineGraph>";
       }
     }
     /**

@@ -1,4 +1,5 @@
 import * as d3 from 'd3';
+import "d3-selection-multi";
 import { Defaults } from './defaults'; 
 import { AxisLeft } from './helpers/axisConverter';
 
@@ -208,7 +209,7 @@ export class LineGraph extends HTMLElement {
       .data(data)
       .enter()
       .append("text")
-      .style("font-size",12)
+      .styles({"font-size":12})
       .attr("x", 36)
       .attr("y", (d, i) => {
         return i * 20 + 38;

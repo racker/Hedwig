@@ -119,21 +119,10 @@ export class LineGraph extends HTMLElement {
         // Define a div and add styling for tooltip
     var div = d3.select("body").append("div")
     .attr("class", "tooltip")
-    .style("opacity", 0)
-    .style("position", "absolute")
-    .style("text-align", "center")
-    .style("width", "100px")
-    .style("height", "70px")
-    .style("padding", "2px")
-    .style("font", "12px sans-serif")
-    .style("background", "lightsteelblue")
-    .style("border", "0px")
-    .style("pointer-events", "none");
-
+    .styles({"opacity": 0, "position":"absolute", "text-align":"center", "width":"100px", "height":"70px", "padding":"2px", "font":"12px sans-serif", "background":"lightsteelblue", "border":"0px", "pointer-events":"none"});
     // Setup the svg element in the DOM
     var svg = d3.select(el)
-      .style("width", width + margin.left + +margin.right)
-      .style("height", height + +margin.top + +margin.bottom)
+      .styles({"width": width + margin.left + +margin.right, "height":height + +margin.top + +margin.bottom})
       .append('g')
       .attr("transform", `translate(${margin.top}, ${margin.left})`);
 
@@ -163,11 +152,8 @@ export class LineGraph extends HTMLElement {
           .append("circle")
           .attr("r", 4)
           .attr("cx", function(d) { return xScale(d.time); })		 
-          .attr("cy", function(d) { return yScale(d.value); }) 
-          .style("opacity", 0)
-          .style("stroke", d.color) // Adding color to each tooltip hover datapoints with the same color given to each line
-          .style("fill", "none") 
-          .style("stroke-width", "2px")
+          .attr("cy", function(d) { return yScale(d.value); })
+          .styles({"opacity": 0, "stroke": d.color, "fill": "none", "stroke-width": "2px"})
           .on("mouseover", function(d) {
            d3.select(this)
               .transition()
@@ -176,10 +162,8 @@ export class LineGraph extends HTMLElement {
            div.transition()		
                .duration(200)		
                .style("opacity", .9);		
-           div.html(d.time + "<br/>"  + d.value)	
-               .style("left", (d3.event.pageX + 10) + "px")		
-               .style("top", (d3.event.pageY - 28) + "px")
-               .style("pointer-events","none");	
+           div.html(d.time + "<br/>"  + d.value)
+               .styles({"left":(d3.event.pageX + 10) + "px", "top":(d3.event.pageY - 28) + "px", "pointer-events":"none"});      
            })					
           .on("mouseout", function(d) {
             d3.select(this)

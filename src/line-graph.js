@@ -1,4 +1,5 @@
 import * as d3 from 'd3';
+import "d3-selection-multi";
 import { Defaults } from './defaults'; 
 import { AxisLeft } from './helpers/axisConverter';
 
@@ -26,10 +27,14 @@ export class LineGraph extends HTMLElement {
     var svg = document.querySelector(`#${id}`);
     var data = JSON.parse(this.dataset.graph);
 
-    this.attachShadow({ mode: 'open' });
+    this.attachShadow({
+      mode: 'open'
+    });
     this.shadowRoot.appendChild(svg);
     this.renderGraph(this.parseData(data), svg);
   }
+
+ 
 
   /**
    * @name parseData
@@ -84,7 +89,7 @@ export class LineGraph extends HTMLElement {
    * @description
    * Call back for when the component is detached from the DOM
    */
-  disconnectedCallback() { }
+  disconnectedCallback() {}
 
   /**
    * @name renderGraph
@@ -100,10 +105,10 @@ export class LineGraph extends HTMLElement {
     var width = parseInt(this.dataset.width);
     var unit = this.dataset.unit;
 
-    // Create X time scale
-    var xScale = d3.scaleTime()
-      .domain(d3.extent(data[0].datapoints, d => d.time))
-      .range([0, width - margin.bottom]);
+     // Create X time scale
+     var xScale = d3.scaleTime()
+     .domain(d3.extent(data[0].datapoints, d => d.time))
+     .range([0, width - margin.bottom]);
 
     // Create Y linear scale
     var yScale = d3.scaleLinear()
@@ -194,6 +199,7 @@ export class LineGraph extends HTMLElement {
       return new AxisLeft().convert(unit, d);
     });
 
+
     // Add both Axis' to the SVG
     svg.append("g")
       .attr("class", "x axis")
@@ -207,7 +213,54 @@ export class LineGraph extends HTMLElement {
       .attr("y", 15)
       .attr("transform", "rotate(-90)")
       .attr("fill", "#000");
+    this.setLegend(svg, height, data)
+    
   }
+
+  /**
+   * 
+   * @param {d3 svg element} svg 
+   * @param {height} height 
+   * @param {data} data 
+   */
+  setLegend(svg, height, data) {
+    var legend = svg.append("g")
+      .attr("class", "legend")
+      .attr('transform', `translate(0,${height-50})`)
+    
+      // create rectangle for legends
+    legend.selectAll('rect')
+      .data(data)
+      .enter()
+      .append("rect")
+      .attr("x", 18)
+      .attr("y", (d, i) => {
+        return i * 20 + 30;
+      })
+      .attr("width", 10)
+      .attr("height", 10)
+      .style("fill", (d) => {
+        return d.color;
+      })
+      // set text of legends
+    legend.selectAll('text')
+      .data(data)
+      .enter()
+      .append("text")
+      .styles({"font-size":12})
+      .attr("x", 36)
+      .attr("y", (d, i) => {
+        return i * 20 + 38;
+      })
+      .text((d) => {
+        if(d.group){
+          return d.group;
+      }else{
+        return this.dataset.field
+      }
+      });
+  }
+
 }
 
 customElements.define('line-graph', LineGraph);

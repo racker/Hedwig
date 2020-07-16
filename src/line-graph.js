@@ -197,9 +197,21 @@ export class LineGraph extends HTMLElement {
       .attr("y", 15)
       .attr("transform", "rotate(-90)")
       .attr("fill", "#000");
-    this.setLegend(svg, height, data)
-    
+    this.setLegend(svg, height, data);
+    this.setTitle(svg,width);
   }
+  
+  setTitle(svg,width){
+    if (this.dataset.title !== 'undefined') {
+      svg.append("text")
+        .attr("transform", `translate(-14, -23)`)
+        .attr("x", width / 2)
+        .attr("y", 0)
+        .style("text-anchor", "middle")
+        .style("font-size", 12)
+        .text(this.dataset.title);
+    }
+    }
 
   /**
    * 

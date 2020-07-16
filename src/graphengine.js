@@ -39,7 +39,6 @@ export class GraphEngine extends HTMLElement {
      * @param {string} data this param is collected from the data-graph attribute
      */
     render () {
-        
         if (this.defaults) {
             this.innerHTML = "<line-graph data-margin=" + JSON.stringify(this.defaults.margin) +
             " data-height=" + this.defaults.height +
@@ -48,6 +47,7 @@ export class GraphEngine extends HTMLElement {
             " data-unit=" + (this.graphInfo.unit || this.defaults.unit) +
             " data-line-color=" + this.defaults.lineColor +
             " data-field=" + this.graphInfo.field +
+            " data-title=" + JSON.stringify(this.dataset.title)+
             " data-group=" + this.dataset.group + "></lineGraph>";
         }
     }

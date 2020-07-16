@@ -1,4 +1,5 @@
 import * as d3 from 'd3';
+import "d3-selection-multi";
 import { Defaults } from './defaults'; 
 import { AxisLeft } from './helpers/axisConverter';
 
@@ -114,28 +115,28 @@ export class LineGraph extends HTMLElement {
       .domain([0, d3.max(data[0].datapoints, d => d.value)])
       .range([height - margin.left, 0]);
     // create color scale for each line
-    //const colorScale = d3.scaleOrdinal(this.lineColor); 
 
+        // Define a div and add styling for tooltip
+    var div = d3.select("body").append("div")
+    .attr("class", "tooltip")
+    .styles({"opacity": 0, "position":"absolute", "text-align":"center", "width":"100px", "height":"70px", "padding":"2px", "font":"12px sans-serif", "background":"lightsteelblue", "border":"0px", "pointer-events":"none"});
     // Setup the svg element in the DOM
     var svg = d3.select(el)
-      .style("width", width + margin.left + +margin.right)
-      .style("height", height + +margin.top + +margin.bottom)
+      .styles({"width": width + margin.left + +margin.right, "height":height + +margin.top + +margin.bottom})
       .append('g')
       .attr("transform", `translate(${margin.top}, ${margin.left})`);
-
 
     // Create the lines
     var line = d3.line()
       .x(d => xScale(d.time))
       .y(d => yScale(d.value));
 
-    //colorScale.domain(data.map(d => d.group)); 
     // add element for line and add class name
     let lines = svg.append('g')
       .attr('class', 'lines');
-
-    // add the lines for each collection of objects to the SVG
-    lines.selectAll('.line-group')
+    
+      // create g tag with path having class line-group and line.
+      lines.selectAll('.line-group')
       .data(data).enter()
       .append('g')
       .attr('class', 'line-group')
@@ -143,15 +144,37 @@ export class LineGraph extends HTMLElement {
       .attr('class', 'line')
       .attr('d', d => line(d.datapoints))
       .style('stroke', d => d.color)
-      .style('fill', 'none');
-      
-    /*
-    TODO: Color schema strategy needed to ensure lines
-    are the right colors
-    https://github.com/d3/d3-scale/blob/master/README.md#sequential-scales
-    var color = d3.scaleOrdinal(d3.schemeCategory10);
-    .style('stroke', (d, i) => color(i));
-    */
+      .style('fill', 'none')
+      .each((d, i) => { // loop through datapoints to fetch time and value to create tooltip hover events with value.
+        lines.selectAll('dot')
+          .data(d.datapoints)
+          .enter()
+          .append("circle")
+          .attr("r", 4)
+          .attr("cx", function(d) { return xScale(d.time); })		 
+          .attr("cy", function(d) { return yScale(d.value); })
+          .styles({"opacity": 0, "stroke": d.color, "fill": "none", "stroke-width": "2px"})
+          .on("mouseover", function(d) {
+           d3.select(this)
+              .transition()
+              .duration(200)
+              .style("opacity", 0.9); // add opacity in case of hover		
+           div.transition()		
+               .duration(200)		
+               .style("opacity", .9);		
+           div.html(d.time + "<br/>"  + d.value)
+               .styles({"left":(d3.event.pageX + 10) + "px", "top":(d3.event.pageY - 28) + "px", "pointer-events":"none"});      
+           })					
+          .on("mouseout", function(d) {
+            d3.select(this)
+              .transition()
+              .duration(200)
+              .style("opacity", 0);		// Remove hover in case of mouse out
+           div.transition()		
+               .duration(500)		
+               .style("opacity", 0);	
+           });
+      });
 
     // Configure X Axis ticks and add xScale
     var xAxis = d3.axisBottom(xScale).ticks(5);
@@ -220,7 +243,7 @@ export class LineGraph extends HTMLElement {
       .data(data)
       .enter()
       .append("text")
-      .style("font-size",12)
+      .styles({"font-size":12})
       .attr("x", 36)
       .attr("y", (d, i) => {
         return i * 20 + 38;

@@ -20,7 +20,8 @@
   ],
   "dependencies": {
     "@webcomponents/webcomponentsjs": "2.2.1",
-    "d3": "5.7.0"
+    "d3": "5.7.0",
+    "d3-selection-multi": "^1.0.1"
   },
   "devDependencies": {
     "@babel/core": "7.5.4",

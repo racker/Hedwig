@@ -1104,6 +1104,8 @@
 
   var filterEvents = {};
 
+  var event = null;
+
   if (typeof document !== "undefined") {
     var element = document.documentElement;
     if (!("onmouseenter" in element)) {
@@ -1123,9 +1125,12 @@
 
   function contextListener(listener, index, group) {
     return function(event1) {
+      var event0 = event; // Events can be reentrant (e.g., focus).
+      event = event1;
       try {
         listener.call(this, this.__data__, index, group);
       } finally {
+        event = event0;
       }
     };
   }
@@ -6630,25 +6635,56 @@
       var xScale = time().domain(extent(data[0].datapoints, d => d.time)).range([0, width - margin.bottom]); // Create Y linear scale
 
       var yScale = linear$1().domain([0, max(data[0].datapoints, d => d.value)]).range([height - margin.left, 0]); // create color scale for each line
-      //const colorScale = d3.scaleOrdinal(this.lineColor); 
-      // Setup the svg element in the DOM
+      // Define a div and add styling for tooltip
 
-      var svg = select(el).style("width", width + margin.left + +margin.right).style("height", height + +margin.top + +margin.bottom).append('g').attr("transform", `translate(${margin.top}, ${margin.left})`); // Create the lines
+      var div = select("body").append("div").attr("class", "tooltip").styles({
+        "opacity": 0,
+        "position": "absolute",
+        "text-align": "center",
+        "width": "100px",
+        "height": "70px",
+        "padding": "2px",
+        "font": "12px sans-serif",
+        "background": "lightsteelblue",
+        "border": "0px",
+        "pointer-events": "none"
+      }); // Setup the svg element in the DOM
 
-      var line$1 = line().x(d => xScale(d.time)).y(d => yScale(d.value)); //colorScale.domain(data.map(d => d.group)); 
-      // add element for line and add class name
+      var svg = select(el).styles({
+        "width": width + margin.left + +margin.right,
+        "height": height + +margin.top + +margin.bottom
+      }).append('g').attr("transform", `translate(${margin.top}, ${margin.left})`); // Create the lines
 
-      let lines = svg.append('g').attr('class', 'lines'); // add the lines for each collection of objects to the SVG
+      var line$1 = line().x(d => xScale(d.time)).y(d => yScale(d.value)); // add element for line and add class name
 
-      lines.selectAll('.line-group').data(data).enter().append('g').attr('class', 'line-group').append('path').attr('class', 'line').attr('d', d => line$1(d.datapoints)).style('stroke', d => d.color).style('fill', 'none');
-      /*
-      TODO: Color schema strategy needed to ensure lines
-      are the right colors
-      https://github.com/d3/d3-scale/blob/master/README.md#sequential-scales
-      var color = d3.scaleOrdinal(d3.schemeCategory10);
-      .style('stroke', (d, i) => color(i));
-      */
-      // Configure X Axis ticks and add xScale
+      let lines = svg.append('g').attr('class', 'lines'); // create g tag with path having class line-group and line.
+
+      lines.selectAll('.line-group').data(data).enter().append('g').attr('class', 'line-group').append('path').attr('class', 'line').attr('d', d => line$1(d.datapoints)).style('stroke', d => d.color).style('fill', 'none').each((d, i) => {
+        // loop through datapoints to fetch time and value to create tooltip hover events with value.
+        lines.selectAll('dot').data(d.datapoints).enter().append("circle").attr("r", 4).attr("cx", function (d) {
+          return xScale(d.time);
+        }).attr("cy", function (d) {
+          return yScale(d.value);
+        }).styles({
+          "opacity": 0,
+          "stroke": d.color,
+          "fill": "none",
+          "stroke-width": "2px"
+        }).on("mouseover", function (d) {
+          select(this).transition().duration(200).style("opacity", 0.9); // add opacity in case of hover		
+
+          div.transition().duration(200).style("opacity", .9);
+          div.html(d.time + "<br/>" + d.value).styles({
+            "left": event.pageX + 10 + "px",
+            "top": event.pageY - 28 + "px",
+            "pointer-events": "none"
+          });
+        }).on("mouseout", function (d) {
+          select(this).transition().duration(200).style("opacity", 0); // Remove hover in case of mouse out
+
+          div.transition().duration(500).style("opacity", 0);
+        });
+      }); // Configure X Axis ticks and add xScale
 
       var xAxis = axisBottom(xScale).ticks(5); // Configure Y Axis ticks and
 
@@ -6663,8 +6699,6 @@
     }
 
     setTitle(svg, width) {
-      console.log(this.dataset);
-
       if (this.dataset.title !== 'undefined') {
         svg.append("text").attr("transform", `translate(-14, -23)`).attr("x", width / 2).attr("y", 0).style("text-anchor", "middle").style("font-size", 12).text(this.dataset.title);
       }
@@ -7021,8 +7055,6 @@
 
 
     render() {
-      console.log(this.dataset.title);
-
       if (this.defaults) {
         this.innerHTML = "<line-graph data-margin=" + JSON.stringify(this.defaults.margin) + " data-height=" + this.defaults.height + " data-width=" + this.defaults.width + " data-graph=" + this.graphData + " data-unit=" + (this.graphInfo.unit || this.defaults.unit) + " data-line-color=" + this.defaults.lineColor + " data-field=" + this.graphInfo.field + " data-title=" + JSON.stringify(this.dataset.title) + " data-group=" + this.dataset.group + "></lineGraph>";
       }

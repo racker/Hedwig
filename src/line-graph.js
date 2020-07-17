@@ -2,13 +2,13 @@ import * as d3 from 'd3';
 import "d3-selection-multi";
 import { Defaults } from './defaults'; 
 import { AxisLeft } from './helpers/axisConverter';
-
 /**
  * @name LineGraph
  * @description
  * @extends HTMLElement
  * Generic line graph component for reusability
  */
+
 export class LineGraph extends HTMLElement {
 
   constructor() {
@@ -23,7 +23,7 @@ export class LineGraph extends HTMLElement {
    */
   connectedCallback() {
     let id = 'hedwig-' + btoa(Math.random()).substr(5, 5);
-    this.innerHTML = `<svg id='${id}'></svg>`;
+    this.innerHTML = `<style> @import url("assets/styles/style.css")</style><svg id='${id}'></svg>`;
     var svg = document.querySelector(`#${id}`);
     var data = JSON.parse(this.dataset.graph);
 
@@ -119,7 +119,6 @@ export class LineGraph extends HTMLElement {
         // Define a div and add styling for tooltip
     var div = d3.select("body").append("div")
     .attr("class", "tooltip")
-    .styles({"opacity": 0, "position":"absolute", "text-align":"center", "width":"100px", "height":"70px", "padding":"2px", "font":"12px sans-serif", "background":"lightsteelblue", "border":"0px", "pointer-events":"none"});
     // Setup the svg element in the DOM
     var svg = d3.select(el)
       .styles({"width": width + margin.left + +margin.right, "height":height + +margin.top + +margin.bottom})
@@ -134,25 +133,20 @@ export class LineGraph extends HTMLElement {
     // add element for line and add class name
     let lines = svg.append('g')
       .attr('class', 'lines');
-    
       // create g tag with path having class line-group and line.
       lines.selectAll('.line-group')
       .data(data).enter()
       .append('g')
       .attr('class', 'line-group')
       .append('path')
-      .attr('class', 'line')
-      .attr('d', d => line(d.datapoints))
-      .style('stroke', d => d.color)
-      .style('fill', 'none')
+      .attrs({'class':'line', 'd': d => line(d.datapoints)})
+      .styles({'stroke':d => d.color, 'fill':'none'})
       .each((d, i) => { // loop through datapoints to fetch time and value to create tooltip hover events with value.
         lines.selectAll('dot')
           .data(d.datapoints)
           .enter()
           .append("circle")
-          .attr("r", 4)
-          .attr("cx", function(d) { return xScale(d.time); })		 
-          .attr("cy", function(d) { return yScale(d.value); })
+          .attrs({"r": 4, "cx": function(d) { return xScale(d.time); }, "cy": function(d) { return yScale(d.value); }})
           .styles({"opacity": 0, "stroke": d.color, "fill": "none", "stroke-width": "2px"})
           .on("mouseover", function(d) {
            d3.select(this)
@@ -186,17 +180,14 @@ export class LineGraph extends HTMLElement {
 
     // Add both Axis' to the SVG
     svg.append("g")
-      .attr("class", "x axis")
-      .attr("transform", `translate(0, ${height - margin.top})`)
+      .attrs({"class": "x axis", "transform": `translate(0, ${height - margin.top})`})
       .call(xAxis);
 
     svg.append("g")
       .attr("class", "y axis")
       .call(yAxis)
       .append('text')
-      .attr("y", 15)
-      .attr("transform", "rotate(-90)")
-      .attr("fill", "#000");
+      .attrs({"y": 15, "transform": "rotate(-90)", "fill": "#000"})
     this.setLegend(svg, height, data)
     
   }
@@ -209,20 +200,15 @@ export class LineGraph extends HTMLElement {
    */
   setLegend(svg, height, data) {
     var legend = svg.append("g")
-      .attr("class", "legend")
-      .attr('transform', `translate(0,${height-50})`)
-    
+      .attrs({"class": "legend", 'transform': `translate(0,${height-50})`}) 
       // create rectangle for legends
     legend.selectAll('rect')
       .data(data)
       .enter()
       .append("rect")
-      .attr("x", 18)
-      .attr("y", (d, i) => {
+      .attrs({"x": 18, "y": (d, i) => {
         return i * 20 + 30;
-      })
-      .attr("width", 10)
-      .attr("height", 10)
+      }, "width": 10, "height": 10 })
       .style("fill", (d) => {
         return d.color;
       })
@@ -232,10 +218,9 @@ export class LineGraph extends HTMLElement {
       .enter()
       .append("text")
       .styles({"font-size":12})
-      .attr("x", 36)
-      .attr("y", (d, i) => {
+      .attrs({"x":36, "y": (d, i) => {
         return i * 20 + 38;
-      })
+      }})
       .text((d) => {
         if(d.group){
           return d.group;

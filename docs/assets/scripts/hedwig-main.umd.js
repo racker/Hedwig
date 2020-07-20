@@ -133,41 +133,6 @@
     return stop < start ? -step1 : step1;
   }
 
-  function max(values, valueof) {
-    var n = values.length,
-        i = -1,
-        value,
-        max;
-
-    if (valueof == null) {
-      while (++i < n) { // Find the first comparable value.
-        if ((value = values[i]) != null && value >= value) {
-          max = value;
-          while (++i < n) { // Compare the remaining values.
-            if ((value = values[i]) != null && value > max) {
-              max = value;
-            }
-          }
-        }
-      }
-    }
-
-    else {
-      while (++i < n) { // Find the first comparable value.
-        if ((value = valueof(values[i], i, values)) != null && value >= value) {
-          max = value;
-          while (++i < n) { // Compare the remaining values.
-            if ((value = valueof(values[i], i, values)) != null && value > max) {
-              max = value;
-            }
-          }
-        }
-      }
-    }
-
-    return max;
-  }
-
   var slice = Array.prototype.slice;
 
   function identity(x) {
@@ -3412,12 +3377,12 @@
     return map;
   }
 
-  function Set() {}
+  function Set$1() {}
 
   var proto = map.prototype;
 
-  Set.prototype = set$2.prototype = {
-    constructor: Set,
+  Set$1.prototype = set$2.prototype = {
+    constructor: Set$1,
     has: proto.has,
     add: function(value) {
       value += "";
@@ -3433,10 +3398,10 @@
   };
 
   function set$2(object, f) {
-    var set = new Set;
+    var set = new Set$1;
 
     // Copy constructor.
-    if (object instanceof Set) object.each(function(value) { set.add(value); });
+    if (object instanceof Set$1) object.each(function(value) { set.add(value); });
 
     // Otherwise, assume it’s an array.
     else if (object) {
@@ -6557,6 +6522,37 @@
       this.shadowRoot.appendChild(svg);
       this.renderGraph(this.parseData(data), svg);
     }
+
+    maxValue(data) {
+      let arr = new Set();
+      data.forEach(element => {
+        element.datapoints.forEach(el => {
+          arr.add(el.value);
+        });
+      });
+      let min = Math.min(...[...arr]);
+
+      if (min === 0 && arr.size === 1) {
+        arr.add(-1);
+        arr.add(1);
+      } else if (arr.size === 1) {
+        let tenPer = [...arr][0] * 10 / 100;
+        arr.add([...arr][0] - tenPer);
+        arr.add([...arr][0] + tenPer);
+      }
+
+      return [...arr];
+    }
+
+    maxTime(data) {
+      let arr = [];
+      data.forEach(element => {
+        element.datapoints.forEach(el => {
+          arr.push(el.time);
+        });
+      });
+      return arr;
+    }
     /**
      * @name parseData
      * @param {Array} data
@@ -6632,9 +6628,9 @@
       var width = parseInt(this.dataset.width);
       var unit = this.dataset.unit; // Create X time scale
 
-      var xScale = time().domain(extent(data[0].datapoints, d => d.time)).range([0, width - margin.bottom]); // Create Y linear scale
+      var xScale = time().domain(extent(this.maxTime(data))).range([0, width - margin.bottom]); // Create Y linear scale
 
-      var yScale = linear$1().domain([0, max(data[0].datapoints, d => d.value)]).range([height - margin.left, 0]); // create color scale for each line
+      var yScale = linear$1().domain(extent(this.maxValue(data))).range([height - margin.left, 0]); // create color scale for each line
       // Define a div and add styling for tooltip
 
       var div = select("body").append("div").attr("class", "tooltip").styles({

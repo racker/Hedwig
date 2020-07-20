@@ -1,7 +1,11 @@
 import * as d3 from 'd3';
 import "d3-selection-multi";
-import { Defaults } from './defaults'; 
-import { AxisLeft } from './helpers/axisConverter';
+import {
+  Defaults
+} from './defaults';
+import {
+  AxisLeft
+} from './helpers/axisConverter';
 
 /**
  * @name LineGraph
@@ -34,7 +38,44 @@ export class LineGraph extends HTMLElement {
     this.renderGraph(this.parseData(data), svg);
   }
 
- 
+
+  /**
+   * Create set of distinct values
+   * @param {data} data 
+   */
+  maxValue(data) {
+    let arr = new Set()
+    data.forEach(element => {
+      element.datapoints.forEach(el => {
+        arr.add(el.value);
+      });
+    });
+    let min = Math.min(...[...arr]);
+    if (min === 0 && arr.size === 1) {
+      arr.add(-1);
+      arr.add(1);
+    } else if (arr.size === 1) {
+      let tenPer = (([...arr][0] * 10) / 100);
+      arr.add([...arr][0] - tenPer);
+      arr.add([...arr][0] + tenPer);
+    }
+    return [...arr];
+  }
+
+   /**
+   * Create set of time values
+   * @param {data} data 
+   */
+  maxTime(data) {
+    let arr = [];
+    data.forEach(element => {
+      element.datapoints.forEach(el => {
+        arr.push(el.time);
+      });
+    });
+    return arr;
+  }
+
 
   /**
    * @name parseData
@@ -61,13 +102,16 @@ export class LineGraph extends HTMLElement {
       return {
         group,
         datapoints: data.filter(d => d[grouping] === group).map((d) => {
-          return { time: new Date(d.time), value: +d.mean }
+          return {
+            time: new Date(d.time),
+            value: +d.mean
+          }
         }),
-        color : this.lineColor[index]
+        color: this.lineColor[index]
       }
     });
 
-   
+
   }
 
   /**
@@ -78,12 +122,12 @@ export class LineGraph extends HTMLElement {
   getDataLineColor(colors) {
     var arr = [];
     var arrColor;
-    var defaults = new Defaults();     
+    var defaults = new Defaults();
     colors.split(',').map(value => arr.push(value));
     arrColor = [...arr, ...defaults.schemeCategory10Color];
-    this.lineColor.push.apply(this.lineColor, arrColor);   
+    this.lineColor.push.apply(this.lineColor, arrColor);
   }
- 
+
   /**
    * @name disconnectedCallback
    * @description
@@ -105,24 +149,39 @@ export class LineGraph extends HTMLElement {
     var width = parseInt(this.dataset.width);
     var unit = this.dataset.unit;
 
-     // Create X time scale
-     var xScale = d3.scaleTime()
-     .domain(d3.extent(data[0].datapoints, d => d.time))
-     .range([0, width - margin.bottom]);
+   // Create X time scale
+   var xScale = d3.scaleTime()
+   .domain(d3.extent(this.maxTime(data)))
+   .range([0, width - margin.bottom]);
 
-    // Create Y linear scale
-    var yScale = d3.scaleLinear()
-      .domain([0, d3.max(data[0].datapoints, d => d.value)])
-      .range([height - margin.left, 0]);
+ // Create Y linear scale
+ var yScale = d3.scaleLinear()
+   .domain(d3.extent(this.maxValue(data)))
+   .range([height - margin.left, 0]);
+ 
     // create color scale for each line
 
-        // Define a div and add styling for tooltip
+    // Define a div and add styling for tooltip
     var div = d3.select("body").append("div")
-    .attr("class", "tooltip")
-    .styles({"opacity": 0, "position":"absolute", "text-align":"center", "width":"100px", "height":"70px", "padding":"2px", "font":"12px sans-serif", "background":"lightsteelblue", "border":"0px", "pointer-events":"none"});
+      .attr("class", "tooltip")
+      .styles({
+        "opacity": 0,
+        "position": "absolute",
+        "text-align": "center",
+        "width": "100px",
+        "height": "70px",
+        "padding": "2px",
+        "font": "12px sans-serif",
+        "background": "lightsteelblue",
+        "border": "0px",
+        "pointer-events": "none"
+      });
     // Setup the svg element in the DOM
     var svg = d3.select(el)
-      .styles({"width": width + margin.left + +margin.right, "height":height + +margin.top + +margin.bottom})
+      .styles({
+        "width": width + margin.left + +margin.right,
+        "height": height + +margin.top + +margin.bottom
+      })
       .append('g')
       .attr("transform", `translate(${margin.top}, ${margin.left})`);
 
@@ -134,9 +193,9 @@ export class LineGraph extends HTMLElement {
     // add element for line and add class name
     let lines = svg.append('g')
       .attr('class', 'lines');
-    
-      // create g tag with path having class line-group and line.
-      lines.selectAll('.line-group')
+
+    // create g tag with path having class line-group and line.
+    lines.selectAll('.line-group')
       .data(data).enter()
       .append('g')
       .attr('class', 'line-group')
@@ -151,29 +210,42 @@ export class LineGraph extends HTMLElement {
           .enter()
           .append("circle")
           .attr("r", 4)
-          .attr("cx", function(d) { return xScale(d.time); })		 
-          .attr("cy", function(d) { return yScale(d.value); })
-          .styles({"opacity": 0, "stroke": d.color, "fill": "none", "stroke-width": "2px"})
-          .on("mouseover", function(d) {
-           d3.select(this)
-              .transition()
-              .duration(200)
-              .style("opacity", 0.9); // add opacity in case of hover		
-           div.transition()		
-               .duration(200)		
-               .style("opacity", .9);		
-           div.html(d.time + "<br/>"  + d.value)
-               .styles({"left":(d3.event.pageX + 10) + "px", "top":(d3.event.pageY - 28) + "px", "pointer-events":"none"});      
-           })					
-          .on("mouseout", function(d) {
+          .attr("cx", function (d) {
+            return xScale(d.time);
+          })
+          .attr("cy", function (d) {
+            return yScale(d.value);
+          })
+          .styles({
+            "opacity": 0,
+            "stroke": d.color,
+            "fill": "none",
+            "stroke-width": "2px"
+          })
+          .on("mouseover", function (d) {
             d3.select(this)
               .transition()
               .duration(200)
-              .style("opacity", 0);		// Remove hover in case of mouse out
-           div.transition()		
-               .duration(500)		
-               .style("opacity", 0);	
-           });
+              .style("opacity", 0.9); // add opacity in case of hover		
+            div.transition()
+              .duration(200)
+              .style("opacity", .9);
+            div.html(d.time + "<br/>" + d.value)
+              .styles({
+                "left": (d3.event.pageX + 10) + "px",
+                "top": (d3.event.pageY - 28) + "px",
+                "pointer-events": "none"
+              });
+          })
+          .on("mouseout", function (d) {
+            d3.select(this)
+              .transition()
+              .duration(200)
+              .style("opacity", 0); // Remove hover in case of mouse out
+            div.transition()
+              .duration(500)
+              .style("opacity", 0);
+          });
       });
 
     // Configure X Axis ticks and add xScale
@@ -198,10 +270,10 @@ export class LineGraph extends HTMLElement {
       .attr("transform", "rotate(-90)")
       .attr("fill", "#000");
     this.setLegend(svg, height, data);
-    this.setTitle(svg,width);
+    this.setTitle(svg, width);
   }
-  
-  setTitle(svg,width){
+
+  setTitle(svg, width) {
     if (this.dataset.title !== 'undefined') {
       svg.append("text")
         .attr("transform", `translate(-14, -23)`)
@@ -211,7 +283,7 @@ export class LineGraph extends HTMLElement {
         .style("font-size", 12)
         .text(this.dataset.title);
     }
-    }
+  }
 
   /**
    * 
@@ -223,8 +295,8 @@ export class LineGraph extends HTMLElement {
     var legend = svg.append("g")
       .attr("class", "legend")
       .attr('transform', `translate(0,${height-50})`)
-    
-      // create rectangle for legends
+
+    // create rectangle for legends
     legend.selectAll('rect')
       .data(data)
       .enter()
@@ -238,22 +310,24 @@ export class LineGraph extends HTMLElement {
       .style("fill", (d) => {
         return d.color;
       })
-      // set text of legends
+    // set text of legends
     legend.selectAll('text')
       .data(data)
       .enter()
       .append("text")
-      .styles({"font-size":12})
+      .styles({
+        "font-size": 12
+      })
       .attr("x", 36)
       .attr("y", (d, i) => {
         return i * 20 + 38;
       })
       .text((d) => {
-        if(d.group){
+        if (d.group) {
           return d.group;
-      }else{
-        return this.dataset.field
-      }
+        } else {
+          return this.dataset.field
+        }
       });
   }
 

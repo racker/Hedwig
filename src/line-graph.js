@@ -2,7 +2,7 @@ import * as d3 from 'd3';
 import "d3-selection-multi";
 import { Defaults } from './defaults'; 
 import { AxisLeft } from './helpers/axisConverter';
-import './styles/main.css';
+import * as styles from  './styles/main.css';
 /**
  * @name LineGraph
  * @description
@@ -25,7 +25,7 @@ export class LineGraph extends HTMLElement {
   connectedCallback() {
 
     let id = 'hedwig-' + btoa(Math.random()).substr(5, 5);
-    this.innerHTML = `<svg id='${id}'></svg>`;
+    this.innerHTML = `<style>${styles}</style><svg id='${id}'></svg>`;
     var svg = document.querySelector(`#${id}`);
     var data = JSON.parse(this.dataset.graph);
 

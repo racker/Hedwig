@@ -1104,6 +1104,8 @@
 
   var filterEvents = {};
 
+  var event = null;
+
   if (typeof document !== "undefined") {
     var element = document.documentElement;
     if (!("onmouseenter" in element)) {
@@ -1123,9 +1125,12 @@
 
   function contextListener(listener, index, group) {
     return function(event1) {
+      var event0 = event; // Events can be reentrant (e.g., focus).
+      event = event1;
       try {
         listener.call(this, this.__data__, index, group);
       } finally {
+        event = event0;
       }
     };
   }
@@ -6522,6 +6527,42 @@
 
   }
 
+  function styleInject(css, ref) {
+    if ( ref === void 0 ) ref = {};
+    var insertAt = ref.insertAt;
+
+    if (!css || typeof document === 'undefined') { return; }
+
+    var head = document.head || document.getElementsByTagName('head')[0];
+    var style = document.createElement('style');
+    style.type = 'text/css';
+
+    if (insertAt === 'top') {
+      if (head.firstChild) {
+        head.insertBefore(style, head.firstChild);
+      } else {
+        head.appendChild(style);
+      }
+    } else {
+      head.appendChild(style);
+    }
+
+    if (style.styleSheet) {
+      style.styleSheet.cssText = css;
+    } else {
+      style.appendChild(document.createTextNode(css));
+    }
+  }
+
+  var css_248z = "div.tooltip {\n        opacity: 0;\n        position : absolute;\n        text-align : center;\n        width:100px;\n        height:70px;\n        padding:2px;\n        font :12px sans-serif;\n        background:lightsteelblue;\n        border:0px;\n        pointer-events:none;\n}";
+  var stylesheet="div.tooltip {\n        opacity: 0;\n        position : absolute;\n        text-align : center;\n        width:100px;\n        height:70px;\n        padding:2px;\n        font :12px sans-serif;\n        background:lightsteelblue;\n        border:0px;\n        pointer-events:none;\n}";
+  styleInject(css_248z);
+
+  var styles = /*#__PURE__*/Object.freeze({
+    'default': css_248z,
+    stylesheet: stylesheet
+  });
+
   /**
    * @name LineGraph
    * @description
@@ -6543,7 +6584,7 @@
 
     connectedCallback() {
       let id = 'hedwig-' + btoa(Math.random()).substr(5, 5);
-      this.innerHTML = `<svg id='${id}'></svg>`;
+      this.innerHTML = `<style>${styles}</style><svg id='${id}'></svg>`;
       var svg = document.querySelector(`#${id}`);
       var data = JSON.parse(this.dataset.graph);
       this.attachShadow({
@@ -6630,25 +6671,55 @@
       var xScale = time().domain(extent(data[0].datapoints, d => d.time)).range([0, width - margin.bottom]); // Create Y linear scale
 
       var yScale = linear$1().domain([0, max(data[0].datapoints, d => d.value)]).range([height - margin.left, 0]); // create color scale for each line
-      //const colorScale = d3.scaleOrdinal(this.lineColor); 
-      // Setup the svg element in the DOM
+      // Define a div and add styling for tooltip
 
-      var svg = select(el).style("width", width + margin.left + +margin.right).style("height", height + +margin.top + +margin.bottom).append('g').attr("transform", `translate(${margin.top}, ${margin.left})`); // Create the lines
+      var div = select("body").append("div").attr("class", "tooltip"); // Setup the svg element in the DOM
 
-      var line$1 = line().x(d => xScale(d.time)).y(d => yScale(d.value)); //colorScale.domain(data.map(d => d.group)); 
-      // add element for line and add class name
+      var svg = select(el).styles({
+        "width": width + margin.left + +margin.right,
+        "height": height + +margin.top + +margin.bottom
+      }).append('g').attr("transform", `translate(${margin.top}, ${margin.left})`); // Create the lines
 
-      let lines = svg.append('g').attr('class', 'lines'); // add the lines for each collection of objects to the SVG
+      var line$1 = line().x(d => xScale(d.time)).y(d => yScale(d.value)); // add element for line and add class name
 
-      lines.selectAll('.line-group').data(data).enter().append('g').attr('class', 'line-group').append('path').attr('class', 'line').attr('d', d => line$1(d.datapoints)).style('stroke', d => d.color).style('fill', 'none');
-      /*
-      TODO: Color schema strategy needed to ensure lines
-      are the right colors
-      https://github.com/d3/d3-scale/blob/master/README.md#sequential-scales
-      var color = d3.scaleOrdinal(d3.schemeCategory10);
-      .style('stroke', (d, i) => color(i));
-      */
-      // Configure X Axis ticks and add xScale
+      let lines = svg.append('g').attr('class', 'lines'); // create g tag with path having class line-group and line.
+
+      lines.selectAll('.line-group').data(data).enter().append('g').attr('class', 'line-group').append('path').attrs({
+        'class': 'line',
+        'd': d => line$1(d.datapoints)
+      }).styles({
+        'stroke': d => d.color,
+        'fill': 'none'
+      }).each((d, i) => {
+        // loop through datapoints to fetch time and value to create tooltip hover events with value.
+        lines.selectAll('dot').data(d.datapoints).enter().append("circle").attrs({
+          "r": 4,
+          "cx": function (d) {
+            return xScale(d.time);
+          },
+          "cy": function (d) {
+            return yScale(d.value);
+          }
+        }).styles({
+          "opacity": 0,
+          "stroke": d.color,
+          "fill": "none",
+          "stroke-width": "2px"
+        }).on("mouseover", function (d) {
+          select(this).transition().duration(200).style("opacity", 0.9); // add opacity in case of hover		
+
+          div.transition().duration(200).style("opacity", .9);
+          div.html(d.time + "<br/>" + d.value).styles({
+            "left": event.pageX + 10 + "px",
+            "top": event.pageY - 28 + "px",
+            "pointer-events": "none"
+          });
+        }).on("mouseout", function (d) {
+          select(this).transition().duration(200).style("opacity", 0); // Remove hover in case of mouse out
+
+          div.transition().duration(500).style("opacity", 0);
+        });
+      }); // Configure X Axis ticks and add xScale
 
       var xAxis = axisBottom(xScale).ticks(5); // Configure Y Axis ticks and
 
@@ -6656,8 +6727,15 @@
         return new AxisLeft().convert(unit, d);
       }); // Add both Axis' to the SVG
 
-      svg.append("g").attr("class", "x axis").attr("transform", `translate(0, ${height - margin.top})`).call(xAxis);
-      svg.append("g").attr("class", "y axis").call(yAxis).append('text').attr("y", 15).attr("transform", "rotate(-90)").attr("fill", "#000");
+      svg.append("g").attrs({
+        "class": "x axis",
+        "transform": `translate(0, ${height - margin.top})`
+      }).call(xAxis);
+      svg.append("g").attr("class", "y axis").call(yAxis).append('text').attrs({
+        "y": 15,
+        "transform": "rotate(-90)",
+        "fill": "#000"
+      });
       this.setLegend(svg, height, data);
     }
     /**
@@ -6669,18 +6747,29 @@
 
 
     setLegend(svg, height, data) {
-      var legend = svg.append("g").attr("class", "legend").attr('transform', `translate(0,${height - 50})`); // create rectangle for legends
+      var legend = svg.append("g").attrs({
+        "class": "legend",
+        'transform': `translate(0,${height - 50})`
+      }); // create rectangle for legends
 
-      legend.selectAll('rect').data(data).enter().append("rect").attr("x", 18).attr("y", (d, i) => {
-        return i * 20 + 30;
-      }).attr("width", 10).attr("height", 10).style("fill", d => {
+      legend.selectAll('rect').data(data).enter().append("rect").attrs({
+        "x": 18,
+        "y": (d, i) => {
+          return i * 20 + 30;
+        },
+        "width": 10,
+        "height": 10
+      }).style("fill", d => {
         return d.color;
       }); // set text of legends
 
       legend.selectAll('text').data(data).enter().append("text").styles({
         "font-size": 12
-      }).attr("x", 36).attr("y", (d, i) => {
-        return i * 20 + 38;
+      }).attrs({
+        "x": 36,
+        "y": (d, i) => {
+          return i * 20 + 38;
+        }
       }).text(d => {
         if (d.group) {
           return d.group;

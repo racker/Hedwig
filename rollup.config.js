@@ -75,11 +75,7 @@ export default [
 			{ file: pkg.module, format: 'es' }
 		],
 		plugins: [
-			json(),
-			commonjs(), // so Rollup can convert any dependencies to an ES module
-			postcss({
-				extensions: [ '.css' ],
-			})
+			json()
 		]
 	}
 ];

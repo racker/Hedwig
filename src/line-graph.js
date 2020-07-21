@@ -7,6 +7,8 @@ import {
   AxisLeft
 } from './helpers/axisConverter';
 
+import { Helper } from "./Helper";
+
 /**
  * @name LineGraph
  * @description
@@ -37,45 +39,6 @@ export class LineGraph extends HTMLElement {
     this.shadowRoot.appendChild(svg);
     this.renderGraph(this.parseData(data), svg);
   }
-
-
-  /**
-   * Create set of distinct values
-   * @param {data} data 
-   */
-  maxValue(data) {
-    let arr = new Set()
-    data.forEach(element => {
-      element.datapoints.forEach(el => {
-        arr.add(el.value);
-      });
-    });
-    let min = Math.min(...[...arr]);
-    if (min === 0 && arr.size === 1) {
-      arr.add(-1);
-      arr.add(1);
-    } else if (arr.size === 1) {
-      let tenPer = (([...arr][0] * 10) / 100);
-      arr.add([...arr][0] - tenPer);
-      arr.add([...arr][0] + tenPer);
-    }
-    return [...arr];
-  }
-
-   /**
-   * Create set of time values
-   * @param {data} data 
-   */
-  maxTime(data) {
-    let arr = [];
-    data.forEach(element => {
-      element.datapoints.forEach(el => {
-        arr.push(el.time);
-      });
-    });
-    return arr;
-  }
-
 
   /**
    * @name parseData
@@ -143,6 +106,7 @@ export class LineGraph extends HTMLElement {
    * Renders the graph using d3js
    */
   renderGraph(data, el) {
+    var helper= new Helper();
     // Setup the margins and height, width
     var margin = JSON.parse(this.dataset.margin);
     var height = parseInt(this.dataset.height);
@@ -151,12 +115,12 @@ export class LineGraph extends HTMLElement {
 
    // Create X time scale
    var xScale = d3.scaleTime()
-   .domain(d3.extent(this.maxTime(data)))
+   .domain(d3.extent(helper.maxTime(data)))
    .range([0, width - margin.bottom]);
 
  // Create Y linear scale
  var yScale = d3.scaleLinear()
-   .domain(d3.extent(this.maxValue(data)))
+   .domain(d3.extent(helper.maxValue(data)))
    .range([height - margin.left, 0]);
  
     // create color scale for each line

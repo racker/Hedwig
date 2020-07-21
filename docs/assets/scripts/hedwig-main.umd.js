@@ -6492,6 +6492,52 @@
 
   }
 
+  class DataHelper {
+    constructor() {}
+    /**
+     * Create set of distinct values
+     * @param {data} data 
+     */
+
+
+    maxValue(data) {
+      let arr = new Set();
+      data.forEach(element => {
+        element.datapoints.forEach(el => {
+          arr.add(el.value);
+        });
+      });
+      let min = Math.min(...[...arr]);
+
+      if (min === 0 && arr.size === 1) {
+        arr.add(-1);
+        arr.add(1);
+      } else if (arr.size === 1) {
+        let tenPer = [...arr][0] * 10 / 100;
+        arr.add([...arr][0] - tenPer);
+        arr.add([...arr][0] + tenPer);
+      }
+
+      return [...arr];
+    }
+    /**
+    * Create set of time values
+    * @param {data} data 
+    */
+
+
+    maxTime(data) {
+      let arr = [];
+      data.forEach(element => {
+        element.datapoints.forEach(el => {
+          arr.push(el.time);
+        });
+      });
+      return arr;
+    }
+
+  }
+
   /**
    * @name LineGraph
    * @description
@@ -6521,37 +6567,6 @@
       });
       this.shadowRoot.appendChild(svg);
       this.renderGraph(this.parseData(data), svg);
-    }
-
-    maxValue(data) {
-      let arr = new Set();
-      data.forEach(element => {
-        element.datapoints.forEach(el => {
-          arr.add(el.value);
-        });
-      });
-      let min = Math.min(...[...arr]);
-
-      if (min === 0 && arr.size === 1) {
-        arr.add(-1);
-        arr.add(1);
-      } else if (arr.size === 1) {
-        let tenPer = [...arr][0] * 10 / 100;
-        arr.add([...arr][0] - tenPer);
-        arr.add([...arr][0] + tenPer);
-      }
-
-      return [...arr];
-    }
-
-    maxTime(data) {
-      let arr = [];
-      data.forEach(element => {
-        element.datapoints.forEach(el => {
-          arr.push(el.time);
-        });
-      });
-      return arr;
     }
     /**
      * @name parseData
@@ -6622,15 +6637,16 @@
 
 
     renderGraph(data, el) {
-      // Setup the margins and height, width
+      var helper = new DataHelper(); // Setup the margins and height, width
+
       var margin = JSON.parse(this.dataset.margin);
       var height = parseInt(this.dataset.height);
       var width = parseInt(this.dataset.width);
       var unit = this.dataset.unit; // Create X time scale
 
-      var xScale = time().domain(extent(this.maxTime(data))).range([0, width - margin.bottom]); // Create Y linear scale
+      var xScale = time().domain(extent(helper.maxTime(data))).range([0, width - margin.bottom]); // Create Y linear scale
 
-      var yScale = linear$1().domain(extent(this.maxValue(data))).range([height - margin.left, 0]); // create color scale for each line
+      var yScale = linear$1().domain(extent(helper.maxValue(data))).range([height - margin.left, 0]); // create color scale for each line
       // Define a div and add styling for tooltip
 
       var div = select("body").append("div").attr("class", "tooltip").styles({

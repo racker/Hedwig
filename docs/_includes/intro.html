@@ -40,6 +40,8 @@
       <br/><br/>
       <em>data-field</em><br/> This is required for the graph to render, the value must correspond with the matching
       field name for the measurement.
+      <br/><br/>
+      <em>data-title</em><br/> Use to Set title of graph.
     </p>
   </div>
   <br><br>
@@ -91,7 +93,7 @@
       If you're wanting to graph this data in a multiline format where <em>device</em> is the grouping qualifier, you'd then
       add the <strong>data-group</strong> attribute and enter the value of the key being used for grouping.
     </p>
-    <pre><code class='html'>&lt;hedwig-graph data-type="MAAS_cpu" data-field="usage_average" data-group="device" data-height="200" data-width="400" data='[someBoundData]' &gt;&lt;/hedwig-graph&gt;</code></pre>
+    <pre><code class='html'>&lt;hedwig-graph data-type="MAAS_cpu" data-title="MAAS CPU" data-field="usage_average" data-group="device" data-height="200" data-width="400" data='[someBoundData]' &gt;&lt;/hedwig-graph&gt;</code></pre>
     <br>
     <p><script>
       var multiMocked = [{
@@ -125,7 +127,7 @@
             "device": "7877-ministryofmagic.staging.com"
             }];
 
-      document.write('<hedwig-graph data-type="MAAS_cpu" data-group="device" data-field="usage_average" data-height="300" data-width="400" data-graph=' + JSON.stringify(multiMocked) + '></hedwig-graph>');
+      document.write('<hedwig-graph data-type="MAAS_cpu" data-title="MAAS CPU" data-group="device" data-field="usage_average" data-height="300" data-width="400" data-graph=' + JSON.stringify(multiMocked) + '></hedwig-graph>');
   </script></p>
     <p>This will render the graph, with multiline capabilities</p>
     <br/>

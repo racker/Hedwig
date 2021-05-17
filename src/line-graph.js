@@ -35,8 +35,31 @@ export class LineGraph extends HTMLElement {
       mode: 'open'
     });
     this.shadowRoot.appendChild(svg);
+    var data = this.formatMutlipleData(data, this.dataset.group);
     this.renderGraph(this.parseData(data), svg);
   }
+
+
+  formatMutlipleData(records, groupName) {
+    var arr = [];
+    var groupName;
+    for (let data of records) {
+    var keys = Object.keys(data.values);
+    var values = Object.values(data.values);
+      var res = keys.map((v, i) => {
+        return {
+          mean  : values[i],
+          time  : keys[i],
+          group : groupName
+        }
+      });
+
+      arr.push(res);
+    }
+      const combinedArray = [].concat(...arr);
+    return combinedArray;
+  }
+
 
   /**
    * @name parseData

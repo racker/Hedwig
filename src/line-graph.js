@@ -62,7 +62,7 @@ export class LineGraph extends HTMLElement {
     var group, keys, values, res;
     const combinedArray = [];
     for (let data of records) {
-      group = findByProp(data, groupName); 
+      group = this.findByProp(data, groupName); 
       keys = Object.keys(data.values);
       values = Object.values(data.values);
       res = keys.map((v, i) => {

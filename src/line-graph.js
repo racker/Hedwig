@@ -42,7 +42,6 @@ export class LineGraph extends HTMLElement {
 
   formatMutlipleData(records, groupName) {
     var arr = [];
-    var groupName;
     for (let data of records) {
     var keys = Object.keys(data.values);
     var values = Object.values(data.values);

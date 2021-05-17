@@ -40,22 +40,41 @@ export class LineGraph extends HTMLElement {
   }
 
 
+  findByProp(o, prop) {
+    var p, c; 
+    for (p in o) {
+      if(typeof o[p] === 'object') {
+          for(c in o[p]) {
+            if(c === prop) {
+              return o[p][c];
+            }
+          }
+      } else {
+        if(p === prop) {
+          return o[p];  
+        }
+      }
+    }
+  }
+
   formatMutlipleData(records, groupName) {
     var arr = [];
+    var group, keys, values, res;
+    const combinedArray = [];
     for (let data of records) {
-    var keys = Object.keys(data.values);
-    var values = Object.values(data.values);
-      var res = keys.map((v, i) => {
+      group = findByProp(data, groupName); 
+      keys = Object.keys(data.values);
+      values = Object.values(data.values);
+      res = keys.map((v, i) => {
         return {
-          mean  : values[i],
-          time  : keys[i],
-          group : groupName
+          mean : values[i],
+          time : keys[i],
+          group : group
         }
       });
-
       arr.push(res);
     }
-      const combinedArray = [].concat(...arr);
+    combinedArray.concat(...arr);
     return combinedArray;
   }
 

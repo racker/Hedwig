@@ -35,8 +35,8 @@ export class LineGraph extends HTMLElement {
       mode: 'open'
     });
     this.shadowRoot.appendChild(svg);
-    var data = this.formatMutlipleData(data, this.dataset.group);
-    this.renderGraph(this.parseData(data), svg);
+    var newData = this.formatMutlipleData(data, this.dataset.group);
+    this.renderGraph(this.parseData(newData), svg);
   }
 
 

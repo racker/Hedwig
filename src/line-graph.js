@@ -36,9 +36,7 @@ export class LineGraph extends HTMLElement {
     });
     this.shadowRoot.appendChild(svg);
     var newData = this.formatMutlipleData(data, this.dataset.group);
-    if(newData.length > 0) {
-      this.renderGraph(this.parseData(newData), svg);
-    }
+    this.renderGraph(this.parseData(newData), svg);
   }
 
 
@@ -62,7 +60,6 @@ export class LineGraph extends HTMLElement {
   formatMutlipleData(records, groupName) {
     var arr = [];
     var group, keys, values, res;
-    const combinedArray = [];
     for (let data of records) {
       group = this.findByProp(data, groupName); 
       keys = Object.keys(data.values);
@@ -76,7 +73,7 @@ export class LineGraph extends HTMLElement {
       });
       arr.push(res);
     }
-    combinedArray.concat(...arr);
+    const combinedArray = [].concat(...arr);
     return combinedArray;
   }
 

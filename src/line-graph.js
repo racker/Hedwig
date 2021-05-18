@@ -35,8 +35,7 @@ export class LineGraph extends HTMLElement {
       mode: 'open'
     });
     this.shadowRoot.appendChild(svg);
-    var newData = this.formatMutlipleData(data, this.dataset.group);
-    this.renderGraph(this.parseData(newData), svg);
+    this.renderGraph(this.parseData(data), svg);
   }
 
 
@@ -57,6 +56,15 @@ export class LineGraph extends HTMLElement {
     }
   }
 
+  checkExistsProp(o, prop) {
+    var p; 
+    for (p in o) { 
+      if(prop === o[p]) {
+        return true;
+      }
+    }
+  }
+
   formatMutlipleData(records, groupName) {
     var arr = [];
     var group, keys, values, res;
@@ -68,7 +76,7 @@ export class LineGraph extends HTMLElement {
         return {
           mean : values[i],
           time : keys[i],
-          group : group
+          groupName : group
         }
       });
       arr.push(res);
@@ -91,8 +99,7 @@ export class LineGraph extends HTMLElement {
     // get color array 
     this.getDataLineColor(this.dataset.lineColor);
     data.map((item) => {
-      // if grouping is specified find unique groups
-      let group = item[grouping];
+      let group = this.findByProp(item, grouping); 
       const index = uniqueGroups.findIndex((i) => i === group);
       if (index === -1) {
         uniqueGroups.push(group);
@@ -100,9 +107,10 @@ export class LineGraph extends HTMLElement {
     });
     // now that we have grouping we will filter and map our datapoints
     return uniqueGroups.map((group, index) => {
+      var dt = this.formatMutlipleData(data, grouping);
       return {
         group,
-        datapoints: data.filter(d => d[grouping] === group).map((d) => {
+        datapoints: dt.filter(d => this.checkExistsProp(d, group)).map((d) => {
           return {
             time: new Date(d.time),
             value: +d.mean
@@ -111,8 +119,6 @@ export class LineGraph extends HTMLElement {
         color: this.lineColor[index]
       }
     });
-
-
   }
 
   /**

@@ -38,6 +38,54 @@ export class LineGraph extends HTMLElement {
     this.renderGraph(this.parseData(data), svg);
   }
 
+
+  findByProp(o, prop) {
+    var p, c; 
+    for (p in o) {
+      if(typeof o[p] === 'object') {
+          for(c in o[p]) {
+            if(c === prop) {
+              return o[p][c];
+            }
+          }
+      } else {
+        if(p === prop) {
+          return o[p];  
+        }
+      }
+    }
+  }
+
+  checkExistsProp(o, prop) {
+    var p; 
+    for (p in o) { 
+      if(prop === o[p]) {
+        return true;
+      }
+    }
+  }
+
+  formatMutlipleData(records, groupName) {
+    var arr = [];
+    var group, keys, values, res;
+    for (let data of records) {
+      group = this.findByProp(data, groupName); 
+      keys = Object.keys(data.values);
+      values = Object.values(data.values);
+      res = keys.map((v, i) => {
+        return {
+          mean : values[i],
+          time : keys[i],
+          groupName : group
+        }
+      });
+      arr.push(res);
+    }
+    const combinedArray = [].concat(...arr);
+    return combinedArray;
+  }
+
+
   /**
    * @name parseData
    * @param {Array} data
@@ -51,8 +99,7 @@ export class LineGraph extends HTMLElement {
     // get color array 
     this.getDataLineColor(this.dataset.lineColor);
     data.map((item) => {
-      // if grouping is specified find unique groups
-      let group = item[grouping];
+      let group = this.findByProp(item, grouping); 
       const index = uniqueGroups.findIndex((i) => i === group);
       if (index === -1) {
         uniqueGroups.push(group);
@@ -60,9 +107,10 @@ export class LineGraph extends HTMLElement {
     });
     // now that we have grouping we will filter and map our datapoints
     return uniqueGroups.map((group, index) => {
+      var dt = this.formatMutlipleData(data, grouping);
       return {
         group,
-        datapoints: data.filter(d => d[grouping] === group).map((d) => {
+        datapoints: dt.filter(d => this.checkExistsProp(d, group)).map((d) => {
           return {
             time: new Date(d.time),
             value: +d.mean
@@ -71,8 +119,6 @@ export class LineGraph extends HTMLElement {
         color: this.lineColor[index]
       }
     });
-
-
   }
 
   /**

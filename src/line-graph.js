@@ -1,8 +1,10 @@
 import * as d3 from 'd3';
 import "d3-selection-multi";
-import { Defaults } from './defaults'; 
+import { Defaults } from './defaults';
 import { AxisLeft } from './helpers/axisConverter';
 import * as styleSheet from  './styles/main.css';
+
+/* Simply a PR test */
 
 import { Helper } from "./Helper";
 /**
@@ -48,7 +50,7 @@ export class LineGraph extends HTMLElement {
   parseData(data) {
     let uniqueGroups = [];
     let grouping = this.dataset.group;
-    // get color array 
+    // get color array
     this.getDataLineColor(this.dataset.lineColor);
     data.map((item) => {
       // if grouping is specified find unique groups
@@ -120,7 +122,7 @@ export class LineGraph extends HTMLElement {
  var yScale = d3.scaleLinear()
    .domain(d3.extent(helper.maxValue(data)))
    .range([height - margin.left, 0]);
- 
+
     // create color scale for each line
 
     // Define a div and add styling for tooltip
@@ -162,7 +164,7 @@ export class LineGraph extends HTMLElement {
            d3.select(this)
               .transition()
               .duration(200)
-              .style("opacity", 0.9); // add opacity in case of hover		
+              .style("opacity", 0.9); // add opacity in case of hover
             div.transition()
               .duration(200)
               .style("opacity", .9);
@@ -203,7 +205,7 @@ export class LineGraph extends HTMLElement {
       .append('text')
       .attrs({"y": 15, "transform": "rotate(-90)", "fill": "#000"})
     this.setLegend(svg, height, data)
-    
+
   }
 
   setTitle(svg, width) {
@@ -219,14 +221,14 @@ export class LineGraph extends HTMLElement {
   }
 
   /**
-   * 
-   * @param {d3 svg element} svg 
-   * @param {height} height 
-   * @param {data} data 
+   *
+   * @param {d3 svg element} svg
+   * @param {height} height
+   * @param {data} data
    */
   setLegend(svg, height, data) {
     var legend = svg.append("g")
-      .attrs({"class": "legend", 'transform': `translate(0,${height-50})`}) 
+      .attrs({"class": "legend", 'transform': `translate(0,${height-50})`})
       // create rectangle for legends
     legend.selectAll('rect')
       .data(data)

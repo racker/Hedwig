@@ -6528,6 +6528,18 @@
     stylesheet: stylesheet
   });
 
+  /**
+   * @description
+   * Recursive function for returning value based on property path
+   * @param o object
+   * @param p string
+   */
+  function findByProp(o, prop) {
+    if (!prop) return o;
+    const properties = prop.split('.');
+    return findByProp(o[properties.shift()], properties.join('.'));
+  }
+
   class Helper {
     constructor() {}
     /**
@@ -6614,30 +6626,25 @@
 
 
     parseData(data) {
-      let uniqueGroups = [];
-      let grouping = this.dataset.group; // get color array 
+      let grouping = this.dataset.group; // get color array
 
       this.getDataLineColor(this.dataset.lineColor);
-      data.map(item => {
-        // if grouping is specified find unique groups
-        let group = item[grouping];
-        const index = uniqueGroups.findIndex(i => i === group);
+      return data.map((item, i) => {
+        let pointsArray = [];
+        let group = findByProp(item, grouping);
+        let valuesArray = Object.keys(item.values); // loop through each time property
 
-        if (index === -1) {
-          uniqueGroups.push(group);
+        for (const obj of valuesArray) {
+          pointsArray.push({
+            time: new Date(obj),
+            value: +item.values[obj]
+          });
         }
-      }); // now that we have grouping we will filter and map our datapoints
 
-      return uniqueGroups.map((group, index) => {
         return {
           group,
-          datapoints: data.filter(d => d[grouping] === group).map(d => {
-            return {
-              time: new Date(d.time),
-              value: +d.mean
-            };
-          }),
-          color: this.lineColor[index]
+          datapoints: pointsArray,
+          color: this.lineColor[i]
         };
       });
     }
@@ -6718,7 +6725,7 @@
           "fill": "none",
           "stroke-width": "2px"
         }).on("mouseover", function (d) {
-          select(this).transition().duration(200).style("opacity", 0.9); // add opacity in case of hover		
+          select(this).transition().duration(200).style("opacity", 0.9); // add opacity in case of hover
 
           div.transition().duration(200).style("opacity", .9);
           div.html(d.time + "<br/>" + d.value).styles({
@@ -6757,10 +6764,10 @@
       }
     }
     /**
-     * 
-     * @param {d3 svg element} svg 
-     * @param {height} height 
-     * @param {data} data 
+     *
+     * @param {d3 svg element} svg
+     * @param {height} height
+     * @param {data} data
      */
 
 
@@ -7119,7 +7126,7 @@
 
 
     render() {
-      if (this.defaults) {
+      if (this.defaults && this.graphData) {
         this.innerHTML = "<line-graph data-margin=" + JSON.stringify(this.defaults.margin) + " data-height=" + this.defaults.height + " data-width=" + this.defaults.width + " data-graph=" + this.graphData + " data-unit=" + (this.graphInfo.unit || this.defaults.unit) + " data-line-color=" + this.defaults.lineColor + " data-field=" + this.graphInfo.field + " data-title=" + JSON.stringify(this.dataset.title) + " data-group=" + this.dataset.group + "></lineGraph>";
       }
     }

@@ -1,8 +1,9 @@
 import * as d3 from 'd3';
 import "d3-selection-multi";
-import { Defaults } from './defaults'; 
+import { Defaults } from './defaults';
 import { AxisLeft } from './helpers/axisConverter';
 import * as styleSheet from  './styles/main.css';
+import { findByProp } from './helpers/utils';
 
 import { Helper } from "./Helper";
 /**
@@ -38,54 +39,6 @@ export class LineGraph extends HTMLElement {
     this.renderGraph(this.parseData(data), svg);
   }
 
-
-  findByProp(o, prop) {
-    var p, c; 
-    for (p in o) {
-      if(typeof o[p] === 'object') {
-          for(c in o[p]) {
-            if(c === prop) {
-              return o[p][c];
-            }
-          }
-      } else {
-        if(p === prop) {
-          return o[p];  
-        }
-      }
-    }
-  }
-
-  checkExistsProp(o, prop) {
-    var p; 
-    for (p in o) { 
-      if(prop === o[p]) {
-        return true;
-      }
-    }
-  }
-
-  formatMutlipleData(records, groupName) {
-    var arr = [];
-    var group, keys, values, res;
-    for (let data of records) {
-      group = this.findByProp(data, groupName); 
-      keys = Object.keys(data.values);
-      values = Object.values(data.values);
-      res = keys.map((v, i) => {
-        return {
-          mean : values[i],
-          time : keys[i],
-          groupName : group
-        }
-      });
-      arr.push(res);
-    }
-    const combinedArray = [].concat(...arr);
-    return combinedArray;
-  }
-
-
   /**
    * @name parseData
    * @param {Array} data
@@ -94,31 +47,26 @@ export class LineGraph extends HTMLElement {
    * javascript date objects which is required for d3js
    */
   parseData(data) {
-    let uniqueGroups = [];
-    let grouping = this.dataset.group;
-    // get color array 
-    this.getDataLineColor(this.dataset.lineColor);
-    data.map((item) => {
-      let group = this.findByProp(item, grouping); 
-      const index = uniqueGroups.findIndex((i) => i === group);
-      if (index === -1) {
-        uniqueGroups.push(group);
-      }
-    });
-    // now that we have grouping we will filter and map our datapoints
-    return uniqueGroups.map((group, index) => {
-      var dt = this.formatMutlipleData(data, grouping);
-      return {
-        group,
-        datapoints: dt.filter(d => this.checkExistsProp(d, group)).map((d) => {
-          return {
-            time: new Date(d.time),
-            value: +d.mean
-          }
-        }),
-        color: this.lineColor[index]
-      }
-    });
+      let grouping = this.dataset.group;
+      // get color array
+      this.getDataLineColor(this.dataset.lineColor);
+      return data.map((item, i) => {
+        let pointsArray = [];
+        let group = findByProp(item, grouping);
+        let valuesArray = Object.keys(item.values);
+        // loop through each time property
+        for (const obj of valuesArray) {
+          pointsArray.push({
+            time: new Date(obj),
+            value: +item.values[obj]
+          });
+        }
+        return {
+          group,
+          datapoints: pointsArray,
+          color: this.lineColor[i]
+        }
+      });
   }
 
   /**
@@ -166,7 +114,7 @@ export class LineGraph extends HTMLElement {
  var yScale = d3.scaleLinear()
    .domain(d3.extent(helper.maxValue(data)))
    .range([height - margin.left, 0]);
- 
+
     // create color scale for each line
 
     // Define a div and add styling for tooltip
@@ -208,7 +156,7 @@ export class LineGraph extends HTMLElement {
            d3.select(this)
               .transition()
               .duration(200)
-              .style("opacity", 0.9); // add opacity in case of hover		
+              .style("opacity", 0.9); // add opacity in case of hover
             div.transition()
               .duration(200)
               .style("opacity", .9);
@@ -249,7 +197,7 @@ export class LineGraph extends HTMLElement {
       .append('text')
       .attrs({"y": 15, "transform": "rotate(-90)", "fill": "#000"})
     this.setLegend(svg, height, data)
-    
+
   }
 
   setTitle(svg, width) {
@@ -265,14 +213,14 @@ export class LineGraph extends HTMLElement {
   }
 
   /**
-   * 
-   * @param {d3 svg element} svg 
-   * @param {height} height 
-   * @param {data} data 
+   *
+   * @param {d3 svg element} svg
+   * @param {height} height
+   * @param {data} data
    */
   setLegend(svg, height, data) {
     var legend = svg.append("g")
-      .attrs({"class": "legend", 'transform': `translate(0,${height-50})`}) 
+      .attrs({"class": "legend", 'transform': `translate(0,${height-50})`})
       // create rectangle for legends
     legend.selectAll('rect')
       .data(data)

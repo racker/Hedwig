@@ -11,7 +11,7 @@
     "dev": "rollup -c -w",
     "unit-test": "./node_modules/karma/bin/karma start",
     "visual-test": "node backstop.js --test --singleRun",
-    "pretest": "npm run build",
+    "prepare": "npm run build",
     "serve": "node -e \"require('./bin/server.js').start()\"",
     "reference": "node backstop.js --reference --singleRun"
   },

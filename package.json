@@ -7,8 +7,13 @@
   "docs": "docs/assets/scripts/hedwig-main.umd.js",
   "scripts": {
     "preinstall": "npm install rollup@1.17.0 --save-dev --save-exact",
-    "prepare": "npm run build",
-    "build": "rollup -c"
+    "build": "rollup -c",
+    "dev": "rollup -c -w",
+    "unit-test": "./node_modules/karma/bin/karma start",
+    "visual-test": "node backstop.js --test --singleRun",
+    "pretest": "npm run build",
+    "serve": "node -e \"require('./bin/server.js').start()\"",
+    "reference": "node backstop.js --reference --singleRun"
   },
   "files": [
     "dist"

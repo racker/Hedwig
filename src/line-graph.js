@@ -3,9 +3,8 @@ import "d3-selection-multi";
 import { Defaults } from './defaults';
 import { AxisLeft } from './helpers/axisConverter';
 import * as styleSheet from  './styles/main.css';
-import { findByProp } from './helpers/utils';
+import { Utils } from "./core/utils";
 
-import { Helper } from "./Helper";
 /**
  * @name LineGraph
  * @description
@@ -52,7 +51,7 @@ export class LineGraph extends HTMLElement {
       this.getDataLineColor(this.dataset.lineColor);
       return data.map((item, i) => {
         let pointsArray = [];
-        let group = findByProp(item, grouping);
+        let group = Utils.findByProp(item, grouping);
         let valuesArray = Object.keys(item.values);
         // loop through each time property
         for (const obj of valuesArray) {
@@ -98,7 +97,6 @@ export class LineGraph extends HTMLElement {
    * Renders the graph using d3js
    */
   renderGraph(data, el) {
-    var helper= new Helper();
     // Setup the margins and height, width
     var margin = JSON.parse(this.dataset.margin);
     var height = parseInt(this.dataset.height);
@@ -107,12 +105,12 @@ export class LineGraph extends HTMLElement {
 
    // Create X time scale
    var xScale = d3.scaleTime()
-   .domain(d3.extent(helper.maxTime(data)))
+   .domain(d3.extent(Utils.maxTime(data)))
    .range([0, width - margin.bottom]);
 
  // Create Y linear scale
  var yScale = d3.scaleLinear()
-   .domain(d3.extent(helper.maxValue(data)))
+   .domain(d3.extent(Utils.maxValue(data)))
    .range([height - margin.left, 0]);
 
     // create color scale for each line

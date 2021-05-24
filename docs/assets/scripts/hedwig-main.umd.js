@@ -6432,11 +6432,84 @@
   transition.prototype.attrs = transition_attrs;
   transition.prototype.styles = transition_styles;
 
+  class Utils {
+    /**
+     * Convert bytes to largest unit
+     * @param {*} bytes number
+     * @param {*} decimals number
+     * @returns string
+     */
+    static formatBytes(bytes, decimals = 2) {
+      if (bytes === 0) return '0 Bytes';
+      const k = 1024;
+      const dm = decimals < 0 ? 0 : decimals;
+      const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+    }
+    /**
+    * @description
+    * Recursive function for returning value based on property path
+    * @param o object
+    * @param p string
+    */
+
+
+    static findByProp(o, prop) {
+      if (!prop) return o;
+      const properties = prop.split('.');
+      return this.findByProp(o[properties.shift()], properties.join('.'));
+    }
+    /**
+     * Create set of distinct values
+     * @param {data} data
+     */
+
+
+    static maxValue(data) {
+      let arr = new Set();
+      data.forEach(element => {
+        element.datapoints.forEach(el => {
+          arr.add(el.value);
+        });
+      });
+      let min = Math.min(...[...arr]);
+
+      if (min === 0 && arr.size === 1) {
+        arr.add(-1);
+        arr.add(1);
+      } else if (arr.size === 1) {
+        let tenPer = [...arr][0] * 10 / 100;
+        arr.add([...arr][0] - tenPer);
+        arr.add([...arr][0] + tenPer);
+      }
+
+      return [...arr];
+    }
+    /**
+    * Create set of time values
+    * @param {data} data
+    */
+
+
+    static maxTime(data) {
+      let arr = [];
+      data.forEach(element => {
+        element.datapoints.forEach(el => {
+          arr.push(el.time);
+        });
+      });
+      return arr;
+    }
+
+  }
+
   /**
    * @name AxisLeft
    * @description
    * Class to handle conversion of Left Axis labels
    */
+
   class AxisLeft {
     constructor() {}
     /**
@@ -6453,13 +6526,9 @@
           return d;
 
         case unit === 'b':
-          return d + ' b';
-
         case unit === 'kb':
-          return d + ' kb';
-
         case unit === 'mb':
-          return d + ' mb';
+          return Utils.formatBytes(d, 2);
 
         case unit === 'frames':
           return d + ' frames/s';
@@ -6529,64 +6598,6 @@
   });
 
   /**
-   * @description
-   * Recursive function for returning value based on property path
-   * @param o object
-   * @param p string
-   */
-  function findByProp(o, prop) {
-    if (!prop) return o;
-    const properties = prop.split('.');
-    return findByProp(o[properties.shift()], properties.join('.'));
-  }
-
-  class Helper {
-    constructor() {}
-    /**
-     * Create set of distinct values
-     * @param {data} data 
-     */
-
-
-    maxValue(data) {
-      let arr = new Set();
-      data.forEach(element => {
-        element.datapoints.forEach(el => {
-          arr.add(el.value);
-        });
-      });
-      let min = Math.min(...[...arr]);
-
-      if (min === 0 && arr.size === 1) {
-        arr.add(-1);
-        arr.add(1);
-      } else if (arr.size === 1) {
-        let tenPer = [...arr][0] * 10 / 100;
-        arr.add([...arr][0] - tenPer);
-        arr.add([...arr][0] + tenPer);
-      }
-
-      return [...arr];
-    }
-    /**
-    * Create set of time values
-    * @param {data} data 
-    */
-
-
-    maxTime(data) {
-      let arr = [];
-      data.forEach(element => {
-        element.datapoints.forEach(el => {
-          arr.push(el.time);
-        });
-      });
-      return arr;
-    }
-
-  }
-
-  /**
    * @name LineGraph
    * @description
    * @extends HTMLElement
@@ -6631,7 +6642,7 @@
       this.getDataLineColor(this.dataset.lineColor);
       return data.map((item, i) => {
         let pointsArray = [];
-        let group = findByProp(item, grouping);
+        let group = Utils.findByProp(item, grouping);
         let valuesArray = Object.keys(item.values); // loop through each time property
 
         for (const obj of valuesArray) {
@@ -6680,16 +6691,15 @@
 
 
     renderGraph(data, el) {
-      var helper = new Helper(); // Setup the margins and height, width
-
+      // Setup the margins and height, width
       var margin = JSON.parse(this.dataset.margin);
       var height = parseInt(this.dataset.height);
       var width = parseInt(this.dataset.width);
       var unit = this.dataset.unit; // Create X time scale
 
-      var xScale = time().domain(extent(helper.maxTime(data))).range([0, width - margin.bottom]); // Create Y linear scale
+      var xScale = time().domain(extent(Utils.maxTime(data))).range([0, width - margin.bottom]); // Create Y linear scale
 
-      var yScale = linear$1().domain(extent(helper.maxValue(data))).range([height - margin.left, 0]); // create color scale for each line
+      var yScale = linear$1().domain(extent(Utils.maxValue(data))).range([height - margin.left, 0]); // create color scale for each line
       // Define a div and add styling for tooltip
 
       var div = select("body").append("div").attr("class", "tooltip"); // Setup the svg element in the DOM

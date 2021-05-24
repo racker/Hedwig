@@ -1,4 +1,4 @@
-
+import {  Utils} from "../core/utils";
 /**
  * @name AxisLeft
  * @description
@@ -20,11 +20,9 @@ export class AxisLeft {
             case unit === 'count':
                 return d;
             case unit === 'b':
-                return d + ' b';
-            case unit === 'kb':
-                return d + ' kb';
+            case unit === 'kb':    
             case unit === 'mb':
-                return d + ' mb';
+               return Utils.formatBytes(d,2);
             case unit === 'frames':
                 return d + ' frames/s';
             case unit === 'overruns':

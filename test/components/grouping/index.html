@@ -1,0 +1,74 @@
+<html>
+    <head>
+        <script src="../../../../dist/hedwig-main.umd.js"></script>
+    </head>
+    <body>
+        <script>
+            var mock = [
+            {
+            "tenant": "t-1",
+            "metricName": "cpu_idle",
+            "tags": {
+              "host": "h-1",
+              "os": "linux",
+              "deployment": "prod",
+              "metricGroup": "cpu"
+            },
+            "values": {
+              "2020-08-24T00:13:16Z": 90.0,
+              "2020-08-25T00:13:20Z": 70.0,
+              "2020-08-26T00:13:21Z": 60.0,
+              "2020-08-27T00:15:52Z": 84.0,
+              "2020-08-28T00:15:55Z": 75.0,
+              "2020-09-01T00:15:52Z": 88.0,
+              "2020-09-02T00:15:55Z": 67.0
+            }
+          },
+          {
+            "tenant": "t-1",
+            "metricName": "cpu_idle",
+            "tags": {
+              "host": "h-3",
+              "os": "windows",
+              "deployment": "dev",
+              "metricGroup": "cpu"
+            },
+            "values": {
+              "2020-08-29T00:15:52Z": 88.0,
+              "2020-08-30T00:15:55Z": 22.0
+            }
+          },
+          {
+            "tenant": "t-1",
+            "metricName": "cpu_idle",
+            "tags": {
+              "host": "h-2",
+              "os": "123",
+              "deployment": "staging",
+              "metricGroup": "cpu"
+            },
+            "values": {
+              "2020-08-29T00:15:52Z": 65.0,
+              "2020-08-30T00:15:55Z": 95.0
+            }
+          },
+          {
+            "tenant": "t-1",
+            "metricName": "cpu_idle",
+            "tags": {
+              "host": "h-4",
+              "os": "abc",
+              "deployment": "prod",
+              "metricGroup": "cpu"
+            },
+            "values": {
+              "2020-09-01T00:15:52Z": 88.0,
+              "2020-09-02T00:15:55Z": 67.0
+            }
+          }
+            ];
+
+            document.write('<hedwig-graph data-type="MAAS_cpu" data-group="tags.host" data-field="usage_average" data-height="400" data-width="1000" data-graph=' + JSON.stringify(mock) + '></hedwig-graph>');
+        </script>
+    </body>
+</html>

@@ -3,8 +3,8 @@ var scenarioConfig = {};
 scenarioConfig.config = (host, port) =>
 {
     return {
-        "label": `HTTP - certs-bits`,
-        "url": `${host}:${port}/http/certs-bits/index.html`,
+        "label": `Multiple Line Grouping`,
+        "url": `${host}:${port}/grouping/index.html`,
         "referenceUrl": ``,
         "readyEvent": ``,
         "readySelector": ``,

@@ -3,8 +3,8 @@ var scenarioConfig = {};
 scenarioConfig.config = (host, port) =>
 {
     return {
-        "label": `Filesystem - Total`,
-        "url": `${host}:${port}/filesystem/filesystem-total/index.html`,
+        "label": `Single Line Graph`,
+        "url": `${host}:${port}/single/index.html`,
         "referenceUrl": ``,
         "readyEvent": ``,
         "readySelector": ``,

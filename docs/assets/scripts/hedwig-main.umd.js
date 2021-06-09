@@ -6629,26 +6629,26 @@
     }
     /**
      * @name parseData
-     * @param {Array} data
+     * @param {Array} requestBody
      * @description
      * Parses data into an array and converts dates into
      * javascript date objects which is required for d3js
      */
 
 
-    parseData(data) {
+    parseData(requestBody) {
       let grouping = this.dataset.group; // get color array
 
       this.getDataLineColor(this.dataset.lineColor);
-      return data.map((item, i) => {
+      return requestBody.map((item, i) => {
         let pointsArray = [];
-        let group = Utils.findByProp(item, grouping);
-        let valuesArray = Object.keys(item.values); // loop through each time property
+        let group = Utils.findByProp(item.data, grouping);
+        let valuesArray = Object.keys(item.data.values); // loop through each time property
 
         for (const obj of valuesArray) {
           pointsArray.push({
             time: new Date(obj),
-            value: +item.values[obj]
+            value: +item.data.values[obj]
           });
         }
 
@@ -7149,7 +7149,7 @@
 
     dataPoints(data) {
       this.graphInfo = new FindInfo().info(this.dataset.type, this.dataset.field);
-      this.graphData = data;
+      this.graphData = data.replace(/\s/g, '-');
     }
     /**
      * @name disconnectedCallback
@@ -7173,7 +7173,7 @@
      * @name attributeChangedCallback
      * @description This callback is fired when attribute values change for
      * @param {string} name attribute name
-     * @param {any} oldValue original value upon page load, will most of the time be blank
+     * @param {any} oldValue original value upon page loadstomize the , will most of the time be blank
      * @param {any} newValue new value bound to the attribute
      */
 

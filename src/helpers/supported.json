@@ -1,7 +1,12 @@
 {
   "graphs": {
     "MAAS_cpu": {
-      "metric": [{
+      "metric": [
+        {
+          "field": "system_key",
+          "unit": "%"
+        },
+        {
           "field": "usage_average",
           "unit": "%"
         },

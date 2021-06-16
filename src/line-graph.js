@@ -27,7 +27,7 @@ export class LineGraph extends HTMLElement {
   connectedCallback() {
 
     let id = 'hedwig-' + btoa(Math.random()).substr(5, 5);
-    this.innerHTML = `<style>${styleSheet}</style><svg id='${id}'></svg>`;
+    this.innerHTML = `<style>${styleSheet}</style><svg id='${id}'></svg><div id="test">gello</div>`;
     var svg = document.querySelector(`#${id}`);
     var data = JSON.parse(this.dataset.graph);
 
@@ -122,10 +122,11 @@ export class LineGraph extends HTMLElement {
     var svg = d3.select(el)
       .styles({
         "width": width + margin.left + +margin.right,
-        "height": height + +margin.top + +margin.bottom
+        "height": height + +margin.top + +margin.bottom,
+        "overflow": "inherit"
       })
       .append('g')
-      .attr("transform", `translate(${margin.top}, ${margin.left})`);
+      .attr("transform", `translate(${margin.top}, 0)`);
 
     // Create the lines
     var line = d3.line()
@@ -218,14 +219,28 @@ export class LineGraph extends HTMLElement {
    */
   setLegend(svg, height, data) {
     var legend = svg.append("g")
-      .attrs({"class": "legend", 'transform': `translate(0,${height-50})`})
+      .attrs({"class": "legend", 'transform': `translate(0,${height-40})`})
       // create rectangle for legends
     legend.selectAll('rect')
       .data(data)
       .enter()
       .append("rect")
-      .attrs({"x": 18, "y": (d, i) => {
-        return i * 20 + 30;
+      .attrs({"x":(d, i) => { 
+        if(data.length<=4){return 18;}
+        if(i<=parseInt((data.length-1)/2)){
+          return 18;
+        }else{
+          return 200;
+        } 
+      }, "y": (d, i) => {
+
+        if(data.length<=4){return i * 20 + 30;}
+        if(i<=parseInt((data.length-1)/2)){
+          return i * 20 + 30
+        }else{
+          
+          return (((i-data.length)*-1)-1)*20 + 30;
+        }
       }, "width": 10, "height": 10 })
       .style("fill", (d) => {
         return d.color;
@@ -236,12 +251,24 @@ export class LineGraph extends HTMLElement {
       .enter()
       .append("text")
       .styles({"font-size":12})
-      .attrs({"x":36, "y": (d, i) => {
-        return i * 20 + 38;
+      .attrs({"x":(d, i) => {
+        if(data.length<=4){return 36;}
+        if(i<=parseInt((data.length-1)/2)){
+          return 36;
+        }else{
+          return 218;
+        } 
+      }, "y": (d, i) => {
+        if(data.length<=4){return i * 20 + 38;}
+        if(i<=parseInt((data.length-1)/2)){
+          return i * 20 + 39;
+        }else{
+          return (((i-data.length)*-1)-1)*20 + 39;
+        }
       }})
       .text((d) => {
         if (d.group) {
-          return d.group;
+          return d.group.split('/')[d.group.split('/').length-1];
         } else {
           return this.dataset.field
         }

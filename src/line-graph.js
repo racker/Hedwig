@@ -27,7 +27,7 @@ export class LineGraph extends HTMLElement {
   connectedCallback() {
 
     let id = 'hedwig-' + btoa(Math.random()).substr(5, 5);
-    this.innerHTML = `<style>${styleSheet}</style><svg id='${id}'></svg><div id="test">gello</div>`;
+    this.innerHTML = `<style>${styleSheet}</style><svg id='${id}'></svg>`;
     var svg = document.querySelector(`#${id}`);
     var data = JSON.parse(this.dataset.graph);
 
@@ -268,7 +268,7 @@ export class LineGraph extends HTMLElement {
       }})
       .text((d) => {
         if (d.group) {
-          return d.group.split('/')[d.group.split('/').length-1];
+          return d.group;
         } else {
           return this.dataset.field
         }

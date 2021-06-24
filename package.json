@@ -1,6 +1,6 @@
 {
   "name": "hedwig-monitoring-library",
-  "version": "3.5.0",
+  "version": "3.0.0",
   "main": "dist/hedwig-main.cjs.js",
   "module": "dist/hedwig-main.esm.js",
   "browser": "dist/hedwig-main.umd.js",
@@ -15,8 +15,12 @@
     "serve": "node -e \"require('./bin/server.js').start()\"",
     "reference": "node backstop.js --inspect-brk --reference --singleRun",
     "pack": "(exec npm pack) && (mv \"$(npm pack | tail -n 1)\" $npm_package_name.tgz)",
-    "release": "npm-github-release upload --file '$npm_package_name.tgz'"
+    "release": "npm-github-release"
   },
+
+  "bin": {
+    "npm-github-release": "./script.js"
+},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/racker/Hedwig.git"

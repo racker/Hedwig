@@ -13,7 +13,13 @@
     "visual-test": "node backstop.js --test --singleRun",
     "pretest": "npm run build",
     "serve": "node -e \"require('./bin/server.js').start()\"",
-    "reference": "node backstop.js --inspect-brk --reference --singleRun"
+    "reference": "node backstop.js --inspect-brk --reference --singleRun",
+    "pack": "(exec npm pack) && (mv \"$(npm pack | tail -n 1)\" $npm_package_name.tgz)",
+    "release": "npm-github-release"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/racker/Hedwig.git"
   },
   "files": [
     "dist"
@@ -21,7 +27,8 @@
   "dependencies": {
     "@webcomponents/webcomponentsjs": "2.2.1",
     "d3": "5.7.0",
-    "d3-selection-multi": "^1.0.1"
+    "d3-selection-multi": "^1.0.1",
+    "npm-github-release": "^0.13.0"
   },
   "devDependencies": {
     "@babel/core": "7.5.4",

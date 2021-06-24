@@ -17,9 +17,7 @@
     "pack": "(exec npm pack) && (mv \"$(npm pack | tail -n 1)\" $npm_package_name.tgz)",
     "release": "./script.js"
   },
-  "bin": {
-    "npm-github-release": "./script.js"
-  },
+
   "repository": {
     "type": "git",
     "url": "git+https://github.com/racker/Hedwig.git"

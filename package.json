@@ -15,7 +15,7 @@
     "serve": "node -e \"require('./bin/server.js').start()\"",
     "reference": "node backstop.js --inspect-brk --reference --singleRun",
     "pack": "(exec npm pack) && (mv \"$(npm pack | tail -n 1)\" $npm_package_name.tgz)",
-    "release": "npm-github-release"
+    "release": "npm-github-release $npm_package_name.tgz"
   },
   "repository": {
     "type": "git",

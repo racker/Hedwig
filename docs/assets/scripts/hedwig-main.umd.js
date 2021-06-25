@@ -6338,8 +6338,8 @@
         bottom: 50,
         left: 50
       };
-      this.graphHeight = 200;
-      this.graphWidth = 400;
+      this.height = 200;
+      this.width = 400;
       this.lineColor = '#0c7c84';
       this.schemeCategory10Color = category10;
     }
@@ -7109,6 +7109,7 @@
   class GraphEngine extends HTMLElement {
     constructor() {
       super();
+      this.defaults = new Defaults();
     }
     /**
      * @name connectedCallback
@@ -7118,12 +7119,10 @@
 
 
     connectedCallback() {
-      this.defaults = {};
-      var defaults = new Defaults();
-      this.defaults.margin = this.dataset.margin || defaults.margin;
-      this.defaults.height = (this.dataset.height || defaults.graphHeight) - this.defaults.margin.top - this.defaults.margin.bottom;
-      this.defaults.width = (this.dataset.width || defaults.graphWidth) - this.defaults.margin.left - this.defaults.margin.right;
-      this.defaults.lineColor = this.dataset.lineColor || defaults.lineColor;
+      this.defaults.margin = this.dataset.margin || this.defaults.margin;
+      this.defaults.height = (this.dataset.height || this.defaults.height) - this.defaults.margin.top - this.defaults.margin.bottom;
+      this.defaults.width = (this.dataset.width || this.defaults.width) - this.defaults.margin.left - this.defaults.margin.right;
+      this.defaults.lineColor = this.dataset.lineColor || this.defaults.lineColor;
       this.defaults.unit = this.dataset.unit;
       this.render();
     }
@@ -7136,9 +7135,30 @@
 
 
     render() {
-      if (this.defaults && this.graphData) {
+      if (this.graphData) {
         this.innerHTML = "<line-graph data-margin=" + JSON.stringify(this.defaults.margin) + " data-height=" + this.defaults.height + " data-width=" + this.defaults.width + " data-graph=" + this.graphData + " data-unit=" + (this.graphInfo.unit || this.defaults.unit) + " data-line-color=" + this.defaults.lineColor + " data-field=" + this.graphInfo.field + " data-title=" + JSON.stringify(this.dataset.title) + " data-group=" + this.dataset.group + "></lineGraph>";
       }
+    }
+    /**
+     * @name preRender
+     * @description setup default height & width - resize, change unit
+     */
+
+
+    preRender(object) {
+      if (object.hasOwnProperty('width')) {
+        this.defaults.width = object.width;
+      }
+
+      if (object.hasOwnProperty('height')) {
+        this.defaults.height = object.height;
+      }
+
+      if (object.hasOwnProperty('margin')) {
+        this.defaults.margin = object.margin;
+      }
+
+      this.render();
     }
     /**
      * @name dataPoints
@@ -7150,6 +7170,7 @@
     dataPoints(data) {
       this.graphInfo = new FindInfo().info(this.dataset.type, this.dataset.field);
       this.graphData = data.replace(/\s/g, '-');
+      this.preRender({});
     }
     /**
      * @name disconnectedCallback
@@ -7167,7 +7188,7 @@
 
 
     static get observedAttributes() {
-      return ['data-graph'];
+      return ['data-width', 'data-height', 'data-graph'];
     }
     /**
      * @name attributeChangedCallback
@@ -7179,9 +7200,24 @@
 
 
     attributeChangedCallback(name, oldValue, newValue) {
-      if (newValue && name === "data-graph") {
-        this.dataPoints(newValue);
-        this.render();
+      switch (!!newValue) {
+        case name === "data-graph":
+          return this.dataPoints(newValue);
+
+        case name === "data-width":
+          return this.preRender({
+            width: newValue
+          });
+
+        case name === "data-height":
+          return this.preRender({
+            height: newValue
+          });
+
+        case name === "data-margin":
+          return this.preRender({
+            margin: newValue
+          });
       }
     }
 

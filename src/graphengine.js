@@ -8,8 +8,11 @@ import { FindInfo } from "./helpers/supportedInfo";
  * Base graph
  */
 export class GraphEngine extends HTMLElement {
+
+
     constructor() {
         super();
+        this.defaults = new Defaults();
     }
 
     /**
@@ -18,13 +21,12 @@ export class GraphEngine extends HTMLElement {
      * Call back for when the component is attached to the DOM
      */
     connectedCallback() {
-        this.defaults = {};
-        var defaults = new Defaults();
-        this.defaults.margin = this.dataset.margin || defaults.margin;
-        this.defaults.height = (this.dataset.height || defaults.graphHeight) - this.defaults.margin.top - this.defaults.margin.bottom;
-        this.defaults.width = (this.dataset.width || defaults.graphWidth) - this.defaults.margin.left - this.defaults.margin.right;
-        this.defaults.lineColor = this.dataset.lineColor || defaults.lineColor;
+        this.defaults.margin = this.dataset.margin || this.defaults.margin;
+        this.defaults.height = (this.dataset.height || this.defaults.height) - this.defaults.margin.top - this.defaults.margin.bottom;
+        this.defaults.width = (this.dataset.width || this.defaults.width) - this.defaults.margin.left - this.defaults.margin.right;
+        this.defaults.lineColor = this.dataset.lineColor || this.defaults.lineColor;
         this.defaults.unit = this.dataset.unit;
+
         this.render();
     }
 
@@ -35,7 +37,7 @@ export class GraphEngine extends HTMLElement {
      * @param {string} data this param is collected from the data-graph attribute
      */
     render () {
-        if (this.defaults && this.graphData) {
+        if (this.graphData) {
             this.innerHTML = "<line-graph data-margin=" + JSON.stringify(this.defaults.margin) +
             " data-height=" + this.defaults.height +
             " data-width=" + this.defaults.width +
@@ -48,6 +50,30 @@ export class GraphEngine extends HTMLElement {
         }
     }
 
+
+    /**
+     * @name resize
+     * @param {}
+     * @description setup default height & width - resize, change unit
+     */
+    resize(object) {
+
+        if (object.hasOwnProperty('width')) {
+            this.defaults.width = object.width;
+        }
+
+        if (object.hasOwnProperty('height')) {
+            this.defaults.height = object.height;
+        }
+
+        if (object.hasOwnProperty('margin')) {
+            this.defaults.margin = object.margin;
+        }
+
+        this.render();
+    }
+
+
     /**
      * @name dataPoints
      * @description Sets datapoints this.graphdata
@@ -56,6 +82,7 @@ export class GraphEngine extends HTMLElement {
     dataPoints(data){
         this.graphInfo = new FindInfo().info(this.dataset.type, this.dataset.field);
         this.graphData = data.replace(/\s/g, '-');
+        this.resize({});
     }
 
     /**
@@ -71,7 +98,12 @@ export class GraphEngine extends HTMLElement {
      * @returns {Array} an array of attribute to watch for value changes
      */
     static get observedAttributes() {
-        return ['data-graph'];
+        return [
+            'data-width',
+            'data-height',
+            'data-graph',
+            'data-margin'
+        ];
     }
 
     /**
@@ -82,9 +114,15 @@ export class GraphEngine extends HTMLElement {
      * @param {any} newValue new value bound to the attribute
      */
     attributeChangedCallback(name, oldValue, newValue) {
-        if (newValue && name === "data-graph") {
-            this.dataPoints(newValue);
-            this.render();
+        switch(!!newValue) {
+            case name === "data-graph":
+                return this.dataPoints(newValue);
+            case name === "data-width":
+                return this.resize({width: newValue})
+            case name === "data-height":
+                return this.resize({height: newValue});
+            case name === "data-margin":
+                return this.resize({margin: newValue});
         }
     }
 }

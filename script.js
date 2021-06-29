@@ -189,10 +189,11 @@ function run() {
                console.log("output ", JSON.stringify(output));
                
                var filename = fullPath.replace(/^.*[\\\/]/, '');
-                console.log("filename  ", filename);
 
 
                console.log("releaseTagName ", releaseTagName);
+               console.log("filename  ", filename);
+
                 
                await putasset(ghToken, {
                     owner: 'racker',

@@ -9,6 +9,9 @@ var Promise = require("bluebird");
 var pexec = Promise.promisify(require('child_process').exec);
 var readline = require('readline');
 const putasset = require('putasset');
+const packageJSON = require("path/to/your/package.json");
+
+
 
 
 function checkForPackageInfoRequirements() {
@@ -183,24 +186,15 @@ function run() {
             return createGitHubRelease(repoName, releaseTagName, releaseNotes, ghToken);
         })
         .then(async (output) => {
-            console.log("\x1b[1m\x1b[32m%s\x1b[0m", `${releaseTagName} released to GitHub - ${output}`);
-               console.log("ghToken ", ghToken);
+            console.log("\x1b[1m\x1b[32m%s\x1b[0m", `${releaseTagName} released to GitHub - ${output}`);  
+                        
+            console.log(packageJSON.name);
 
-               console.log("output ", JSON.stringify(output));
-               
-               console.log("releaseTagName ", releaseTagName);
-
-               var filename = fullPath.replace(/^.*[\\\/]/, '');
-
-
-               console.log("filename  ", filename);
-
-                
                await putasset(ghToken, {
                     owner: 'racker',
                     repo: 'Hedwig',
                     tag: releaseTagName,
-                    filename: 'hedwig-monitoring-library.tgz',
+                    filename: packageJSON.name+'.tgz',
                 }).then((url) => {
                     console.log(`Upload success, download url: ${url}`);
                 }).catch((error) => {

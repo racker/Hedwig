@@ -9,7 +9,6 @@ var Promise = require("bluebird");
 var pexec = Promise.promisify(require('child_process').exec);
 var readline = require('readline');
 const putasset = require('putasset');
-const packageJSON = require("./package.json");
 
 
 
@@ -193,7 +192,7 @@ function run() {
                     owner: owner,
                     repo: repo,
                     tag: releaseTagName,
-                    filename: packageJSON.name+'.tgz',
+                    filename: packageInfo.name+'.tgz',
                 }).then((url) => {
                     console.log(`Upload success, download url: ${url}`);
                 }).catch((error) => {

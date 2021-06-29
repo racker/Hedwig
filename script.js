@@ -185,6 +185,13 @@ function run() {
         .then(async (output) => {
             console.log("\x1b[1m\x1b[32m%s\x1b[0m", `${releaseTagName} released to GitHub - ${output}`);
                console.log("ghToken ", ghToken);
+
+               console.log("output ", JSON.stringify(output));
+               
+               var filename = fullPath.replace(/^.*[\\\/]/, '');
+                console.log("filename  ", filename);
+
+
                console.log("releaseTagName ", releaseTagName);
                 
                await putasset(ghToken, {

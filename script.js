@@ -8,6 +8,8 @@ var github = require("octonode");
 var Promise = require("bluebird");
 var pexec = Promise.promisify(require('child_process').exec);
 var readline = require('readline');
+const putasset = require('putasset');
+
 
 function checkForPackageInfoRequirements() {
     return new Promise(function (resolve, reject) {
@@ -32,16 +34,6 @@ function checkForUncommitedChanges() {
     });
 }
 
-function uploadAssets() {
-    var url = 'https://uploads.github.com/repos/hubot/singularity/releases/123/assets?name=1.0.0-mac.zip'
-    return new Promise(function (resolve, reject) {
-        var xhr = new XMLHttpRequest;
-        xhr.addEventListener("error", reject);
-        xhr.addEventListener("load", resolve);
-        xhr.open("GET", '');
-        xhr.send(null);
-    });
-}    
 
 
 function promptVersionType() {

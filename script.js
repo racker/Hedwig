@@ -160,6 +160,8 @@ function run() {
     let ghToken = null;
     let releaseNotes = null;
     let releaseTagName = null;
+    let owner = 'racker';
+    let repo = 'Hedwig';
 
     checkForPackageInfoRequirements()
         .then(() => {
@@ -187,12 +189,9 @@ function run() {
         })
         .then(async (output) => {
             console.log("\x1b[1m\x1b[32m%s\x1b[0m", `${releaseTagName} released to GitHub - ${output}`);  
-                        
-            console.log(packageJSON.name);
-
                await putasset(ghToken, {
-                    owner: 'racker',
-                    repo: 'Hedwig',
+                    owner: owner,
+                    repo: repo,
                     tag: releaseTagName,
                     filename: packageJSON.name+'.tgz',
                 }).then((url) => {

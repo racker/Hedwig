@@ -182,10 +182,12 @@ function run() {
             let repoName = packageInfo.repository.url.match(/\.com\/(\w+\/(?:(?!\.git)[^/])*)/)[1];
             return createGitHubRelease(repoName, releaseTagName, releaseNotes, ghToken);
         })
-        .then((output) => {
+        .then(async (output) => {
             console.log("\x1b[1m\x1b[32m%s\x1b[0m", `${releaseTagName} released to GitHub - ${output}`);
-
-                putasset(ghToken, {
+               console.log("ghToken ", ghToken);
+               console.log("releaseTagName ", releaseTagName);
+                
+               await putasset(ghToken, {
                     owner: 'racker',
                     repo: 'Hedwig',
                     tag: releaseTagName,
@@ -196,12 +198,6 @@ function run() {
                     console.error(error.message);
                 });
 
-
-        })
-        .then(() => {
-            let npmUrl = `https://www.npmjs.com/package/` + packageInfo.name;
-            console.log("\x1b[1m\x1b[32m%s\x1b[0m", `${releaseTagName} released to npm - ${npmUrl}`);
-            process.exit(0);
         })
         .catch((errorMessage) => {
             console.log("\x1b[31mERROR: %s\x1b[0m", errorMessage);

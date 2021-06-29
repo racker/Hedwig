@@ -1,6 +1,6 @@
 {
   "name": "hedwig-monitoring-library",
-  "version": "6.0.0",
+  "version": "7.0.0",
   "main": "dist/hedwig-main.cjs.js",
   "module": "dist/hedwig-main.esm.js",
   "browser": "dist/hedwig-main.umd.js",

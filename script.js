@@ -32,6 +32,18 @@ function checkForUncommitedChanges() {
     });
 }
 
+function uploadAssets() {
+    var url = 'https://uploads.github.com/repos/hubot/singularity/releases/123/assets?name=1.0.0-mac.zip'
+    return new Promise(function (resolve, reject) {
+        var xhr = new XMLHttpRequest;
+        xhr.addEventListener("error", reject);
+        xhr.addEventListener("load", resolve);
+        xhr.open("GET", '');
+        xhr.send(null);
+    });
+}    
+
+
 function promptVersionType() {
     return new Promise(function (resolve, reject) {
         inquirer.prompt([
@@ -179,8 +191,20 @@ function run() {
             return createGitHubRelease(repoName, releaseTagName, releaseNotes, ghToken);
         })
         .then((output) => {
-            console.log("\x1b[1m\x1b[32m%s\x1b[0m", `${releaseTagName} released to GitHub - ${output.html_url}`);
-            //return npmPublish(releaseTagName);
+            console.log("\x1b[1m\x1b[32m%s\x1b[0m", `${releaseTagName} released to GitHub - ${output}`);
+
+                putasset(ghToken, {
+                    owner: 'racker',
+                    repo: 'Hedwig',
+                    tag: releaseTagName,
+                    filename: 'hedwig-monitoring-library.tgz',
+                }).then((url) => {
+                    console.log(`Upload success, download url: ${url}`);
+                }).catch((error) => {
+                    console.error(error.message);
+                });
+
+
         })
         .then(() => {
             let npmUrl = `https://www.npmjs.com/package/` + packageInfo.name;

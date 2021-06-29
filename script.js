@@ -188,10 +188,11 @@ function run() {
 
                console.log("output ", JSON.stringify(output));
                
+               console.log("releaseTagName ", releaseTagName);
+
                var filename = fullPath.replace(/^.*[\\\/]/, '');
 
 
-               console.log("releaseTagName ", releaseTagName);
                console.log("filename  ", filename);
 
                 

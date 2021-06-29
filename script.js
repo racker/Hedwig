@@ -9,7 +9,7 @@ var Promise = require("bluebird");
 var pexec = Promise.promisify(require('child_process').exec);
 var readline = require('readline');
 const putasset = require('putasset');
-const packageJSON = require("path/to/your/package.json");
+const packageJSON = require("./package.json");
 
 
 

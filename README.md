@@ -38,7 +38,7 @@ jekyll serve
 Now browse to http://localhost:4000
 
 
-For installing hedwig library inside any other project, For e.g - Minerva, we need to run command `npm pack` inside Hedwig. This command creates `hedwig-monitoring-library-1.0.0.tgz` file. Now we need to attach this file to release section in Hedwig github repository to make a release. Once it got published as a release, we then copy the URL link by right click on the `tgz` file and paste the same into package.json file of the project where it needs to be used, e.g: Minerva.
+For installing hedwig library inside any other project, For e.g - Minerva, we need to run command `npm run release` inside Hedwig. This command creates `hedwig-monitoring-library.tgz` file. Now we need to attach this file to release section in Hedwig github repository to make a release which is already done by `script.js` file. Once it got published as a release, we then copy the URL link by right click on the `tgz` file and paste the same into package.json file of the project where it needs to be used, e.g: Minerva.
 
 for e.g: if we want to use the same in Minerva project then the package file should look like : `"hedwig-monitoring-library": "https://github.com/racker/Hedwig/releases/download/0.0.6/hedwig-monitoring-library-1.0.0.tgz"`
 

@@ -1,5 +1,6 @@
 var scenarioConfig = {};
 
+
 scenarioConfig.config = (host, port) =>
 {
     return {
@@ -12,7 +13,7 @@ scenarioConfig.config = (host, port) =>
         "hideSelectors": [],
         "removeSelectors": [],
         "hoverSelector": ``,
-        "clickSelector": ``,
+        "clickSelector": `.textoutside7`,
         "postInteractionWait": 0,
         "selectors": [ ],
         "selectorExpansion": true,

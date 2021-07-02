@@ -18,7 +18,9 @@ module.exports = (options) => {
             "height": 1024
           }
         ],
-        //"onReadyScript": `puppet/onReady.js`,
+        /* when attempting to create a test for click events we will make
+           use of the onReadyScript  */
+        // "onReadyScript": `puppet/onReady.js`,
         "scenarios": options.scenarios,
         "paths": {
             "bitmaps_reference": `test/backstop_data/bitmaps_references`,

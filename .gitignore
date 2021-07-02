@@ -8,3 +8,5 @@ _site
 coverage
 test/backstop_data
 .idea
+# ignore tgz file
+*.tgz

@@ -18,6 +18,8 @@ module.exports = (options) => {
             "height": 1024
           }
         ],
+        /* when attempting to create a test for click events we will make
+           use of the onReadyScript  */
         // "onReadyScript": `puppet/onReady.js`,
         "scenarios": options.scenarios,
         "paths": {

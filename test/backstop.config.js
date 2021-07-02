@@ -18,13 +18,17 @@ module.exports = (options) => {
             "height": 1024
           }
         ],
+        /* when attempting to create a test for click events we will make
+           use of the onReadyScript  */
+        // "onReadyScript": `puppet/onReady.js`,
         "scenarios": options.scenarios,
         "paths": {
             "bitmaps_reference": `test/backstop_data/bitmaps_references`,
             "bitmaps_test": `test/backstop_data/bitmaps_test`,
             "casper_scripts": `test/backstop_data/casper_scripts`,
             "html_report": `test/backstop_data/html_report`,
-            "ci_report": `test/backstop_data/ci_report`
+            "ci_report": `test/backstop_data/ci_report`,
+            "engine_scripts": "test/engine_scripts"
         },
         "report": ["browser"],
         "engine": "puppeteer",

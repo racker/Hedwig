@@ -18,7 +18,7 @@ module.exports = (options) => {
             "height": 1024
           }
         ],
-        // "onReadyScript": `puppet/onReady.js`,
+        //"onReadyScript": `puppet/onReady.js`,
         "scenarios": options.scenarios,
         "paths": {
             "bitmaps_reference": `test/backstop_data/bitmaps_references`,
@@ -26,7 +26,7 @@ module.exports = (options) => {
             "casper_scripts": `test/backstop_data/casper_scripts`,
             "html_report": `test/backstop_data/html_report`,
             "ci_report": `test/backstop_data/ci_report`,
-            "engine_scripts": "test/backstop_data/engine_scripts"
+            "engine_scripts": "test/engine_scripts"
         },
         "report": ["browser"],
         "engine": "puppeteer",

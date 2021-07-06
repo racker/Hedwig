@@ -181,7 +181,7 @@ export class LineGraph extends HTMLElement {
     var xAxis = d3.axisBottom(xScale).ticks(5);
     // Configure Y Axis ticks and
     var yAxis = d3.axisLeft(yScale).ticks(5).tickFormat((d) => {
-      return new AxisLeft().convert(unit, d);
+      return `${d}${unit}`;
     });
 
 
@@ -225,20 +225,20 @@ export class LineGraph extends HTMLElement {
       .data(data)
       .enter()
       .append("rect")
-      .attrs({"x":(d, i) => { 
+      .attrs({"x":(d, i) => {
         if(data.length<=4){return 18;}
         if(i<=parseInt((data.length-1)/2)){
           return 18;
         }else{
           return 200;
-        } 
+        }
       }, "y": (d, i) => {
 
         if(data.length<=4){return i * 20 + 30;}
         if(i<=parseInt((data.length-1)/2)){
           return i * 20 + 30
         }else{
-          
+
           return (((i-data.length)*-1)-1)*20 + 30;
         }
       }, "width": 10, "height": 10 })
@@ -257,7 +257,7 @@ export class LineGraph extends HTMLElement {
           return 36;
         }else{
           return 218;
-        } 
+        }
       }, "y": (d, i) => {
         if(data.length<=4){return i * 20 + 38;}
         if(i<=parseInt((data.length-1)/2)){

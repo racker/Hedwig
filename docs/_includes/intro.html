@@ -30,104 +30,244 @@
       Just add a component tag to your page and add any data-* attributes for configuration
     </p>
     <br>
-    <pre><code class='html'>&lt;hedwig-graph data-type="MAAS_cpu" data-field="usage_average" data-height="200" data-width="400" data='[someBoundData]' &gt;&lt;/hedwig-graph&gt;</code></pre>
+    <pre><code class='html'>&lt;hedwig-graph data-unit="percentage" data-height="200" data-width="400" data-graph='[someBoundData]' &gt;&lt;/hedwig-graph&gt;</code></pre>
     <br>
     <p>This will render the graph, taking in the data and mapping according to the components perscribed data format.</p>
     <br/>
     <p>
-        <em>data-type</em><br/>This is required for the graph to render, the value must correspond
-      with the list of accepted measurement names.
+      <em>data-graph</em><span color="red">(required)</span><br/>This is required for the graph to render, this is the set of data that will include
+        the datapoints related to the x & y coordinates.
       <br/><br/>
-      <em>data-field</em><br/> This is required for the graph to render, the value must correspond with the matching
-      field name for the measurement.
+      <em>data-unit</em><br/> This is the value to be passed along to the graph to determine what symbol or word to show along side
+      the y ticks.
       <br/><br/>
       <em>data-title</em><br/> Use to Set title of graph.
     </p>
+    <br/>
+    <script>
+      var graphBasic = [
+  {
+    "data": {
+      "tenant": "hybrid:5454",
+      "metricName": "CPU_total",
+      "tags": {
+        "accountType": "MANAGED_HOSTING",
+        "metricGroup": "network",
+        "monitoring_system": "ZENOSS",
+        "resource": "5454",
+        "resource_account_id": "4876373",
+        "resource_cmdb_source": "CORE",
+        "system_device": "80244",
+        "system_key": "Devices/802836",
+        "unit": "percentage"
+      },
+      "values": {
+        "2021-06-29T21:00:10Z": 54.127630767822266,
+        "2021-06-29T21:20:10Z": 87.447630767822266,
+        "2021-06-29T23:55:10Z": 33.67766128540039,
+        "2021-06-30T02:05:10Z": 29.23769943237305,
+        "2021-06-30T02:30:10Z": 31.547718505859375,
+        "2021-06-30T06:40:10Z": 67.127779541015625,
+        "2021-06-30T08:30:10Z": 93.3510779098510742,
+        "2021-06-30T09:15:10Z": 14.61779861450195,
+        "2021-06-30T09:25:10Z": 37.11779861450195,
+        "2021-06-30T10:55:10Z": 65.871787109375,
+        "2021-06-30T14:50:10Z": 89.23795883178711,
+        "2021-06-30T16:00:10Z": 41.00217199707,
+        "2021-06-31T06:40:10Z": 67.127779541015625,
+        "2021-06-31T08:30:10Z": 93.3510779098510742,
+        "2021-06-31T09:15:10Z": 14.61779861450195,
+        "2021-06-31T09:25:10Z": 37.11779861450195,
+        "2021-06-31T10:55:10Z": 65.871787109375,
+        "2021-06-31T14:50:10Z": 89.23795883178711,
+        "2021-06-31T16:00:10Z": 41.00217199707
+      }
+    },
+    "metadata": {
+      "aggregator": "raw",
+      "startTime": "2021-06-29T16:01:46.684752Z",
+      "endTime": "2021-06-30T16:01:46.684777Z"
+    }
+  }
+];
+
+    document.write('<hedwig-graph data-title="CPU" data-unit="percentage" data-field="CPU_total" data-height="500" data-width="800" data-graph=' + JSON.stringify(graphBasic) + '></hedwig-graph>');
+  </script>
+
+
   </div>
   <br><br>
   <div id='grouping'>
     <h3>Grouping & MultiLine Graphs</h3>
     <p>
       One of the features Hedwig has is the ability to create multiline graphs. This can be relevant for when
-      more than one device is wanting to be displayed in a graph or more than one monitor for a specific device.
+      more than one device or other category is wanting to be displayed in a graph or more than one monitor for a specific device.
     </p>
     <p>
       For displaying a multiline graph be sure to specify the key in the JSON data that will be used to group the metrics.
       Consider the following data:
       <pre>
         <code class="html">
-          [{
-            "mean": 0.99,
-            "time": "2018-11-24T18:58:21Z",
-            "device": "6221-forestofdean.prod.com"
-            },
-            {
-            "mean": 0.67,
-            "time": "2018-11-25T23:58:21Z",
-            "device": "6221-forestofdean.prod.com"
-            },
-            {
-            "mean": 0.33,
-            "time": "2018-11-26T02:58:21Z",
-            "device": "6221-forestofdean.prod.com"
-            },
-            {
-            "mean": 0.45,
-            "time": "2018-11-24T18:58:21Z",
-            "device": "7877-ministryofmagic.staging.com"
-            },
-            {
-            "mean": 0.10,
-            "time": "2018-11-25T23:58:21Z",
-            "device": "7877-ministryofmagic.staging.com"
-            },
-            {
-            "mean": 0.89,
-            "time": "2018-11-26T02:58:21Z",
-            "device": "7877-ministryofmagic.staging.com"
-            }]
+          [
+  {
+    "data": {
+      "tenant": "hybrid:5454",
+      "metricName": "CPU_total",
+      "tags": {
+        "accountType": "MANAGED_HOSTING",
+        "metricGroup": "network",
+        "monitoring_system": "ZENOSS",
+        "resource": "5454",
+        "resource_account_id": "4876373",
+        "resource_cmdb_source": "CORE",
+        "system_device": "80244",
+        "system_key": "Devices/802836",
+        "unit": "percentage"
+      },
+      "values": {
+        "2021-06-29T21:00:10Z": 54.127630767822266,
+        "2021-06-29T21:20:10Z": 87.447630767822266,
+        "2021-06-29T23:55:10Z": 33.67766128540039,
+        "2021-06-30T02:05:10Z": 29.23769943237305,
+        "2021-06-30T02:30:10Z": 31.547718505859375,
+        "2021-06-30T06:40:10Z": 67.127779541015625,
+        "2021-06-30T08:30:10Z": 93.3510779098510742,
+        "2021-06-30T09:15:10Z": 14.61779861450195,
+        "2021-06-30T09:25:10Z": 37.11779861450195,
+        "2021-06-30T10:55:10Z": 65.871787109375,
+        "2021-06-30T14:50:10Z": 89.23795883178711,
+        "2021-06-30T16:00:10Z": 41.00217199707
+      }
+    },
+    "metadata": {
+      "aggregator": "raw",
+      "startTime": "2021-06-29T16:01:46.684752Z",
+      "endTime": "2021-06-30T16:01:46.684777Z"
+    }
+  },
+  {
+    "data": {
+      "tenant": "hybrid:4876373",
+      "metricName": "CPU_total",
+      "tags": {
+        "accountType": "MANAGED_HOSTING",
+        "metricGroup": "network",
+        "monitoring_system": "ZENOSS",
+        "resource": "80277",
+        "resource_account_id": "4876373",
+        "resource_cmdb_source": "CORE",
+        "system_device": "80277",
+        "system_key": "Devices/802835",
+        "unit": "percentage"
+      },
+      "values": {
+        "2021-06-29T21:00:10Z": 24.127630767822266,
+        "2021-06-29T21:20:10Z": 77.447630767822266,
+        "2021-06-29T23:55:10Z": 53.67766128540039,
+        "2021-06-30T02:05:10Z": 19.23769943237305,
+        "2021-06-30T02:30:10Z": 81.547718505859375,
+        "2021-06-30T06:40:10Z": 97.127779541015625,
+        "2021-06-30T08:30:10Z": 33.3510779098510742,
+        "2021-06-30T09:15:10Z": 24.61779861450195,
+        "2021-06-30T09:25:10Z": 37.11779861450195,
+        "2021-06-30T10:55:10Z": 65.871787109375,
+        "2021-06-30T14:50:10Z": 69.23795883178711,
+        "2021-06-30T16:00:10Z": 21.00217199707
+      }
+    },
+    "metadata": {
+      "aggregator": "raw",
+      "startTime": "2021-06-29T16:01:46.684752Z",
+      "endTime": "2021-06-30T16:01:46.684777Z"
+    }
+  }
+]
         </code>
       </pre>
     </p>
       <p>
-      If you're wanting to graph this data in a multiline format where <em>device</em> is the grouping qualifier, you'd then
+      If you're wanting to graph this data in a multiline format where <em>tags.system_key</em> is the grouping qualifier, you'd then
       add the <strong>data-group</strong> attribute and enter the value of the key being used for grouping.
     </p>
-    <pre><code class='html'>&lt;hedwig-graph data-type="MAAS_cpu" data-title="MAAS CPU" data-field="usage_average" data-group="device" data-height="200" data-width="400" data='[someBoundData]' &gt;&lt;/hedwig-graph&gt;</code></pre>
+    <pre><code class='html'>&lt;hedwig-graph data-title="CPU" data-field="CPU_total" data-group="tags.system" data-height="200" data-width="400" data='[someBoundData]' &gt;&lt;/hedwig-graph&gt;</code></pre>
     <br>
     <p><script>
-      var multiMocked = [{
-            "mean": 0.99,
-            "time": "2018-11-24T18:58:21Z",
-            "device": "6221-forestofdean.prod.com"
-            },
-            {
-            "mean": 0.67,
-            "time": "2018-11-25T23:58:21Z",
-            "device": "6221-forestofdean.prod.com"
-            },
-            {
-            "mean": 0.22,
-            "time": "2018-11-26T02:58:21Z",
-            "device": "6221-forestofdean.prod.com"
-            },
-            {
-            "mean": 0.56,
-            "time": "2018-11-24T18:58:21Z",
-            "device": "7877-ministryofmagic.staging.com"
-            },
-            {
-            "mean": 0.10,
-            "time": "2018-11-25T12:58:21Z",
-            "device": "7877-ministryofmagic.staging.com"
-            },
-            {
-            "mean": 0.89,
-            "time": "2018-11-26T09:58:21Z",
-            "device": "7877-ministryofmagic.staging.com"
-            }];
+      var multiMocked = [
+  {
+    "data": {
+      "tenant": "hybrid:5454",
+      "metricName": "CPU_total",
+      "tags": {
+        "accountType": "MANAGED_HOSTING",
+        "metricGroup": "network",
+        "monitoring_system": "ZENOSS",
+        "resource": "5454",
+        "resource_account_id": "4876373",
+        "resource_cmdb_source": "CORE",
+        "system_device": "80244",
+        "system_key": "Devices/802836",
+        "unit": "percentage"
+      },
+      "values": {
+        "2021-06-29T21:00:10Z": 54.127630767822266,
+        "2021-06-29T21:20:10Z": 87.447630767822266,
+        "2021-06-29T23:55:10Z": 33.67766128540039,
+        "2021-06-30T02:05:10Z": 29.23769943237305,
+        "2021-06-30T02:30:10Z": 31.547718505859375,
+        "2021-06-30T06:40:10Z": 67.127779541015625,
+        "2021-06-30T08:30:10Z": 93.3510779098510742,
+        "2021-06-30T09:15:10Z": 14.61779861450195,
+        "2021-06-30T09:25:10Z": 37.11779861450195,
+        "2021-06-30T10:55:10Z": 65.871787109375,
+        "2021-06-30T14:50:10Z": 89.23795883178711,
+        "2021-06-30T16:00:10Z": 41.00217199707
+      }
+    },
+    "metadata": {
+      "aggregator": "raw",
+      "startTime": "2021-06-29T16:01:46.684752Z",
+      "endTime": "2021-06-30T16:01:46.684777Z"
+    }
+  },
+  {
+    "data": {
+      "tenant": "hybrid:4876373",
+      "metricName": "CPU_total",
+      "tags": {
+        "accountType": "MANAGED_HOSTING",
+        "metricGroup": "network",
+        "monitoring_system": "ZENOSS",
+        "resource": "80277",
+        "resource_account_id": "4876373",
+        "resource_cmdb_source": "CORE",
+        "system_device": "80277",
+        "system_key": "Devices/802835",
+        "unit": "percentage"
+      },
+      "values": {
+        "2021-06-29T21:00:10Z": 24.127630767822266,
+        "2021-06-29T21:20:10Z": 77.447630767822266,
+        "2021-06-29T23:55:10Z": 53.67766128540039,
+        "2021-06-30T02:05:10Z": 19.23769943237305,
+        "2021-06-30T02:30:10Z": 81.547718505859375,
+        "2021-06-30T06:40:10Z": 97.127779541015625,
+        "2021-06-30T08:30:10Z": 33.3510779098510742,
+        "2021-06-30T09:15:10Z": 24.61779861450195,
+        "2021-06-30T09:25:10Z": 37.11779861450195,
+        "2021-06-30T10:55:10Z": 65.871787109375,
+        "2021-06-30T14:50:10Z": 69.23795883178711,
+        "2021-06-30T16:00:10Z": 21.00217199707
+      }
+    },
+    "metadata": {
+      "aggregator": "raw",
+      "startTime": "2021-06-29T16:01:46.684752Z",
+      "endTime": "2021-06-30T16:01:46.684777Z"
+    }
+  }
+];
 
-      document.write('<hedwig-graph data-type="MAAS_cpu" data-title="MAAS CPU" data-group="device" data-field="usage_average" data-height="300" data-width="400" data-graph=' + JSON.stringify(multiMocked) + '></hedwig-graph>');
+      document.write('<hedwig-graph data-title="CPU" data-unit="percentage" data-group="tags.system_key" data-field="CPU_total" data-height="500" data-width="800" data-graph=' + JSON.stringify(multiMocked) + '></hedwig-graph>');
   </script></p>
     <p>This will render the graph, with multiline capabilities</p>
     <br/>

@@ -6618,7 +6618,7 @@
 
     connectedCallback() {
       let id = 'hedwig-' + btoa(Math.random()).substr(5, 5);
-      this.innerHTML = `<style>${styleSheet}</style><svg id='${id}'></svg>`;
+      this.innerHTML = `<style>${styleSheet}</style><svg id='${id}'></svg><div id="test">gello</div>`;
       var svg = document.querySelector(`#${id}`);
       var data = JSON.parse(this.dataset.graph);
       this.attachShadow({
@@ -6716,10 +6716,11 @@
 
       lines.selectAll('.line-group').data(data).enter().append('g').attr('class', 'line-group').append('path').attrs({
         'class': (d, i) => {
-          return `${d.group}${i}`; // Assigning a class to work with it opacity
+          return `${d.group}${i}`; // Assigning a class to work with its opacity
         },
         'd': d => line$1(d.datapoints)
-      }).on('click', function (d, i) {
+      }) // Line Click and change Opacity
+      .on('click', function (d, i) {
         let currentLgndLineOpacity = select(this.parentNode).selectAll(`.${d.group}${i}`).style("opacity");
         select(this.parentNode).selectAll(`.${d.group}${i}`).style('opacity', currentLgndLineOpacity == 1 ? 0.2 : 1);
         let currentTextOpacity = select(this.parentNode.parentNode.parentNode).selectAll('.legend').selectAll(`.text${d.group}${i}`).style("opacity");
@@ -6803,7 +6804,7 @@
       }); // create rectangle for legends
 
       legend.selectAll('rect').data(data).enter().append("rect").attr(`class`, (d, i) => {
-        // Assigning a class to work with it opacity
+        // Assigning a class to work with its opacity
         return `rect${d.group}${i}`;
       }).attrs({
         "x": (d, i) => {
@@ -6835,7 +6836,7 @@
       }); // set text of legends
 
       legend.selectAll('text').data(data).enter().append("text").attr(`class`, (d, i) => {
-        // Assigning a class to work with it opacity
+        // Assigning a class to work with its opacity
         return `text${d.group}${i}`;
       }).attrs({
         "x": (d, i) => {
@@ -6862,11 +6863,12 @@
         }
       }).text(d => {
         if (d.group) {
-          return d.group;
+          return d.group.split('/')[d.group.split('/').length - 1];
         } else {
           return this.dataset.field;
         }
-      }).on('click', function (d, i) {
+      }) // Legend text Click
+      .on('click', function (d, i) {
         let currentLgndRectOpacity = select(this.parentNode).selectAll(`.rect${d.group}${i}`).style("opacity");
         select(this.parentNode).selectAll(`.rect${d.group}${i}`).style('opacity', currentLgndRectOpacity == 1 ? 0.2 : 1);
         let currentLgndTextOpacity = select(this.parentNode).selectAll(`.text${d.group}${i}`).style("opacity");
@@ -7206,12 +7208,13 @@
       }
     }
     /**
-     * @name preRender
+     * @name resize
+     * @param {}
      * @description setup default height & width - resize, change unit
      */
 
 
-    preRender(object) {
+    resize(object) {
       if (object.hasOwnProperty('width')) {
         this.defaults.width = object.width;
       }
@@ -7236,7 +7239,7 @@
     dataPoints(data) {
       this.graphInfo = new FindInfo().info(this.dataset.type, this.dataset.field);
       this.graphData = data.replace(/\s/g, '-');
-      this.preRender({});
+      this.resize({});
     }
     /**
      * @name disconnectedCallback
@@ -7254,7 +7257,7 @@
 
 
     static get observedAttributes() {
-      return ['data-width', 'data-height', 'data-graph'];
+      return ['data-width', 'data-height', 'data-graph', 'data-margin'];
     }
     /**
      * @name attributeChangedCallback
@@ -7271,17 +7274,17 @@
           return this.dataPoints(newValue);
 
         case name === "data-width":
-          return this.preRender({
+          return this.resize({
             width: newValue
           });
 
         case name === "data-height":
-          return this.preRender({
+          return this.resize({
             height: newValue
           });
 
         case name === "data-margin":
-          return this.preRender({
+          return this.resize({
             margin: newValue
           });
       }

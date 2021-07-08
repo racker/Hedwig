@@ -6658,11 +6658,23 @@
       let lines = svg.append('g').attr('class', 'lines'); // create g tag with path having class line-group and line.
 
       lines.selectAll('.line-group').data(data).enter().append('g').attr('class', 'line-group').append('path').attrs({
-        'class': 'line',
+        'class': (d, i) => {
+          return `${d.group}${i}`; // Assigning a class to work with its opacity
+        },
         'd': d => line$1(d.datapoints)
+      }) // Line Click and change Opacity
+      .on('click', function (d, i) {
+        let currentLgndLineOpacity = select(this.parentNode).selectAll(`.${d.group}${i}`).style("opacity");
+        select(this.parentNode).selectAll(`.${d.group}${i}`).style('opacity', currentLgndLineOpacity == 1 ? 0.2 : 1);
+        let currentTextOpacity = select(this.parentNode.parentNode.parentNode).selectAll('.legend').selectAll(`.text${d.group}${i}`).style("opacity");
+        select(this.parentNode.parentNode.parentNode).selectAll('.legend').selectAll(`.text${d.group}${i}`).style('opacity', currentTextOpacity == 1 ? 0.2 : 1);
+        let currentRectOpacity = select(this.parentNode.parentNode.parentNode).selectAll('.legend').selectAll(`.rect${d.group}${i}`).style("opacity");
+        select(this.parentNode.parentNode.parentNode).selectAll('.legend').selectAll(`.rect${d.group}${i}`).style('opacity', currentRectOpacity == 1 ? 0.2 : 1);
       }).styles({
         'stroke': d => d.color,
-        'fill': 'none'
+        'fill': 'none',
+        "stroke-width": "2px",
+        cursor: "pointer"
       }).each((d, i) => {
         // loop through datapoints to fetch time and value to create tooltip hover events with value.
         lines.selectAll('dot').data(d.datapoints).enter().append("circle").attrs({
@@ -6729,9 +6741,15 @@
       var legend = svg.append("g").attrs({
         "class": "legend",
         'transform': `translate(0,${height - 40})`
+      }).styles({
+        "font-size": 12,
+        "cursor": "pointer"
       }); // create rectangle for legends
 
-      legend.selectAll('rect').data(data).enter().append("rect").attrs({
+      legend.selectAll('rect').data(data).enter().append("rect").attr(`class`, (d, i) => {
+        // Assigning a class to work with its opacity
+        return `rect${d.group}${i}`;
+      }).attrs({
         "x": (d, i) => {
           if (data.length <= 4) {
             return 18;
@@ -6760,8 +6778,9 @@
         return d.color;
       }); // set text of legends
 
-      legend.selectAll('text').data(data).enter().append("text").styles({
-        "font-size": 12
+      legend.selectAll('text').data(data).enter().append("text").attr(`class`, (d, i) => {
+        // Assigning a class to work with its opacity
+        return `text${d.group}${i}`;
       }).attrs({
         "x": (d, i) => {
           if (data.length <= 4) {
@@ -6791,6 +6810,14 @@
         } else {
           return this.dataset.field;
         }
+      }) // Legend text Click
+      .on('click', function (d, i) {
+        let currentLgndRectOpacity = select(this.parentNode).selectAll(`.rect${d.group}${i}`).style("opacity");
+        select(this.parentNode).selectAll(`.rect${d.group}${i}`).style('opacity', currentLgndRectOpacity == 1 ? 0.2 : 1);
+        let currentLgndTextOpacity = select(this.parentNode).selectAll(`.text${d.group}${i}`).style("opacity");
+        select(this.parentNode).selectAll(`.text${d.group}${i}`).style('opacity', currentLgndTextOpacity == 1 ? 0.2 : 1);
+        let currentLineOpacity = select(this.parentNode.parentNode).selectAll('.lines').selectAll(`.${d.group}${i}`).style("opacity");
+        select(this.parentNode.parentNode).select('.lines').selectAll(`.${d.group}${i}`).style('opacity', currentLineOpacity == 1 ? 0.2 : 1);
       });
     }
 

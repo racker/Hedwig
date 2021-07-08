@@ -1,9 +1,15 @@
 import * as d3 from 'd3';
 import "d3-selection-multi";
-import { Defaults } from './defaults';
-import { AxisLeft } from './helpers/axisConverter';
-import * as styleSheet from  './styles/main.css';
-import { Utils } from "./core/utils";
+import {
+  Defaults
+} from './defaults';
+import {
+  AxisLeft
+} from './helpers/axisConverter';
+import * as styleSheet from './styles/main.css';
+import {
+  Utils
+} from "./core/utils";
 
 /**
  * @name LineGraph
@@ -46,26 +52,26 @@ export class LineGraph extends HTMLElement {
    * javascript date objects which is required for d3js
    */
   parseData(requestBody) {
-      let grouping = this.dataset.group;
-      // get color array
-      this.getDataLineColor(this.dataset.lineColor);
-      return requestBody.map((item, i) => {
-        let pointsArray = [];
-        let group = Utils.findByProp(item.data, grouping);
-        let valuesArray = Object.keys(item.data.values);
-        // loop through each time property
-        for (const obj of valuesArray) {
-          pointsArray.push({
-            time: new Date(obj),
-            value: +item.data.values[obj]
-          });
-        }
-        return {
-          group,
-          datapoints: pointsArray,
-          color: this.lineColor[i]
-        }
-      });
+    let grouping = this.dataset.group;
+    // get color array
+    this.getDataLineColor(this.dataset.lineColor);
+    return requestBody.map((item, i) => {
+      let pointsArray = [];
+      let group = Utils.findByProp(item.data, grouping);
+      let valuesArray = Object.keys(item.data.values);
+      // loop through each time property
+      for (const obj of valuesArray) {
+        pointsArray.push({
+          time: new Date(obj),
+          value: +item.data.values[obj]
+        });
+      }
+      return {
+        group,
+        datapoints: pointsArray,
+        color: this.lineColor[i]
+      }
+    });
   }
 
   /**
@@ -103,21 +109,21 @@ export class LineGraph extends HTMLElement {
     var width = parseInt(this.dataset.width);
     var unit = this.dataset.unit;
 
-   // Create X time scale
-   var xScale = d3.scaleTime()
-   .domain(d3.extent(Utils.maxTime(data)))
-   .range([0, width - margin.bottom]);
+    // Create X time scale
+    var xScale = d3.scaleTime()
+      .domain(d3.extent(Utils.maxTime(data)))
+      .range([0, width - margin.bottom]);
 
- // Create Y linear scale
- var yScale = d3.scaleLinear()
-   .domain(d3.extent(Utils.maxValue(data)))
-   .range([height - margin.left, 0]);
+    // Create Y linear scale
+    var yScale = d3.scaleLinear()
+      .domain(d3.extent(Utils.maxValue(data)))
+      .range([height - margin.left, 0]);
 
     // create color scale for each line
 
     // Define a div and add styling for tooltip
     var div = d3.select("body").append("div")
-    .attr("class", "tooltip")
+      .attr("class", "tooltip")
     // Setup the svg element in the DOM
     var svg = d3.select(el)
       .styles({
@@ -136,23 +142,58 @@ export class LineGraph extends HTMLElement {
     // add element for line and add class name
     let lines = svg.append('g')
       .attr('class', 'lines');
-      // create g tag with path having class line-group and line.
-      lines.selectAll('.line-group')
+    // create g tag with path having class line-group and line.
+    lines.selectAll('.line-group')
       .data(data).enter()
       .append('g')
       .attr('class', 'line-group')
       .append('path')
-      .attrs({'class':'line', 'd': d => line(d.datapoints)})
-      .styles({'stroke':d => d.color, 'fill':'none'})
+      .attrs({
+        'class': (d,i) => {
+          return `${d.group}${i}` // Assigning a class to work with its opacity
+        },
+        'd': d => line(d.datapoints)
+      })
+      // Line Click and change Opacity
+      .on('click', function(d,i) {
+        let currentLgndLineOpacity = d3.select(this.parentNode).selectAll(`.${d.group}${i}`).style("opacity");
+        d3.select(this.parentNode).selectAll(`.${d.group}${i}`).style('opacity', currentLgndLineOpacity == 1 ? 0.2 : 1);
+
+        let currentTextOpacity = d3.select(this.parentNode.parentNode.parentNode).selectAll('.legend').selectAll(`.text${d.group}${i}`).style("opacity");
+        d3.select(this.parentNode.parentNode.parentNode).selectAll('.legend').selectAll(`.text${d.group}${i}`).style('opacity', currentTextOpacity == 1 ? 0.2 : 1);
+
+        let currentRectOpacity = d3.select(this.parentNode.parentNode.parentNode).selectAll('.legend').selectAll(`.rect${d.group}${i}`).style("opacity");
+        d3.select(this.parentNode.parentNode.parentNode).selectAll('.legend').selectAll(`.rect${d.group}${i}`).style('opacity', currentRectOpacity == 1 ? 0.2 : 1);
+
+      })
+      .styles({
+        'stroke': d => d.color,
+        'fill': 'none',
+        "stroke-width": "2px",
+        cursor: "pointer"
+      })
       .each((d, i) => { // loop through datapoints to fetch time and value to create tooltip hover events with value.
         lines.selectAll('dot')
           .data(d.datapoints)
           .enter()
           .append("circle")
-          .attrs({"r": 4, "cx": function(d) { return xScale(d.time); }, "cy": function(d) { return yScale(d.value); }})
-          .styles({"opacity": 0, "stroke": d.color, "fill": "none", "stroke-width": "2px"})
-          .on("mouseover", function(d) {
-           d3.select(this)
+          .attrs({
+            "r": 4,
+            "cx": function (d) {
+              return xScale(d.time);
+            },
+            "cy": function (d) {
+              return yScale(d.value);
+            }
+          })
+          .styles({
+            "opacity": 0,
+            "stroke": d.color,
+            "fill": "none",
+            "stroke-width": "2px"
+          })
+          .on("mouseover", function (d) {
+            d3.select(this)
               .transition()
               .duration(200)
               .style("opacity", 0.9); // add opacity in case of hover
@@ -187,14 +228,21 @@ export class LineGraph extends HTMLElement {
 
     // Add both Axis' to the SVG
     svg.append("g")
-      .attrs({"class": "x axis", "transform": `translate(0, ${height - margin.top})`})
+      .attrs({
+        "class": "x axis",
+        "transform": `translate(0, ${height - margin.top})`
+      })
       .call(xAxis);
 
     svg.append("g")
       .attr("class", "y axis")
       .call(yAxis)
       .append('text')
-      .attrs({"y": 15, "transform": "rotate(-90)", "fill": "#000"})
+      .attrs({
+        "y": 15,
+        "transform": "rotate(-90)",
+        "fill": "#000"
+      })
     this.setLegend(svg, height, data)
 
   }
@@ -219,29 +267,49 @@ export class LineGraph extends HTMLElement {
    */
   setLegend(svg, height, data) {
     var legend = svg.append("g")
-      .attrs({"class": "legend", 'transform': `translate(0,${height-40})`})
-      // create rectangle for legends
+      .attrs({
+        "class": "legend",
+        'transform': `translate(0,${height-40})`
+      })
+      .styles({
+        "font-size": 12,
+        "cursor": "pointer"
+      })
+    // create rectangle for legends
     legend.selectAll('rect')
       .data(data)
       .enter()
       .append("rect")
-      .attrs({"x":(d, i) => {
-        if(data.length<=4){return 18;}
-        if(i<=parseInt((data.length-1)/2)){
-          return 18;
-        }else{
-          return 200;
-        }
-      }, "y": (d, i) => {
+      .attr(`class`, (d,i) => {  // Assigning a class to work with its opacity
+        return `rect${d.group}${i}`
+      })
 
-        if(data.length<=4){return i * 20 + 30;}
-        if(i<=parseInt((data.length-1)/2)){
-          return i * 20 + 30
-        }else{
+      .attrs({
+        "x": (d, i) => {
+          if (data.length <= 4) {
+            return 18;
+          }
+          if (i <= parseInt((data.length - 1) / 2)) {
+            return 18;
+          } else {
+            return 200;
+          }
+        },
+        "y": (d, i) => {
 
-          return (((i-data.length)*-1)-1)*20 + 30;
-        }
-      }, "width": 10, "height": 10 })
+          if (data.length <= 4) {
+            return i * 20 + 30;
+          }
+          if (i <= parseInt((data.length - 1) / 2)) {
+            return i * 20 + 30
+          } else {
+
+            return (((i - data.length) * -1) - 1) * 20 + 30;
+          }
+        },
+        "width": 10,
+        "height": 10
+      })
       .style("fill", (d) => {
         return d.color;
       })
@@ -250,30 +318,52 @@ export class LineGraph extends HTMLElement {
       .data(data)
       .enter()
       .append("text")
-      .styles({"font-size":12})
-      .attrs({"x":(d, i) => {
-        if(data.length<=4){return 36;}
-        if(i<=parseInt((data.length-1)/2)){
-          return 36;
-        }else{
-          return 218;
+      .attr(`class`, (d,i) => {  // Assigning a class to work with its opacity
+        return `text${d.group}${i}`
+      })
+      .attrs({
+        "x": (d, i) => {
+          if (data.length <= 4) {
+            return 36;
+          }
+          if (i <= parseInt((data.length - 1) / 2)) {
+            return 36;
+          } else {
+            return 218;
+          }
+        },
+        "y": (d, i) => {
+          if (data.length <= 4) {
+            return i * 20 + 38;
+          }
+          if (i <= parseInt((data.length - 1) / 2)) {
+            return i * 20 + 39;
+          } else {
+            return (((i - data.length) * -1) - 1) * 20 + 39;
+          }
         }
-      }, "y": (d, i) => {
-        if(data.length<=4){return i * 20 + 38;}
-        if(i<=parseInt((data.length-1)/2)){
-          return i * 20 + 39;
-        }else{
-          return (((i-data.length)*-1)-1)*20 + 39;
-        }
-      }})
+      })
       .text((d) => {
         if (d.group) {
           return d.group.split('/')[d.group.split('/').length-1];
         } else {
           return this.dataset.field
         }
+      })
+      // Legend text Click
+      .on('click', function (d,i) {
+
+        let currentLgndRectOpacity = d3.select(this.parentNode).selectAll(`.rect${d.group}${i}`).style("opacity");
+        d3.select(this.parentNode).selectAll(`.rect${d.group}${i}`).style('opacity', currentLgndRectOpacity == 1 ? 0.2 : 1);
+
+        let currentLgndTextOpacity = d3.select(this.parentNode).selectAll(`.text${d.group}${i}`).style("opacity");
+        d3.select(this.parentNode).selectAll(`.text${d.group}${i}`).style('opacity', currentLgndTextOpacity == 1 ? 0.2 : 1);
+
+        let currentLineOpacity = d3.select(this.parentNode.parentNode).selectAll('.lines').selectAll(`.${d.group}${i}`).style("opacity");
+        d3.select(this.parentNode.parentNode).select('.lines').selectAll(`.${d.group}${i}`).style('opacity', currentLineOpacity == 1 ? 0.2 : 1);
       });
   }
+
 
 }
 

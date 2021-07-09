@@ -5,7 +5,7 @@
     <body>
         <script>
             var mock = [
-            {
+            { data: {
             "tenant": "t-1",
             "metricName": "cpu_idle",
             "tags": {
@@ -23,9 +23,9 @@
               "2020-09-01T00:15:52Z": 88.0,
               "2020-09-02T00:15:55Z": 67.0
             }
-          }];
+          }}];
 
-            document.write('<hedwig-graph data-type="cpu-average-usage" data-height="400" data-width="1000" data-graph=' + JSON.stringify(mock) + '></hedwig-graph>');
+            document.write('<hedwig-graph data-type="cpu-average-usage" data-unit="percentage" data-height="400" data-width="1000" data-graph=' + JSON.stringify(mock) + '></hedwig-graph>');
         </script>
     </body>
 </html>

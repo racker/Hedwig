@@ -42,9 +42,9 @@ export class GraphEngine extends HTMLElement {
             " data-height=" + this.defaults.height +
             " data-width=" + this.defaults.width +
             " data-graph=" + this.graphData +
-            " data-unit=" + (this.graphInfo.unit || this.defaults.unit) +
+            " data-unit=" + (this.graphInfo) +
             " data-line-color=" + this.defaults.lineColor +
-            " data-field=" + this.graphInfo.field +
+            " data-field=" + this.dataset.field +
             " data-title=" + JSON.stringify(this.dataset.title)+
             " data-group=" + this.dataset.group + "></lineGraph>";
         }
@@ -80,7 +80,7 @@ export class GraphEngine extends HTMLElement {
      * @param {string} data This param is stringified JSON data setting
      */
     dataPoints(data){
-        this.graphInfo = new FindInfo().info(this.dataset.type, this.dataset.field);
+        this.graphInfo = new FindInfo().configureUnits(this.dataset.unit);
         this.graphData = data.replace(/\s/g, '-');
         this.resize({});
     }

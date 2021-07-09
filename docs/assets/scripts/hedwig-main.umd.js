@@ -6504,63 +6504,6 @@
 
   }
 
-  /**
-   * @name AxisLeft
-   * @description
-   * Class to handle conversion of Left Axis labels
-   */
-
-  class AxisLeft {
-    constructor() {}
-    /**
-     * @name convert
-     * @description
-     * Function to return correct y axis tick label
-     * @param {string} unit
-     */
-
-
-    convert(unit, d) {
-      switch (true) {
-        case unit === 'count':
-          return d;
-
-        case unit === 'b':
-        case unit === 'kb':
-        case unit === 'mb':
-          return Utils.formatBytes(d, 2);
-
-        case unit === 'frames':
-          return d + ' frames/s';
-
-        case unit === 'overruns':
-          return d + ' overruns/s';
-
-        case unit === 'errors':
-          return d + ' errors/s';
-
-        case unit === 'packets':
-          return d + ' packets/s';
-
-        case unit === 'collisions':
-          return d + ' collisions/s';
-
-        case unit === 'other':
-          return d + ' days';
-
-        case unit === 'milliseconds':
-          return d + ' ms';
-
-        case unit === 'seconds':
-          return d + ' s';
-
-        default:
-          return d + '%';
-      }
-    }
-
-  }
-
   function styleInject(css, ref) {
     if ( ref === void 0 ) ref = {};
     var insertAt = ref.insertAt;
@@ -6766,7 +6709,7 @@
       var xAxis = axisBottom(xScale).ticks(5); // Configure Y Axis ticks and
 
       var yAxis = axisLeft(yScale).ticks(5).tickFormat(d => {
-        return new AxisLeft().convert(unit, d);
+        return `${d}${unit}`;
       }); // Add both Axis' to the SVG
 
       svg.append("g").attrs({
@@ -6881,247 +6824,14 @@
   }
   customElements.define('line-graph', LineGraph);
 
-  var graphs = {
-  	MAAS_cpu: {
-  		metric: [
-  			{
-  				field: "system_key",
-  				unit: "%"
-  			},
-  			{
-  				field: "usage_average",
-  				unit: "%"
-  			},
-  			{
-  				field: "cpu_count",
-  				unit: "count"
-  			},
-  			{
-  				field: "max_cpu_usage",
-  				unit: "%"
-  			},
-  			{
-  				field: "idle_percent_average",
-  				unit: "%"
-  			},
-  			{
-  				field: "irq_percent_average",
-  				unit: "%"
-  			},
-  			{
-  				field: "min_cpu_usage",
-  				unit: "%"
-  			},
-  			{
-  				field: "stolen_percent_average",
-  				unit: "%"
-  			},
-  			{
-  				field: "sys_percent_average",
-  				unit: "%"
-  			},
-  			{
-  				field: "user_percent_average",
-  				unit: "%"
-  			},
-  			{
-  				field: "wait_percent_average",
-  				unit: "%"
-  			}
-  		]
-  	},
-  	MAAS_filesystem: {
-  		metric: [
-  			{
-  				field: "avail",
-  				unit: "kb"
-  			},
-  			{
-  				field: "files",
-  				unit: "kb"
-  			},
-  			{
-  				field: "free",
-  				unit: "kb"
-  			},
-  			{
-  				field: "free_files",
-  				unit: "count"
-  			},
-  			{
-  				field: "used",
-  				unit: "kb"
-  			},
-  			{
-  				field: "total",
-  				unit: "kb"
-  			}
-  		]
-  	},
-  	MAAS_memory: {
-  		metric: [
-  			{
-  				field: "actual_free",
-  				unit: "b"
-  			},
-  			{
-  				field: "actual_used",
-  				unit: "b"
-  			},
-  			{
-  				field: "free",
-  				unit: "b"
-  			},
-  			{
-  				field: "ram",
-  				unit: "mb"
-  			},
-  			{
-  				field: "swap_page_in",
-  				unit: "b"
-  			},
-  			{
-  				field: "swap_page_out",
-  				unit: "b"
-  			},
-  			{
-  				field: "swap-total",
-  				unit: "b"
-  			},
-  			{
-  				field: "swap_used",
-  				unit: "b"
-  			},
-  			{
-  				field: "total",
-  				unit: "b"
-  			},
-  			{
-  				field: "used",
-  				unit: "b"
-  			}
-  		]
-  	},
-  	MAAS_network: {
-  		metric: [
-  			{
-  				field: "rx_bytes",
-  				unit: "b"
-  			},
-  			{
-  				field: "rx_dropped",
-  				unit: "packets"
-  			},
-  			{
-  				field: "rx_bytes",
-  				unit: "b"
-  			},
-  			{
-  				field: "rx_bytes",
-  				unit: "b"
-  			},
-  			{
-  				field: "rx_errors",
-  				unit: "errors"
-  			},
-  			{
-  				field: "rx_frame",
-  				unit: "frames"
-  			},
-  			{
-  				field: "rx_overruns",
-  				unit: "overruns"
-  			},
-  			{
-  				field: "rx_packets",
-  				unit: "packets"
-  			},
-  			{
-  				field: "tx_bytes",
-  				unit: "b"
-  			},
-  			{
-  				field: "tx_carrier",
-  				unit: "errors"
-  			},
-  			{
-  				field: "tx_collisions",
-  				unit: "collisions"
-  			},
-  			{
-  				field: "tx_dropped",
-  				unit: "packets"
-  			},
-  			{
-  				field: "tx_overruns",
-  				unit: "overruns"
-  			},
-  			{
-  				field: "tx_packets",
-  				unit: "packets"
-  			}
-  		]
-  	},
-  	MAAS_http: {
-  		metric: [
-  			{
-  				field: "bytes",
-  				unit: "b"
-  			},
-  			{
-  				field: "cert_bits",
-  				unit: "b"
-  			},
-  			{
-  				field: "cert_end",
-  				unit: "other"
-  			},
-  			{
-  				field: "cert_end_in",
-  				unit: "other"
-  			},
-  			{
-  				field: "cert_start",
-  				unit: "other"
-  			},
-  			{
-  				field: "code_100",
-  				unit: "count"
-  			},
-  			{
-  				field: "code_200",
-  				unit: "count"
-  			},
-  			{
-  				field: "code_300",
-  				unit: "count"
-  			},
-  			{
-  				field: "code_400",
-  				unit: "count"
-  			},
-  			{
-  				field: "code_500",
-  				unit: "count"
-  			},
-  			{
-  				field: "duration",
-  				unit: "milliseconds"
-  			},
-  			{
-  				field: "truncated",
-  				unit: "b"
-  			},
-  			{
-  				field: "tt_connect",
-  				unit: "milliseconds"
-  			},
-  			{
-  				field: "tt_firstbyte",
-  				unit: "milliseconds"
-  			}
-  		]
-  	}
+  var unit$1 = {
+  	percentage: "%",
+  	bytes: "b",
+  	"packets/sec": "packets/s",
+  	kilobytes: "kb",
+  	megabytes: "mb",
+  	"kilobytes/second": "kb/s",
+  	available: "available"
   };
 
   /**
@@ -7132,37 +6842,22 @@
 
   class FindInfo {
     constructor() {
-      this.supported = graphs;
+      this.units = unit$1;
     }
     /**
-     * @name info
-     * @description
-     * Function to get the info on graph type from JSON
+     * Configure the unit of measurment to be used
      * @param {string} type
-     * @returns {object}
+     * @returns string
      */
 
 
-    info(type, field) {
-      let supportedInfo;
-
-      if (type === "" || type === undefined) {
+    configureUnits(type) {
+      if (!!!type) {
         return;
       }
 
-      if (field === "" || field === undefined) {
-        throw new Error('Missing field attribute');
-      }
-
-      let supported = Object.keys(this.supported).find(key => key === type);
-      let metrics = this.supported[supported].metric;
-      supportedInfo = metrics.find(key => key.field === field);
-
-      if (supportedInfo === undefined) {
-        throw new Error("Unknown graph data-type!");
-      }
-
-      return supportedInfo;
+      let units = Object.keys(this.units).find(key => key === type);
+      return unit$1[units];
     }
 
   }
@@ -7204,7 +6899,7 @@
 
     render() {
       if (this.graphData) {
-        this.innerHTML = "<line-graph data-margin=" + JSON.stringify(this.defaults.margin) + " data-height=" + this.defaults.height + " data-width=" + this.defaults.width + " data-graph=" + this.graphData + " data-unit=" + (this.graphInfo.unit || this.defaults.unit) + " data-line-color=" + this.defaults.lineColor + " data-field=" + this.graphInfo.field + " data-title=" + JSON.stringify(this.dataset.title) + " data-group=" + this.dataset.group + "></lineGraph>";
+        this.innerHTML = "<line-graph data-margin=" + JSON.stringify(this.defaults.margin) + " data-height=" + this.defaults.height + " data-width=" + this.defaults.width + " data-graph=" + this.graphData + " data-unit=" + this.graphInfo + " data-line-color=" + this.defaults.lineColor + " data-field=" + this.dataset.field + " data-title=" + JSON.stringify(this.dataset.title) + " data-group=" + this.dataset.group + "></lineGraph>";
       }
     }
     /**
@@ -7237,7 +6932,7 @@
 
 
     dataPoints(data) {
-      this.graphInfo = new FindInfo().info(this.dataset.type, this.dataset.field);
+      this.graphInfo = new FindInfo().configureUnits(this.dataset.unit);
       this.graphData = data.replace(/\s/g, '-');
       this.resize({});
     }

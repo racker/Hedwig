@@ -164,7 +164,7 @@ export class LineGraph extends HTMLElement {
 
         let currentRectOpacity = d3.select(this.parentNode.parentNode.parentNode).selectAll('.legend').selectAll(`.rect${d.group}${i}`).style("opacity");
         d3.select(this.parentNode.parentNode.parentNode).selectAll('.legend').selectAll(`.rect${d.group}${i}`).style('opacity', currentRectOpacity == 1 ? 0.2 : 1);
-        
+
       })
       .styles({
         'stroke': d => d.color,
@@ -222,7 +222,7 @@ export class LineGraph extends HTMLElement {
     var xAxis = d3.axisBottom(xScale).ticks(5);
     // Configure Y Axis ticks and
     var yAxis = d3.axisLeft(yScale).ticks(5).tickFormat((d) => {
-      return new AxisLeft().convert(unit, d);
+      return `${d}${unit}`;
     });
 
 

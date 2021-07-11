@@ -6561,7 +6561,7 @@
 
     connectedCallback() {
       let id = 'hedwig-' + btoa(Math.random()).substr(5, 5);
-      this.innerHTML = `<style>${styleSheet}</style><svg id='${id}'></svg><div id="test">gello</div>`;
+      this.innerHTML = `<style>${styleSheet}</style><svg id='${id}'></svg>`;
       var svg = document.querySelector(`#${id}`);
       var data = JSON.parse(this.dataset.graph);
       this.attachShadow({
@@ -6648,8 +6648,8 @@
       var div = select("body").append("div").attr("class", "tooltip"); // Setup the svg element in the DOM
 
       var svg = select(el).styles({
-        "width": width + margin.left + +margin.right,
-        "height": height + +margin.top + +margin.bottom,
+        "width": "100%",
+        "height": "100%",
         "overflow": "inherit"
       }).append('g').attr("transform", `translate(${margin.top}, 0)`); // Create the lines
 

@@ -6648,8 +6648,8 @@
       var div = select("body").append("div").attr("class", "tooltip"); // Setup the svg element in the DOM
 
       var svg = select(el).styles({
-        "width": "100%",
-        "height": "100%",
+        "width": width + margin.left + +margin.right,
+        "height": height + +margin.top + +margin.bottom,
         "overflow": "inherit"
       }).append('g').attr("transform", `translate(${margin.top}, 0)`); // Create the lines
 

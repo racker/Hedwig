@@ -137,7 +137,7 @@ export class LineGraph extends HTMLElement {
     // Create the lines
     var line = d3.line()
       .x(d => xScale(d.time))
-      .y(d => yScale(Utils.roundUnitsValue('percent', d.value)));
+      .y(d => yScale(Utils.roundUnitsValue(unit, d.value)));
 
     // add element for line and add class name
     let lines = svg.append('g')

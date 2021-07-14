@@ -111,7 +111,7 @@ export class Utils {
                     return this.roundOffValue(value) + ' kilobytes/second';
                 case measurmentUnit === 'pages/second':
                     return this.roundOffValue(value) + ' pages/second';
-                case measurmentUnit == 'percent':
+                case measurmentUnit == '%':
                     return this.roundOffValue(value) + ' %';             
                 default:
                     return this.roundOffValue(value);

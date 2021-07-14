@@ -183,7 +183,7 @@ export class LineGraph extends HTMLElement {
               return xScale(d.time);
             },
             "cy": function (d) {
-              return yScale(Utils.roundUnitsValue('percent', d.value));
+              return yScale(Utils.roundUnitsValue(unit, d.value));
             }
           })
           .styles({
@@ -200,7 +200,7 @@ export class LineGraph extends HTMLElement {
             div.transition()
               .duration(200)
               .style("opacity", .9);
-            div.html(d.time + "<br/>" + Utils.roundUnitsValue('percent', d.value))
+            div.html(d.time + "<br/>" + Utils.roundUnitsValue(unit, d.value))
               .styles({
                 "left": (d3.event.pageX + 10) + "px",
                 "top": (d3.event.pageY - 28) + "px",

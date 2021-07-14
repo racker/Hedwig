@@ -63,4 +63,59 @@ export class Utils {
         });
         return arr;
     }
+        /**
+         * Check byte unit of measurment
+         * @param {number} n
+         * @param {number} d
+         * @returns number
+         */
+         static roundOffValue(n, d=2) {
+            if(Number.isInteger(n)) {
+                var x=(''+n).length,p=Math.pow,d=p(10,d)
+                x-=x%3
+                return Math.round(n*d/p(10,x))/d+" kMGTPE"[x/3];
+            } else {
+                var dd = Math.round((n + Number.EPSILON) * 100) / 100;
+                return dd;
+            }
+        }
+
+        static roundUnitsValue(measurmentUnit, value) {
+            switch(measurmentUnit) {
+                case measurmentUnit === 'bytes':
+                case measurmentUnit === 'kilobytes':
+                case measurmentUnit ===  'megabytes':
+                    return this.formatBytes(value, 2);
+                case measurmentUnit === 'load':
+                case measurmentUnit === 'count':
+                    return this.roundOffValue(value);
+                case measurmentUnit === 'frames':
+                    return this.roundOffValue(value) + ' frames/s';
+                case measurmentUnit === 'overruns':
+                    return this.roundOffValue(value) + ' overruns/s';
+                case measurmentUnit === 'errors':
+                    return this.roundOffValue(value) + ' errors/s';
+                case measurmentUnit === 'packets':
+                    return this.roundOffValue(value) + ' packets/s';
+                case measurmentUnit === 'collisions':
+                    return this.roundOffValue(value) + ' collisions/s';
+                case measurmentUnit === 'other':
+                    return this.roundOffValue(value) + ' days';
+                case measurmentUnit === 'milliseconds':
+                    return this.roundOffValue(value) + ' ms';
+                case measurmentUnit === 'octets':
+                    return this.roundOffValue(value) + ' octets';
+                case measurmentUnit === 'centiseconds':
+                    return this.roundOffValue(value) + ' cs';
+                case measurmentUnit === 'kilobytes/second':
+                    return this.roundOffValue(value) + ' kilobytes/second';
+                case measurmentUnit === 'pages/second':
+                    return this.roundOffValue(value) + ' pages/second';
+                case measurmentUnit == 'percent':
+                    return this.roundOffValue(value) + ' %';             
+                default:
+                    return this.roundOffValue(value);
+            }
+        }
+
 }

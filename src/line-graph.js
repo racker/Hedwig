@@ -137,7 +137,7 @@ export class LineGraph extends HTMLElement {
     // Create the lines
     var line = d3.line()
       .x(d => xScale(d.time))
-      .y(d => yScale(d.value));
+      .y(d => yScale(Utils.roundUnitsValue('percent', d.value)));
 
     // add element for line and add class name
     let lines = svg.append('g')
@@ -183,7 +183,7 @@ export class LineGraph extends HTMLElement {
               return xScale(d.time);
             },
             "cy": function (d) {
-              return yScale(d.value);
+              return yScale(Utils.roundUnitsValue('percent', d.value));
             }
           })
           .styles({
@@ -200,7 +200,7 @@ export class LineGraph extends HTMLElement {
             div.transition()
               .duration(200)
               .style("opacity", .9);
-            div.html(d.time + "<br/>" + d.value)
+            div.html(d.time + "<br/>" + Utils.roundUnitsValue('percent', d.value))
               .styles({
                 "left": (d3.event.pageX + 10) + "px",
                 "top": (d3.event.pageY - 28) + "px",

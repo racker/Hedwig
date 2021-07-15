@@ -68,21 +68,21 @@ export class Utils {
     }
         /**
          * Check byte unit of measurment
-         * @param {number} n
-         * @param {number} d
+         * @param {number} dataPointValue // the value which is needed to show on graph for each line as data points
+         * @param {number} decimalPlaces // value which needs to be rounded to two decimal places
          * @returns number
          */
-         static roundOffValue(n, d=2) {
-            if(Number.isInteger(n)) {
-                var x=(''+n).length,p=Math.pow,d=p(10,d)
+         static roundOffValue(dataPointValue, decimalPlaces=2) {
+            let x, power, roundedValue;    
+            if(Number.isInteger(dataPointValue)) {
+                x=(''+dataPointValue).length,power=Math.pow,decimalPlaces=p(10,decimalPlaces)
                 x-=x%3
-                return Math.round(n*d/p(10,x))/d+" kMGTPE"[x/3];
+                return Math.round(dataPointValue*decimalPlaces/p(10,x))/decimalPlaces+" kMGTPE"[x/3];
             } else {
-                var dd = Math.round((n + Number.EPSILON) * 100) / 100;
-                return dd;
+                roundedValue = Math.round((dataPointValue + Number.EPSILON) * 100) / 100;
+                return roundedValue;
             }
         }
-
         static roundUnitsValue(measurmentUnit, value) {
             switch(measurmentUnit) {
                 case measurmentUnit === 'bytes':

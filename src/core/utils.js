@@ -93,27 +93,21 @@ export class Utils {
                 case measurmentUnit === 'count':
                     return this.roundOffValue(value);
                 case measurmentUnit === 'frames':
-                    return this.roundOffValue(value) + ' frames/s';
                 case measurmentUnit === 'overruns':
-                    return this.roundOffValue(value) + ' overruns/s';
                 case measurmentUnit === 'errors':
-                    return this.roundOffValue(value) + ' errors/s';
                 case measurmentUnit === 'packets':
-                    return this.roundOffValue(value) + ' packets/s';
                 case measurmentUnit === 'collisions':
-                    return this.roundOffValue(value) + ' collisions/s';
+                    return this.roundOffValue(value) + ' ' + measurmentUnit + '/s';
                 case measurmentUnit === 'other':
                     return this.roundOffValue(value) + ' days';
                 case measurmentUnit === 'milliseconds':
                     return this.roundOffValue(value) + ' ms';
-                case measurmentUnit === 'octets':
-                    return this.roundOffValue(value) + ' octets';
                 case measurmentUnit === 'centiseconds':
                     return this.roundOffValue(value) + ' cs';
                 case measurmentUnit === 'kilobytes/second':
-                    return this.roundOffValue(value) + ' kilobytes/second';
                 case measurmentUnit === 'pages/second':
-                    return this.roundOffValue(value) + ' pages/second';
+                case measurmentUnit === 'octets':
+                    return this.roundOffValue(value) + ' ' + measurmentUnit;
                 case measurmentUnit == '%':
                     return this.roundOffValue(value) + ' %';             
                 default:

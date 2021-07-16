@@ -6813,7 +6813,7 @@
         }
       }).text(d => {
         if (d.group) {
-          return d.group.split('/')[d.group.split('/').length - 1];
+          return d.group;
         } else {
           return this.dataset.field;
         }

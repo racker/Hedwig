@@ -11,6 +11,8 @@ import {
   Utils
 } from "./core/utils";
 
+
+const spclCharRegx=/[&\/\\#, +()$~%.'":*?<>{}]/g;
 /**
  * @name LineGraph
  * @description
@@ -19,6 +21,7 @@ import {
  */
 
 export class LineGraph extends HTMLElement {
+  
 
   constructor() {
     super();
@@ -40,8 +43,10 @@ export class LineGraph extends HTMLElement {
     this.attachShadow({
       mode: 'open'
     });
+    if(svg){
     this.shadowRoot.appendChild(svg);
     this.renderGraph(this.parseData(data), svg);
+    }
   }
 
   /**
@@ -150,20 +155,21 @@ export class LineGraph extends HTMLElement {
       .append('path')
       .attrs({
         'class': (d,i) => {
-          return `${d.group}${i}` // Assigning a class to work with its opacity
+          return `${d.group}${i}`.replace(spclCharRegx,'_'); // Assigning a class to work with its opacity
         },
         'd': d => line(d.datapoints)
       })
       // Line Click and change Opacity
       .on('click', function(d,i) {
-        let currentLgndLineOpacity = d3.select(this.parentNode).selectAll(`.${d.group}${i}`).style("opacity");
-        d3.select(this.parentNode).selectAll(`.${d.group}${i}`).style('opacity', currentLgndLineOpacity == 1 ? 0.2 : 1);
+        let cssCls= `${d.group}${i}`.replace(spclCharRegx,'_');
+        let currentLgndLineOpacity = d3.select(this.parentNode).selectAll(`.${cssCls}`).style("opacity");
+        d3.select(this.parentNode).selectAll(`.${cssCls}`).style('opacity', currentLgndLineOpacity == 1 ? 0.2 : 1);
 
-        let currentTextOpacity = d3.select(this.parentNode.parentNode.parentNode).selectAll('.legend').selectAll(`.text${d.group}${i}`).style("opacity");
-        d3.select(this.parentNode.parentNode.parentNode).selectAll('.legend').selectAll(`.text${d.group}${i}`).style('opacity', currentTextOpacity == 1 ? 0.2 : 1);
+        let currentTextOpacity = d3.select(this.parentNode.parentNode.parentNode).selectAll('.legend').selectAll(`.text${cssCls}`).style("opacity");
+        d3.select(this.parentNode.parentNode.parentNode).selectAll('.legend').selectAll(`.text${cssCls}`).style('opacity', currentTextOpacity == 1 ? 0.2 : 1);
 
-        let currentRectOpacity = d3.select(this.parentNode.parentNode.parentNode).selectAll('.legend').selectAll(`.rect${d.group}${i}`).style("opacity");
-        d3.select(this.parentNode.parentNode.parentNode).selectAll('.legend').selectAll(`.rect${d.group}${i}`).style('opacity', currentRectOpacity == 1 ? 0.2 : 1);
+        let currentRectOpacity = d3.select(this.parentNode.parentNode.parentNode).selectAll('.legend').selectAll(`.rect${cssCls}`).style("opacity");
+        d3.select(this.parentNode.parentNode.parentNode).selectAll('.legend').selectAll(`.rect${cssCls}`).style('opacity', currentRectOpacity == 1 ? 0.2 : 1);
 
       })
       .styles({
@@ -280,8 +286,10 @@ export class LineGraph extends HTMLElement {
       .data(data)
       .enter()
       .append("rect")
-      .attr(`class`, (d,i) => {  // Assigning a class to work with its opacity
-        return `rect${d.group}${i}`
+      .attr(`class`, (d,i) => { 
+         // Assigning a class to work with its opacity
+         let cssCls= `${d.group}${i}`.replace(spclCharRegx,'_');
+        return `rect${cssCls}`
       })
 
       .attrs({
@@ -319,7 +327,8 @@ export class LineGraph extends HTMLElement {
       .enter()
       .append("text")
       .attr(`class`, (d,i) => {  // Assigning a class to work with its opacity
-        return `text${d.group}${i}`
+        let cssCls= `${d.group}${i}`.replace(spclCharRegx,'_');
+        return `text${cssCls}`
       })
       .attrs({
         "x": (d, i) => {
@@ -345,22 +354,22 @@ export class LineGraph extends HTMLElement {
       })
       .text((d) => {
         if (d.group) {
-          return d.group.split('/')[d.group.split('/').length-1];
+          return d.group;
         } else {
           return this.dataset.field
         }
       })
       // Legend text Click
       .on('click', function (d,i) {
+        let cssCls= `${d.group}${i}`.replace(spclCharRegx,'_');
+        let currentLgndRectOpacity = d3.select(this.parentNode).selectAll(`.rect${cssCls}`).style("opacity");
+        d3.select(this.parentNode).selectAll(`.rect${cssCls}`).style('opacity', currentLgndRectOpacity == 1 ? 0.2 : 1);
 
-        let currentLgndRectOpacity = d3.select(this.parentNode).selectAll(`.rect${d.group}${i}`).style("opacity");
-        d3.select(this.parentNode).selectAll(`.rect${d.group}${i}`).style('opacity', currentLgndRectOpacity == 1 ? 0.2 : 1);
+        let currentLgndTextOpacity = d3.select(this.parentNode).selectAll(`.text${cssCls}`).style("opacity");
+        d3.select(this.parentNode).selectAll(`.text${cssCls}`).style('opacity', currentLgndTextOpacity == 1 ? 0.2 : 1);
 
-        let currentLgndTextOpacity = d3.select(this.parentNode).selectAll(`.text${d.group}${i}`).style("opacity");
-        d3.select(this.parentNode).selectAll(`.text${d.group}${i}`).style('opacity', currentLgndTextOpacity == 1 ? 0.2 : 1);
-
-        let currentLineOpacity = d3.select(this.parentNode.parentNode).selectAll('.lines').selectAll(`.${d.group}${i}`).style("opacity");
-        d3.select(this.parentNode.parentNode).select('.lines').selectAll(`.${d.group}${i}`).style('opacity', currentLineOpacity == 1 ? 0.2 : 1);
+        let currentLineOpacity = d3.select(this.parentNode.parentNode).selectAll('.lines').selectAll(`.${cssCls}`).style("opacity");
+        d3.select(this.parentNode.parentNode).select('.lines').selectAll(`.${cssCls}`).style('opacity', currentLineOpacity == 1 ? 0.2 : 1);
       });
   }
 

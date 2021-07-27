@@ -12,7 +12,7 @@ import {
 } from "./core/utils";
 
 
-const spclCharRegx=/[&\/\\#, +()$~%.'":*?<>{}]/g;
+const spclCharRegx = /[&\/\\#, +()$~%.'":*?<>{}]/g;
 /**
  * @name LineGraph
  * @description
@@ -21,7 +21,7 @@ const spclCharRegx=/[&\/\\#, +()$~%.'":*?<>{}]/g;
  */
 
 export class LineGraph extends HTMLElement {
-  
+
 
   constructor() {
     super();
@@ -43,9 +43,9 @@ export class LineGraph extends HTMLElement {
     this.attachShadow({
       mode: 'open'
     });
-    if(svg){
-    this.shadowRoot.appendChild(svg);
-    this.renderGraph(this.parseData(data), svg);
+    if (svg) {
+      this.shadowRoot.appendChild(svg);
+      this.renderGraph(this.parseData(data), svg);
     }
   }
 
@@ -124,6 +124,7 @@ export class LineGraph extends HTMLElement {
       .domain(d3.extent(Utils.maxValue(data)))
       .range([height - margin.left, 0]);
 
+    
     // create color scale for each line
 
     // Define a div and add styling for tooltip
@@ -154,14 +155,14 @@ export class LineGraph extends HTMLElement {
       .attr('class', 'line-group')
       .append('path')
       .attrs({
-        'class': (d,i) => {
-          return `${d.group}${i}`.replace(spclCharRegx,'_'); // Assigning a class to work with its opacity
+        'class': (d, i) => {
+          return `${d.group}${i}`.replace(spclCharRegx, '_'); // Assigning a class to work with its opacity
         },
         'd': d => line(d.datapoints)
       })
       // Line Click and change Opacity
-      .on('click', function(d,i) {
-        let cssCls= `${d.group}${i}`.replace(spclCharRegx,'_');
+      .on('click', function (d, i) {
+        let cssCls = `${d.group}${i}`.replace(spclCharRegx, '_');
         let currentLgndLineOpacity = d3.select(this.parentNode).selectAll(`.${cssCls}`).style("opacity");
         d3.select(this.parentNode).selectAll(`.${cssCls}`).style('opacity', currentLgndLineOpacity == 1 ? 0.2 : 1);
 
@@ -249,8 +250,8 @@ export class LineGraph extends HTMLElement {
         "transform": "rotate(-90)",
         "fill": "#000"
       })
-    this.setLegend(svg, height, data)
-
+    this.setLegend(svg, height, data);
+    this.setBrush(svg,xScale,height, width);
   }
 
   setTitle(svg, width) {
@@ -286,9 +287,9 @@ export class LineGraph extends HTMLElement {
       .data(data)
       .enter()
       .append("rect")
-      .attr(`class`, (d,i) => { 
-         // Assigning a class to work with its opacity
-         let cssCls= `${d.group}${i}`.replace(spclCharRegx,'_');
+      .attr(`class`, (d, i) => {
+        // Assigning a class to work with its opacity
+        let cssCls = `${d.group}${i}`.replace(spclCharRegx, '_');
         return `rect${cssCls}`
       })
 
@@ -326,8 +327,8 @@ export class LineGraph extends HTMLElement {
       .data(data)
       .enter()
       .append("text")
-      .attr(`class`, (d,i) => {  // Assigning a class to work with its opacity
-        let cssCls= `${d.group}${i}`.replace(spclCharRegx,'_');
+      .attr(`class`, (d, i) => { // Assigning a class to work with its opacity
+        let cssCls = `${d.group}${i}`.replace(spclCharRegx, '_');
         return `text${cssCls}`
       })
       .attrs({
@@ -360,8 +361,8 @@ export class LineGraph extends HTMLElement {
         }
       })
       // Legend text Click
-      .on('click', function (d,i) {
-        let cssCls= `${d.group}${i}`.replace(spclCharRegx,'_');
+      .on('click', function (d, i) {
+        let cssCls = `${d.group}${i}`.replace(spclCharRegx, '_');
         let currentLgndRectOpacity = d3.select(this.parentNode).selectAll(`.rect${cssCls}`).style("opacity");
         d3.select(this.parentNode).selectAll(`.rect${cssCls}`).style('opacity', currentLgndRectOpacity == 1 ? 0.2 : 1);
 
@@ -373,6 +374,37 @@ export class LineGraph extends HTMLElement {
       });
   }
 
+  setBrush(svg,xScale,height, width){
+    
+    
+
+    let brush = d3.brushX() // Add the brush feature using the d3.brush function
+      .extent([
+        [0, 0],
+        [width-50, height-50]
+      ]) // initialise the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
+      .on("end", () =>{
+        let extent = d3.event.selection;
+        if (extent) {
+          this.dispatchEvent(new CustomEvent("areaSelected", {
+            bubbles: true,
+            composed: true,
+            detail: {
+              start: xScale.invert(extent[0]),
+              end: xScale.invert(extent[1])
+            }
+          }));
+    
+          let test = d3.select(this.shadowRoot.getElementById('brushArea'));
+          test.call(brush.move, null);
+        }
+      });
+      svg.append("g")
+      .attr("id","brushArea")
+      .attr("class", "brush")
+       .call(brush)
+  
+  }
 
 }
 

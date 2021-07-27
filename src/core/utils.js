@@ -12,9 +12,9 @@ export class Utils {
         k = 1024;
         dm = decimals < 0 ? 0 : decimals;
         sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
-        if(Number.isInteger(bytes))
+        if(Number.isInteger(bytes)) {
             bytes = Math.round((bytes + Number.EPSILON) * 100) / 100;
-        else
+        }
             i = Math.floor(Math.log(bytes) / Math.log(k));
             return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
     }
@@ -76,9 +76,9 @@ export class Utils {
          static roundOffValue(dataPointValue, decimalPlaces=2) {
             let x, power, roundedValue;    
             if(Number.isInteger(dataPointValue)) {
-                x=(''+dataPointValue).length,power=Math.pow,decimalPlaces=p(10,decimalPlaces)
+                x=(''+dataPointValue).length,power=Math.pow,decimalPlaces=power(10,decimalPlaces)
                 x-=x%3
-                return Math.round(dataPointValue*decimalPlaces/p(10,x))/decimalPlaces+" kMGTPE"[x/3];
+                return Math.round(dataPointValue*decimalPlaces/power(10,x))/decimalPlaces+" kMGTPE"[x/3];
             } else {
                 roundedValue = Math.round((dataPointValue + Number.EPSILON) * 100) / 100;
                 return roundedValue;

@@ -376,8 +376,6 @@ export class LineGraph extends HTMLElement {
 
   setBrush(svg,xScale,height, width){
     
-    
-
     let brush = d3.brushX() // Add the brush feature using the d3.brush function
       .extent([
         [0, 0],
@@ -395,8 +393,8 @@ export class LineGraph extends HTMLElement {
             }
           }));
     
-          let test = d3.select(this.shadowRoot.getElementById('brushArea'));
-          test.call(brush.move, null);
+          let getBrushArea = d3.select(this.shadowRoot.getElementById('brushArea'));
+          getBrushArea.call(brush.move, null);
         }
       });
       svg.append("g")

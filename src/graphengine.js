@@ -29,7 +29,7 @@ export class GraphEngine extends HTMLElement {
         this.defaults.unit = this.dataset.unit;
 
         this.render();
-        this.addEventListener('areaSelected', (v) => {this.grapAreaSelection(v)});
+        this.addEventListener('areaSelected', (v) => {this.graphAreaSelection(v.detail)});
     }
 
     /**
@@ -48,14 +48,11 @@ export class GraphEngine extends HTMLElement {
             " data-line-color=" + this.defaults.lineColor +
             " data-field=" + this.dataset.field +
             " data-title=" + JSON.stringify(this.dataset.title)+
-            // "onareaSelected={" +this.gtest +
-            "} data-group=" + this.dataset.group + "></lineGraph>";
+            " data-group=" + this.dataset.group + "></lineGraph>";
         }
     }
 
-    grapAreaSelection(event) {
-        alert(event.detail.end)
-        alert(event.detail.start)
+    graphAreaSelection(event) {
         if(event)
         this.dispatchEvent(new CustomEvent("timeStampSelection", {
             bubbles: true,

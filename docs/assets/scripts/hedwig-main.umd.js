@@ -7103,11 +7103,16 @@
      */
     static formatBytes(bytes, decimals = 2) {
       if (bytes === 0) return '0 Bytes';
-      const k = 1024;
-      const dm = decimals < 0 ? 0 : decimals;
-      const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
-      if (Number.isInteger(bytes)) bytes = Math.round((bytes + Number.EPSILON) * 100) / 100;
-      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      let k, dm, sizes, i;
+      k = 1024;
+      dm = decimals < 0 ? 0 : decimals;
+      sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+
+      if (Number.isInteger(bytes)) {
+        bytes = Math.round((bytes + Number.EPSILON) * 100) / 100;
+      }
+
+      i = Math.floor(Math.log(bytes) / Math.log(k));
       return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
     }
     /**
@@ -7173,12 +7178,12 @@
 
 
     static roundOffValue(dataPointValue, decimalPlaces = 2) {
-      let x, roundedValue;
+      let x, power, roundedValue;
 
       if (Number.isInteger(dataPointValue)) {
-        x = ('' + dataPointValue).length, decimalPlaces = p(10, decimalPlaces);
+        x = ('' + dataPointValue).length, power = Math.pow, decimalPlaces = power(10, decimalPlaces);
         x -= x % 3;
-        return Math.round(dataPointValue * decimalPlaces / p(10, x)) / decimalPlaces + " kMGTPE"[x / 3];
+        return Math.round(dataPointValue * decimalPlaces / power(10, x)) / decimalPlaces + " kMGTPE"[x / 3];
       } else {
         roundedValue = Math.round((dataPointValue + Number.EPSILON) * 100) / 100;
         return roundedValue;
@@ -7568,8 +7573,8 @@
               end: xScale.invert(extent[1])
             }
           }));
-          let test = select(this.shadowRoot.getElementById('brushArea'));
-          test.call(brush.move, null);
+          let getBrushArea = select(this.shadowRoot.getElementById('brushArea'));
+          getBrushArea.call(brush.move, null);
         }
       });
       svg.append("g").attr("id", "brushArea").attr("class", "brush").call(brush);
@@ -7643,7 +7648,7 @@
       this.defaults.unit = this.dataset.unit;
       this.render();
       this.addEventListener('areaSelected', v => {
-        this.grapAreaSelection(v);
+        this.graphAreaSelection(v.detail);
       });
     }
     /**
@@ -7656,14 +7661,11 @@
 
     render() {
       if (this.graphData) {
-        this.innerHTML = "<line-graph data-margin=" + JSON.stringify(this.defaults.margin) + " data-height=" + this.defaults.height + " data-width=" + this.defaults.width + " data-graph=" + this.graphData + " data-unit=" + this.graphInfo + " data-line-color=" + this.defaults.lineColor + " data-field=" + this.dataset.field + " data-title=" + JSON.stringify(this.dataset.title) + // "onareaSelected={" +this.gtest +
-        "} data-group=" + this.dataset.group + "></lineGraph>";
+        this.innerHTML = "<line-graph data-margin=" + JSON.stringify(this.defaults.margin) + " data-height=" + this.defaults.height + " data-width=" + this.defaults.width + " data-graph=" + this.graphData + " data-unit=" + this.graphInfo + " data-line-color=" + this.defaults.lineColor + " data-field=" + this.dataset.field + " data-title=" + JSON.stringify(this.dataset.title) + " data-group=" + this.dataset.group + "></lineGraph>";
       }
     }
 
-    grapAreaSelection(event) {
-      alert(event.detail.end);
-      alert(event.detail.start);
+    graphAreaSelection(event) {
       if (event) this.dispatchEvent(new CustomEvent("timeStampSelection", {
         bubbles: true,
         composed: true,

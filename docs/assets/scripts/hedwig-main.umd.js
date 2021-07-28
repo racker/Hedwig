@@ -1164,6 +1164,17 @@
     return this;
   }
 
+  function customEvent(event1, listener, that, args) {
+    var event0 = event;
+    event1.sourceEvent = event;
+    event = event1;
+    try {
+      return listener.apply(that, args);
+    } finally {
+      event = event0;
+    }
+  }
+
   function dispatchEvent(node, type, params) {
     var window = defaultView(node),
         event = window.CustomEvent;
@@ -1247,6 +1258,75 @@
     return typeof selector === "string"
         ? new Selection([[document.querySelector(selector)]], [document.documentElement])
         : new Selection([[selector]], root);
+  }
+
+  function sourceEvent() {
+    var current = event, source;
+    while (source = current.sourceEvent) current = source;
+    return current;
+  }
+
+  function point(node, event) {
+    var svg = node.ownerSVGElement || node;
+
+    if (svg.createSVGPoint) {
+      var point = svg.createSVGPoint();
+      point.x = event.clientX, point.y = event.clientY;
+      point = point.matrixTransform(node.getScreenCTM().inverse());
+      return [point.x, point.y];
+    }
+
+    var rect = node.getBoundingClientRect();
+    return [event.clientX - rect.left - node.clientLeft, event.clientY - rect.top - node.clientTop];
+  }
+
+  function mouse(node) {
+    var event = sourceEvent();
+    if (event.changedTouches) event = event.changedTouches[0];
+    return point(node, event);
+  }
+
+  function touch(node, touches, identifier) {
+    if (arguments.length < 3) identifier = touches, touches = sourceEvent().changedTouches;
+
+    for (var i = 0, n = touches ? touches.length : 0, touch; i < n; ++i) {
+      if ((touch = touches[i]).identifier === identifier) {
+        return point(node, touch);
+      }
+    }
+
+    return null;
+  }
+
+  function noevent() {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+  }
+
+  function dragDisable(view) {
+    var root = view.document.documentElement,
+        selection = select(view).on("dragstart.drag", noevent, true);
+    if ("onselectstart" in root) {
+      selection.on("selectstart.drag", noevent, true);
+    } else {
+      root.__noselect = root.style.MozUserSelect;
+      root.style.MozUserSelect = "none";
+    }
+  }
+
+  function yesdrag(view, noclick) {
+    var root = view.document.documentElement,
+        selection = select(view).on("dragstart.drag", null);
+    if (noclick) {
+      selection.on("click.drag", noevent, true);
+      setTimeout(function() { selection.on("click.drag", null); }, 0);
+    }
+    if ("onselectstart" in root) {
+      selection.on("selectstart.drag", null);
+    } else {
+      root.style.MozUserSelect = root.__noselect;
+      delete root.__noselect;
+    }
   }
 
   function define(constructor, factory, prototype) {
@@ -3172,6 +3252,588 @@
   selection.prototype.interrupt = selection_interrupt;
   selection.prototype.transition = selection_transition;
 
+  function constant$2(x) {
+    return function() {
+      return x;
+    };
+  }
+
+  function BrushEvent(target, type, selection) {
+    this.target = target;
+    this.type = type;
+    this.selection = selection;
+  }
+
+  function nopropagation() {
+    event.stopImmediatePropagation();
+  }
+
+  function noevent$1() {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+  }
+
+  var MODE_DRAG = {name: "drag"},
+      MODE_SPACE = {name: "space"},
+      MODE_HANDLE = {name: "handle"},
+      MODE_CENTER = {name: "center"};
+
+  function number1(e) {
+    return [+e[0], +e[1]];
+  }
+
+  function number2(e) {
+    return [number1(e[0]), number1(e[1])];
+  }
+
+  function toucher(identifier) {
+    return function(target) {
+      return touch(target, event.touches, identifier);
+    };
+  }
+
+  var X = {
+    name: "x",
+    handles: ["w", "e"].map(type),
+    input: function(x, e) { return x == null ? null : [[+x[0], e[0][1]], [+x[1], e[1][1]]]; },
+    output: function(xy) { return xy && [xy[0][0], xy[1][0]]; }
+  };
+
+  var Y = {
+    name: "y",
+    handles: ["n", "s"].map(type),
+    input: function(y, e) { return y == null ? null : [[e[0][0], +y[0]], [e[1][0], +y[1]]]; },
+    output: function(xy) { return xy && [xy[0][1], xy[1][1]]; }
+  };
+
+  var cursors = {
+    overlay: "crosshair",
+    selection: "move",
+    n: "ns-resize",
+    e: "ew-resize",
+    s: "ns-resize",
+    w: "ew-resize",
+    nw: "nwse-resize",
+    ne: "nesw-resize",
+    se: "nwse-resize",
+    sw: "nesw-resize"
+  };
+
+  var flipX = {
+    e: "w",
+    w: "e",
+    nw: "ne",
+    ne: "nw",
+    se: "sw",
+    sw: "se"
+  };
+
+  var flipY = {
+    n: "s",
+    s: "n",
+    nw: "sw",
+    ne: "se",
+    se: "ne",
+    sw: "nw"
+  };
+
+  var signsX = {
+    overlay: +1,
+    selection: +1,
+    n: null,
+    e: +1,
+    s: null,
+    w: -1,
+    nw: -1,
+    ne: +1,
+    se: +1,
+    sw: -1
+  };
+
+  var signsY = {
+    overlay: +1,
+    selection: +1,
+    n: -1,
+    e: null,
+    s: +1,
+    w: null,
+    nw: -1,
+    ne: -1,
+    se: +1,
+    sw: +1
+  };
+
+  function type(t) {
+    return {type: t};
+  }
+
+  // Ignore right-click, since that should open the context menu.
+  function defaultFilter() {
+    return !event.ctrlKey && !event.button;
+  }
+
+  function defaultExtent() {
+    var svg = this.ownerSVGElement || this;
+    if (svg.hasAttribute("viewBox")) {
+      svg = svg.viewBox.baseVal;
+      return [[svg.x, svg.y], [svg.x + svg.width, svg.y + svg.height]];
+    }
+    return [[0, 0], [svg.width.baseVal.value, svg.height.baseVal.value]];
+  }
+
+  function defaultTouchable() {
+    return navigator.maxTouchPoints || ("ontouchstart" in this);
+  }
+
+  // Like d3.local, but with the name “__brush” rather than auto-generated.
+  function local(node) {
+    while (!node.__brush) if (!(node = node.parentNode)) return;
+    return node.__brush;
+  }
+
+  function empty$1(extent) {
+    return extent[0][0] === extent[1][0]
+        || extent[0][1] === extent[1][1];
+  }
+
+  function brushX() {
+    return brush(X);
+  }
+
+  function brush(dim) {
+    var extent = defaultExtent,
+        filter = defaultFilter,
+        touchable = defaultTouchable,
+        keys = true,
+        listeners = dispatch("start", "brush", "end"),
+        handleSize = 6,
+        touchending;
+
+    function brush(group) {
+      var overlay = group
+          .property("__brush", initialize)
+        .selectAll(".overlay")
+        .data([type("overlay")]);
+
+      overlay.enter().append("rect")
+          .attr("class", "overlay")
+          .attr("pointer-events", "all")
+          .attr("cursor", cursors.overlay)
+        .merge(overlay)
+          .each(function() {
+            var extent = local(this).extent;
+            select(this)
+                .attr("x", extent[0][0])
+                .attr("y", extent[0][1])
+                .attr("width", extent[1][0] - extent[0][0])
+                .attr("height", extent[1][1] - extent[0][1]);
+          });
+
+      group.selectAll(".selection")
+        .data([type("selection")])
+        .enter().append("rect")
+          .attr("class", "selection")
+          .attr("cursor", cursors.selection)
+          .attr("fill", "#777")
+          .attr("fill-opacity", 0.3)
+          .attr("stroke", "#fff")
+          .attr("shape-rendering", "crispEdges");
+
+      var handle = group.selectAll(".handle")
+        .data(dim.handles, function(d) { return d.type; });
+
+      handle.exit().remove();
+
+      handle.enter().append("rect")
+          .attr("class", function(d) { return "handle handle--" + d.type; })
+          .attr("cursor", function(d) { return cursors[d.type]; });
+
+      group
+          .each(redraw)
+          .attr("fill", "none")
+          .attr("pointer-events", "all")
+          .on("mousedown.brush", started)
+        .filter(touchable)
+          .on("touchstart.brush", started)
+          .on("touchmove.brush", touchmoved)
+          .on("touchend.brush touchcancel.brush", touchended)
+          .style("touch-action", "none")
+          .style("-webkit-tap-highlight-color", "rgba(0,0,0,0)");
+    }
+
+    brush.move = function(group, selection) {
+      if (group.selection) {
+        group
+            .on("start.brush", function() { emitter(this, arguments).beforestart().start(); })
+            .on("interrupt.brush end.brush", function() { emitter(this, arguments).end(); })
+            .tween("brush", function() {
+              var that = this,
+                  state = that.__brush,
+                  emit = emitter(that, arguments),
+                  selection0 = state.selection,
+                  selection1 = dim.input(typeof selection === "function" ? selection.apply(this, arguments) : selection, state.extent),
+                  i = interpolateValue(selection0, selection1);
+
+              function tween(t) {
+                state.selection = t === 1 && selection1 === null ? null : i(t);
+                redraw.call(that);
+                emit.brush();
+              }
+
+              return selection0 !== null && selection1 !== null ? tween : tween(1);
+            });
+      } else {
+        group
+            .each(function() {
+              var that = this,
+                  args = arguments,
+                  state = that.__brush,
+                  selection1 = dim.input(typeof selection === "function" ? selection.apply(that, args) : selection, state.extent),
+                  emit = emitter(that, args).beforestart();
+
+              interrupt(that);
+              state.selection = selection1 === null ? null : selection1;
+              redraw.call(that);
+              emit.start().brush().end();
+            });
+      }
+    };
+
+    brush.clear = function(group) {
+      brush.move(group, null);
+    };
+
+    function redraw() {
+      var group = select(this),
+          selection = local(this).selection;
+
+      if (selection) {
+        group.selectAll(".selection")
+            .style("display", null)
+            .attr("x", selection[0][0])
+            .attr("y", selection[0][1])
+            .attr("width", selection[1][0] - selection[0][0])
+            .attr("height", selection[1][1] - selection[0][1]);
+
+        group.selectAll(".handle")
+            .style("display", null)
+            .attr("x", function(d) { return d.type[d.type.length - 1] === "e" ? selection[1][0] - handleSize / 2 : selection[0][0] - handleSize / 2; })
+            .attr("y", function(d) { return d.type[0] === "s" ? selection[1][1] - handleSize / 2 : selection[0][1] - handleSize / 2; })
+            .attr("width", function(d) { return d.type === "n" || d.type === "s" ? selection[1][0] - selection[0][0] + handleSize : handleSize; })
+            .attr("height", function(d) { return d.type === "e" || d.type === "w" ? selection[1][1] - selection[0][1] + handleSize : handleSize; });
+      }
+
+      else {
+        group.selectAll(".selection,.handle")
+            .style("display", "none")
+            .attr("x", null)
+            .attr("y", null)
+            .attr("width", null)
+            .attr("height", null);
+      }
+    }
+
+    function emitter(that, args, clean) {
+      return (!clean && that.__brush.emitter) || new Emitter(that, args);
+    }
+
+    function Emitter(that, args) {
+      this.that = that;
+      this.args = args;
+      this.state = that.__brush;
+      this.active = 0;
+    }
+
+    Emitter.prototype = {
+      beforestart: function() {
+        if (++this.active === 1) this.state.emitter = this, this.starting = true;
+        return this;
+      },
+      start: function() {
+        if (this.starting) this.starting = false, this.emit("start");
+        else this.emit("brush");
+        return this;
+      },
+      brush: function() {
+        this.emit("brush");
+        return this;
+      },
+      end: function() {
+        if (--this.active === 0) delete this.state.emitter, this.emit("end");
+        return this;
+      },
+      emit: function(type) {
+        customEvent(new BrushEvent(brush, type, dim.output(this.state.selection)), listeners.apply, listeners, [type, this.that, this.args]);
+      }
+    };
+
+    function started() {
+      if (touchending && !event.touches) return;
+      if (!filter.apply(this, arguments)) return;
+
+      var that = this,
+          type = event.target.__data__.type,
+          mode = (keys && event.metaKey ? type = "overlay" : type) === "selection" ? MODE_DRAG : (keys && event.altKey ? MODE_CENTER : MODE_HANDLE),
+          signX = dim === Y ? null : signsX[type],
+          signY = dim === X ? null : signsY[type],
+          state = local(that),
+          extent = state.extent,
+          selection = state.selection,
+          W = extent[0][0], w0, w1,
+          N = extent[0][1], n0, n1,
+          E = extent[1][0], e0, e1,
+          S = extent[1][1], s0, s1,
+          dx = 0,
+          dy = 0,
+          moving,
+          shifting = signX && signY && keys && event.shiftKey,
+          lockX,
+          lockY,
+          pointer = event.touches ? toucher(event.changedTouches[0].identifier) : mouse,
+          point0 = pointer(that),
+          point = point0,
+          emit = emitter(that, arguments, true).beforestart();
+
+      if (type === "overlay") {
+        if (selection) moving = true;
+        state.selection = selection = [
+          [w0 = dim === Y ? W : point0[0], n0 = dim === X ? N : point0[1]],
+          [e0 = dim === Y ? E : w0, s0 = dim === X ? S : n0]
+        ];
+      } else {
+        w0 = selection[0][0];
+        n0 = selection[0][1];
+        e0 = selection[1][0];
+        s0 = selection[1][1];
+      }
+
+      w1 = w0;
+      n1 = n0;
+      e1 = e0;
+      s1 = s0;
+
+      var group = select(that)
+          .attr("pointer-events", "none");
+
+      var overlay = group.selectAll(".overlay")
+          .attr("cursor", cursors[type]);
+
+      if (event.touches) {
+        emit.moved = moved;
+        emit.ended = ended;
+      } else {
+        var view = select(event.view)
+            .on("mousemove.brush", moved, true)
+            .on("mouseup.brush", ended, true);
+        if (keys) view
+            .on("keydown.brush", keydowned, true)
+            .on("keyup.brush", keyupped, true);
+
+        dragDisable(event.view);
+      }
+
+      nopropagation();
+      interrupt(that);
+      redraw.call(that);
+      emit.start();
+
+      function moved() {
+        var point1 = pointer(that);
+        if (shifting && !lockX && !lockY) {
+          if (Math.abs(point1[0] - point[0]) > Math.abs(point1[1] - point[1])) lockY = true;
+          else lockX = true;
+        }
+        point = point1;
+        moving = true;
+        noevent$1();
+        move();
+      }
+
+      function move() {
+        var t;
+
+        dx = point[0] - point0[0];
+        dy = point[1] - point0[1];
+
+        switch (mode) {
+          case MODE_SPACE:
+          case MODE_DRAG: {
+            if (signX) dx = Math.max(W - w0, Math.min(E - e0, dx)), w1 = w0 + dx, e1 = e0 + dx;
+            if (signY) dy = Math.max(N - n0, Math.min(S - s0, dy)), n1 = n0 + dy, s1 = s0 + dy;
+            break;
+          }
+          case MODE_HANDLE: {
+            if (signX < 0) dx = Math.max(W - w0, Math.min(E - w0, dx)), w1 = w0 + dx, e1 = e0;
+            else if (signX > 0) dx = Math.max(W - e0, Math.min(E - e0, dx)), w1 = w0, e1 = e0 + dx;
+            if (signY < 0) dy = Math.max(N - n0, Math.min(S - n0, dy)), n1 = n0 + dy, s1 = s0;
+            else if (signY > 0) dy = Math.max(N - s0, Math.min(S - s0, dy)), n1 = n0, s1 = s0 + dy;
+            break;
+          }
+          case MODE_CENTER: {
+            if (signX) w1 = Math.max(W, Math.min(E, w0 - dx * signX)), e1 = Math.max(W, Math.min(E, e0 + dx * signX));
+            if (signY) n1 = Math.max(N, Math.min(S, n0 - dy * signY)), s1 = Math.max(N, Math.min(S, s0 + dy * signY));
+            break;
+          }
+        }
+
+        if (e1 < w1) {
+          signX *= -1;
+          t = w0, w0 = e0, e0 = t;
+          t = w1, w1 = e1, e1 = t;
+          if (type in flipX) overlay.attr("cursor", cursors[type = flipX[type]]);
+        }
+
+        if (s1 < n1) {
+          signY *= -1;
+          t = n0, n0 = s0, s0 = t;
+          t = n1, n1 = s1, s1 = t;
+          if (type in flipY) overlay.attr("cursor", cursors[type = flipY[type]]);
+        }
+
+        if (state.selection) selection = state.selection; // May be set by brush.move!
+        if (lockX) w1 = selection[0][0], e1 = selection[1][0];
+        if (lockY) n1 = selection[0][1], s1 = selection[1][1];
+
+        if (selection[0][0] !== w1
+            || selection[0][1] !== n1
+            || selection[1][0] !== e1
+            || selection[1][1] !== s1) {
+          state.selection = [[w1, n1], [e1, s1]];
+          redraw.call(that);
+          emit.brush();
+        }
+      }
+
+      function ended() {
+        nopropagation();
+        if (event.touches) {
+          if (event.touches.length) return;
+          if (touchending) clearTimeout(touchending);
+          touchending = setTimeout(function() { touchending = null; }, 500); // Ghost clicks are delayed!
+        } else {
+          yesdrag(event.view, moving);
+          view.on("keydown.brush keyup.brush mousemove.brush mouseup.brush", null);
+        }
+        group.attr("pointer-events", "all");
+        overlay.attr("cursor", cursors.overlay);
+        if (state.selection) selection = state.selection; // May be set by brush.move (on start)!
+        if (empty$1(selection)) state.selection = null, redraw.call(that);
+        emit.end();
+      }
+
+      function keydowned() {
+        switch (event.keyCode) {
+          case 16: { // SHIFT
+            shifting = signX && signY;
+            break;
+          }
+          case 18: { // ALT
+            if (mode === MODE_HANDLE) {
+              if (signX) e0 = e1 - dx * signX, w0 = w1 + dx * signX;
+              if (signY) s0 = s1 - dy * signY, n0 = n1 + dy * signY;
+              mode = MODE_CENTER;
+              move();
+            }
+            break;
+          }
+          case 32: { // SPACE; takes priority over ALT
+            if (mode === MODE_HANDLE || mode === MODE_CENTER) {
+              if (signX < 0) e0 = e1 - dx; else if (signX > 0) w0 = w1 - dx;
+              if (signY < 0) s0 = s1 - dy; else if (signY > 0) n0 = n1 - dy;
+              mode = MODE_SPACE;
+              overlay.attr("cursor", cursors.selection);
+              move();
+            }
+            break;
+          }
+          default: return;
+        }
+        noevent$1();
+      }
+
+      function keyupped() {
+        switch (event.keyCode) {
+          case 16: { // SHIFT
+            if (shifting) {
+              lockX = lockY = shifting = false;
+              move();
+            }
+            break;
+          }
+          case 18: { // ALT
+            if (mode === MODE_CENTER) {
+              if (signX < 0) e0 = e1; else if (signX > 0) w0 = w1;
+              if (signY < 0) s0 = s1; else if (signY > 0) n0 = n1;
+              mode = MODE_HANDLE;
+              move();
+            }
+            break;
+          }
+          case 32: { // SPACE
+            if (mode === MODE_SPACE) {
+              if (event.altKey) {
+                if (signX) e0 = e1 - dx * signX, w0 = w1 + dx * signX;
+                if (signY) s0 = s1 - dy * signY, n0 = n1 + dy * signY;
+                mode = MODE_CENTER;
+              } else {
+                if (signX < 0) e0 = e1; else if (signX > 0) w0 = w1;
+                if (signY < 0) s0 = s1; else if (signY > 0) n0 = n1;
+                mode = MODE_HANDLE;
+              }
+              overlay.attr("cursor", cursors[type]);
+              move();
+            }
+            break;
+          }
+          default: return;
+        }
+        noevent$1();
+      }
+    }
+
+    function touchmoved() {
+      emitter(this, arguments).moved();
+    }
+
+    function touchended() {
+      emitter(this, arguments).ended();
+    }
+
+    function initialize() {
+      var state = this.__brush || {selection: null};
+      state.extent = number2(extent.apply(this, arguments));
+      state.dim = dim;
+      return state;
+    }
+
+    brush.extent = function(_) {
+      return arguments.length ? (extent = typeof _ === "function" ? _ : constant$2(number2(_)), brush) : extent;
+    };
+
+    brush.filter = function(_) {
+      return arguments.length ? (filter = typeof _ === "function" ? _ : constant$2(!!_), brush) : filter;
+    };
+
+    brush.touchable = function(_) {
+      return arguments.length ? (touchable = typeof _ === "function" ? _ : constant$2(!!_), brush) : touchable;
+    };
+
+    brush.handleSize = function(_) {
+      return arguments.length ? (handleSize = +_, brush) : handleSize;
+    };
+
+    brush.keyModifiers = function(_) {
+      return arguments.length ? (keys = !!_, brush) : keys;
+    };
+
+    brush.on = function() {
+      var value = listeners.on.apply(listeners, arguments);
+      return value === listeners ? brush : value;
+    };
+
+    return brush;
+  }
+
   var pi$1 = Math.PI;
 
   var pi$2 = Math.PI,
@@ -4389,7 +5051,7 @@
   var map$2 = array.map;
   var slice$1 = array.slice;
 
-  function constant$2(x) {
+  function constant$3(x) {
     return function() {
       return x;
     };
@@ -4408,7 +5070,7 @@
   function normalize(a, b) {
     return (b -= (a = +a))
         ? function(x) { return (x - a) / b; }
-        : constant$2(isNaN(b) ? NaN : 0.5);
+        : constant$3(isNaN(b) ? NaN : 0.5);
   }
 
   function clamper(domain) {
@@ -6128,7 +6790,7 @@
 
   var plasma = ramp$1(colors("0d088710078813078916078a19068c1b068d1d068e20068f2206902406912605912805922a05932c05942e05952f059631059733059735049837049938049a3a049a3c049b3e049c3f049c41049d43039e44039e46039f48039f4903a04b03a14c02a14e02a25002a25102a35302a35502a45601a45801a45901a55b01a55c01a65e01a66001a66100a76300a76400a76600a76700a86900a86a00a86c00a86e00a86f00a87100a87201a87401a87501a87701a87801a87a02a87b02a87d03a87e03a88004a88104a78305a78405a78606a68707a68808a68a09a58b0aa58d0ba58e0ca48f0da4910ea3920fa39410a29511a19613a19814a099159f9a169f9c179e9d189d9e199da01a9ca11b9ba21d9aa31e9aa51f99a62098a72197a82296aa2395ab2494ac2694ad2793ae2892b02991b12a90b22b8fb32c8eb42e8db52f8cb6308bb7318ab83289ba3388bb3488bc3587bd3786be3885bf3984c03a83c13b82c23c81c33d80c43e7fc5407ec6417dc7427cc8437bc9447aca457acb4679cc4778cc4977cd4a76ce4b75cf4c74d04d73d14e72d24f71d35171d45270d5536fd5546ed6556dd7566cd8576bd9586ada5a6ada5b69db5c68dc5d67dd5e66de5f65de6164df6263e06363e16462e26561e26660e3685fe4695ee56a5de56b5de66c5ce76e5be76f5ae87059e97158e97257ea7457eb7556eb7655ec7754ed7953ed7a52ee7b51ef7c51ef7e50f07f4ff0804ef1814df1834cf2844bf3854bf3874af48849f48948f58b47f58c46f68d45f68f44f79044f79143f79342f89441f89540f9973ff9983ef99a3efa9b3dfa9c3cfa9e3bfb9f3afba139fba238fca338fca537fca636fca835fca934fdab33fdac33fdae32fdaf31fdb130fdb22ffdb42ffdb52efeb72dfeb82cfeba2cfebb2bfebd2afebe2afec029fdc229fdc328fdc527fdc627fdc827fdca26fdcb26fccd25fcce25fcd025fcd225fbd324fbd524fbd724fad824fada24f9dc24f9dd25f8df25f8e125f7e225f7e425f6e626f6e826f5e926f5eb27f4ed27f3ee27f3f027f2f227f1f426f1f525f0f724f0f921"));
 
-  function constant$3(x) {
+  function constant$4(x) {
     return function constant() {
       return x;
     };
@@ -6179,7 +6841,7 @@
   function line() {
     var x$1 = x,
         y$1 = y,
-        defined = constant$3(true),
+        defined = constant$4(true),
         context = null,
         curve = curveLinear,
         output = null;
@@ -6205,15 +6867,15 @@
     }
 
     line.x = function(_) {
-      return arguments.length ? (x$1 = typeof _ === "function" ? _ : constant$3(+_), line) : x$1;
+      return arguments.length ? (x$1 = typeof _ === "function" ? _ : constant$4(+_), line) : x$1;
     };
 
     line.y = function(_) {
-      return arguments.length ? (y$1 = typeof _ === "function" ? _ : constant$3(+_), line) : y$1;
+      return arguments.length ? (y$1 = typeof _ === "function" ? _ : constant$4(+_), line) : y$1;
     };
 
     line.defined = function(_) {
-      return arguments.length ? (defined = typeof _ === "function" ? _ : constant$3(!!_), line) : defined;
+      return arguments.length ? (defined = typeof _ === "function" ? _ : constant$4(!!_), line) : defined;
     };
 
     line.curve = function(_) {
@@ -6253,7 +6915,7 @@
   // According to https://en.wikipedia.org/wiki/Cubic_Hermite_spline#Representations
   // "you can express cubic Hermite interpolation in terms of cubic Bézier curves
   // with respect to the four values p0, p0 + m0 / 3, p1 - m1 / 3, p1".
-  function point(that, t0, t1) {
+  function point$1(that, t0, t1) {
     var x0 = that._x0,
         y0 = that._y0,
         x1 = that._x1,
@@ -6282,7 +6944,7 @@
     lineEnd: function() {
       switch (this._point) {
         case 2: this._context.lineTo(this._x1, this._y1); break;
-        case 3: point(this, this._t0, slope2(this, this._t0)); break;
+        case 3: point$1(this, this._t0, slope2(this, this._t0)); break;
       }
       if (this._line || (this._line !== 0 && this._point === 1)) this._context.closePath();
       this._line = 1 - this._line;
@@ -6295,8 +6957,8 @@
       switch (this._point) {
         case 0: this._point = 1; this._line ? this._context.lineTo(x, y) : this._context.moveTo(x, y); break;
         case 1: this._point = 2; break;
-        case 2: this._point = 3; point(this, slope2(this, t1 = slope3(this, x, y)), t1); break;
-        default: point(this, this._t0, t1 = slope3(this, x, y)); break;
+        case 2: this._point = 3; point$1(this, slope2(this, t1 = slope3(this, x, y)), t1); break;
+        default: point$1(this, this._t0, t1 = slope3(this, x, y)); break;
       }
 
       this._x0 = this._x1, this._x1 = x;
@@ -6441,10 +7103,16 @@
      */
     static formatBytes(bytes, decimals = 2) {
       if (bytes === 0) return '0 Bytes';
-      const k = 1024;
-      const dm = decimals < 0 ? 0 : decimals;
-      const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
-      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      let k, dm, sizes, i;
+      k = 1024;
+      dm = decimals < 0 ? 0 : decimals;
+      sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+
+      if (Number.isInteger(bytes)) {
+        bytes = Math.round((bytes + Number.EPSILON) * 100) / 100;
+      }
+
+      i = Math.floor(Math.log(bytes) / Math.log(k));
       return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
     }
     /**
@@ -6500,6 +7168,66 @@
         });
       });
       return arr;
+    }
+    /**
+     * Check byte unit of measurment
+     * @param {number} dataPointValue // the value which is needed to show on graph for each line as data points
+     * @param {number} decimalPlaces // value which needs to be rounded to two decimal places
+     * @returns number
+     */
+
+
+    static roundOffValue(dataPointValue, decimalPlaces = 2) {
+      let x, power, roundedValue;
+
+      if (Number.isInteger(dataPointValue)) {
+        x = ('' + dataPointValue).length, power = Math.pow, decimalPlaces = power(10, decimalPlaces);
+        x -= x % 3;
+        return Math.round(dataPointValue * decimalPlaces / power(10, x)) / decimalPlaces + " kMGTPE"[x / 3];
+      } else {
+        roundedValue = Math.round((dataPointValue + Number.EPSILON) * 100) / 100;
+        return roundedValue;
+      }
+    }
+
+    static roundUnitsValue(measurmentUnit, value) {
+      switch (measurmentUnit) {
+        case measurmentUnit === 'bytes':
+        case measurmentUnit === 'kilobytes':
+        case measurmentUnit === 'megabytes':
+          return this.formatBytes(value, 2);
+
+        case measurmentUnit === 'load':
+        case measurmentUnit === 'count':
+          return this.roundOffValue(value);
+
+        case measurmentUnit === 'frames':
+        case measurmentUnit === 'overruns':
+        case measurmentUnit === 'errors':
+        case measurmentUnit === 'packets':
+        case measurmentUnit === 'collisions':
+          return this.roundOffValue(value) + ' ' + measurmentUnit + '/s';
+
+        case measurmentUnit === 'other':
+          return this.roundOffValue(value) + ' days';
+
+        case measurmentUnit === 'milliseconds':
+          return this.roundOffValue(value) + ' ms';
+
+        case measurmentUnit === 'centiseconds':
+          return this.roundOffValue(value) + ' cs';
+
+        case measurmentUnit === 'kilobytes/second':
+        case measurmentUnit === 'pages/second':
+        case measurmentUnit === 'octets':
+          return this.roundOffValue(value) + ' ' + measurmentUnit;
+
+        case measurmentUnit == '%':
+          return this.roundOffValue(value) + ' %';
+
+        default:
+          return this.roundOffValue(value);
+      }
     }
 
   }
@@ -6655,9 +7383,10 @@
         "width": width + margin.left + +margin.right,
         "height": height + +margin.top + +margin.bottom,
         "overflow": "inherit"
-      }).append('g').attr("transform", `translate(${margin.top}, 0)`); // Create the lines
+      }).append('g').attr("transform", `translate(${margin.top}, 0)`);
+      this.setBrush(svg, xScale, height, width); // Create the lines
 
-      var line$1 = line().x(d => xScale(d.time)).y(d => yScale(d.value)); // add element for line and add class name
+      var line$1 = line().x(d => xScale(d.time)).y(d => yScale(Utils.roundUnitsValue(unit, d.value))); // add element for line and add class name
 
       let lines = svg.append('g').attr('class', 'lines'); // create g tag with path having class line-group and line.
 
@@ -6688,7 +7417,7 @@
             return xScale(d.time);
           },
           "cy": function (d) {
-            return yScale(d.value);
+            return yScale(Utils.roundUnitsValue(unit, d.value));
           }
         }).styles({
           "opacity": 0,
@@ -6699,7 +7428,7 @@
           select(this).transition().duration(200).style("opacity", 0.9); // add opacity in case of hover
 
           div.transition().duration(200).style("opacity", .9);
-          div.html(d.time + "<br/>" + d.value).styles({
+          div.html(d.time + "<br/>" + Utils.roundUnitsValue(unit, d.value)).styles({
             "left": event.pageX + 10 + "px",
             "top": event.pageY - 28 + "px",
             "pointer-events": "none"
@@ -6829,6 +7558,28 @@
       });
     }
 
+    setBrush(svg, xScale, height, width) {
+      let brush = brushX() // Add the brush feature using the d3.brush function
+      .extent([[0, 0], [width - 50, height - 50]]) // initialise the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
+      .on("end", () => {
+        let extent = event.selection;
+
+        if (extent) {
+          this.dispatchEvent(new CustomEvent("areaSelected", {
+            bubbles: true,
+            composed: true,
+            detail: {
+              start: xScale.invert(extent[0]),
+              end: xScale.invert(extent[1])
+            }
+          }));
+          let getBrushArea = select(this.shadowRoot.getElementById('brushArea'));
+          getBrushArea.call(brush.move, null);
+        }
+      });
+      svg.append("g").attr("id", "brushArea").attr("class", "brush").call(brush);
+    }
+
   }
   customElements.define('line-graph', LineGraph);
 
@@ -6896,6 +7647,9 @@
       this.defaults.lineColor = this.dataset.lineColor || this.defaults.lineColor;
       this.defaults.unit = this.dataset.unit;
       this.render();
+      this.addEventListener('areaSelected', v => {
+        this.graphAreaSelection(v.detail);
+      });
     }
     /**
      * @name render
@@ -6909,6 +7663,14 @@
       if (this.graphData) {
         this.innerHTML = "<line-graph data-margin=" + JSON.stringify(this.defaults.margin) + " data-height=" + this.defaults.height + " data-width=" + this.defaults.width + " data-graph=" + this.graphData + " data-unit=" + this.graphInfo + " data-line-color=" + this.defaults.lineColor + " data-field=" + this.dataset.field + " data-title=" + JSON.stringify(this.dataset.title) + " data-group=" + this.dataset.group + "></lineGraph>";
       }
+    }
+
+    graphAreaSelection(event) {
+      if (event) this.dispatchEvent(new CustomEvent("timeStampSelection", {
+        bubbles: true,
+        composed: true,
+        detail: event
+      }));
     }
     /**
      * @name resize

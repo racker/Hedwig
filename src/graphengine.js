@@ -7,6 +7,7 @@ import { FindInfo } from "./helpers/supportedInfo";
  * @description
  * Base graph
  */
+
 export class GraphEngine extends HTMLElement {
 
 
@@ -28,6 +29,7 @@ export class GraphEngine extends HTMLElement {
         this.defaults.unit = this.dataset.unit;
 
         this.render();
+        this.addEventListener('areaSelected', (v) => {this.graphAreaSelection(v.detail)});
     }
 
     /**
@@ -50,7 +52,14 @@ export class GraphEngine extends HTMLElement {
         }
     }
 
-
+    graphAreaSelection(event) {
+        if(event)
+        this.dispatchEvent(new CustomEvent("timeStampSelection", {
+            bubbles: true,
+            composed: true,
+            detail: event
+          }));
+      }
     /**
      * @name resize
      * @param {}

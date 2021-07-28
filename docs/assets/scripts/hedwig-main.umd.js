@@ -7383,7 +7383,8 @@
         "width": width + margin.left + +margin.right,
         "height": height + +margin.top + +margin.bottom,
         "overflow": "inherit"
-      }).append('g').attr("transform", `translate(${margin.top}, 0)`); // Create the lines
+      }).append('g').attr("transform", `translate(${margin.top}, 0)`);
+      this.setBrush(svg, xScale, height, width); // Create the lines
 
       var line$1 = line().x(d => xScale(d.time)).y(d => yScale(Utils.roundUnitsValue(unit, d.value))); // add element for line and add class name
 
@@ -7455,7 +7456,6 @@
         "fill": "#000"
       });
       this.setLegend(svg, height, data);
-      this.setBrush(svg, xScale, height, width);
     }
 
     setTitle(svg, width) {

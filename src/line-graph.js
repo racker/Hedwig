@@ -140,6 +140,7 @@ export class LineGraph extends HTMLElement {
       .append('g')
       .attr("transform", `translate(${margin.top}, 0)`);
 
+      this.setBrush(svg,xScale,height, width);
     // Create the lines
     var line = d3.line()
       .x(d => xScale(d.time))
@@ -251,7 +252,7 @@ export class LineGraph extends HTMLElement {
         "fill": "#000"
       })
     this.setLegend(svg, height, data);
-    this.setBrush(svg,xScale,height, width);
+   
   }
 
   setTitle(svg, width) {

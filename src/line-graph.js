@@ -118,13 +118,12 @@ export class LineGraph extends HTMLElement {
     var xScale = d3.scaleTime()
       .domain(d3.extent(Utils.maxTime(data)))
       .range([0, width - margin.bottom]);
-
     // Create Y linear scale
     var yScale = d3.scaleLinear()
       .domain(d3.extent(Utils.maxValue(data)))
       .range([height - margin.left, 0]);
 
-    
+
     // create color scale for each line
 
     // Define a div and add styling for tooltip
@@ -140,7 +139,7 @@ export class LineGraph extends HTMLElement {
       .append('g')
       .attr("transform", `translate(${margin.top}, 0)`);
 
-      this.setBrush(svg,xScale,height, width);
+    this.setBrush(svg, xScale, height, width);
     // Create the lines
     var line = d3.line()
       .x(d => xScale(d.time))
@@ -181,6 +180,9 @@ export class LineGraph extends HTMLElement {
         cursor: "pointer"
       })
       .each((d, i) => { // loop through datapoints to fetch time and value to create tooltip hover events with value.
+        
+        var toltipDat = {group:d.group, color:d.color, unit}; // collection properties for Tooltip
+        
         lines.selectAll('dot')
           .data(d.datapoints)
           .enter()
@@ -200,7 +202,7 @@ export class LineGraph extends HTMLElement {
             "fill": "none",
             "stroke-width": "2px"
           })
-          .on("mouseover", function (d) {
+          .on("mouseover",  (d)=> {
             d3.select(this)
               .transition()
               .duration(200)
@@ -208,7 +210,7 @@ export class LineGraph extends HTMLElement {
             div.transition()
               .duration(200)
               .style("opacity", .9);
-            div.html(d.time + "<br/>" + Utils.roundUnitsValue(unit, d.value))
+            div.html(this.toolTipHtml(d,toltipDat)) // ToolTip Html template binding
               .styles({
                 "left": (d3.event.pageX + 10) + "px",
                 "top": (d3.event.pageY - 28) + "px",
@@ -252,7 +254,7 @@ export class LineGraph extends HTMLElement {
         "fill": "#000"
       })
     this.setLegend(svg, height, data);
-   
+
   }
 
   setTitle(svg, width) {
@@ -375,14 +377,14 @@ export class LineGraph extends HTMLElement {
       });
   }
 
-  setBrush(svg,xScale,height, width){
-    
+  setBrush(svg, xScale, height, width) {
+
     let brush = d3.brushX() // Add the brush feature using the d3.brush function
       .extent([
         [0, 0],
-        [width-50, height-50]
+        [width - 50, height - 50]
       ]) // initialise the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
-      .on("end", () =>{
+      .on("end", () => {
         let extent = d3.event.selection;
         if (extent) {
           this.dispatchEvent(new CustomEvent("areaSelected", {
@@ -393,16 +395,43 @@ export class LineGraph extends HTMLElement {
               end: xScale.invert(extent[1])
             }
           }));
-    
+
           let getBrushArea = d3.select(this.shadowRoot.getElementById('brushArea'));
           getBrushArea.call(brush.move, null);
         }
       });
-      svg.append("g")
-      .attr("id","brushArea")
+    svg.append("g")
+      .attr("id", "brushArea")
       .attr("class", "brush")
-       .call(brush)
-  
+      .call(brush)
+
+  }
+
+  /**
+   * 
+   * @param d Data points object [value,time]
+   * @param ttlD An object with key unit and color and group
+   * @returns Tooltip html body
+   */
+   
+  toolTipHtml(d,ttlD){
+    return `
+    <table>
+            <tr>
+              <td colspan="2" class="color-box paddingleft">
+                ${d3.timeFormat("%c")(d.time)}
+              </td>
+            </tr>
+            <tr>
+              <td class="color-box">
+                <span style="background:${ttlD.color}"></span> ${ttlD.group}
+              </td>
+              <td class="color-box">
+                ${Utils.roundUnitsValue(ttlD.unit, d.value)}
+              </td>
+            </tr>
+      </table>
+    `
   }
 
 }

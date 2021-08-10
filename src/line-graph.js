@@ -210,7 +210,7 @@ export class LineGraph extends HTMLElement {
             div.transition()
               .duration(200)
               .style("opacity", .9);
-            div.html(this.toolTipHtml(d,toltipDat)) // ToolTip Html template binding
+            div.html(this.tooltipTemplate(d,toltipDat)) // ToolTip Html template binding
               .styles({
                 "left": (d3.event.pageX + 10) + "px",
                 "top": (d3.event.pageY - 28) + "px",
@@ -414,7 +414,7 @@ export class LineGraph extends HTMLElement {
    * @returns Tooltip html body
    */
    
-  toolTipHtml(d,ttlD){
+  tooltipTemplate(d,ttlD){
     return `
     <table>
             <tr>

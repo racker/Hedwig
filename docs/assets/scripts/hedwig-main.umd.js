@@ -7259,8 +7259,8 @@
     }
   }
 
-  var css_248z = "div.tooltip {\n        opacity: 0;\n        position : absolute;\n        text-align : center;\n        width:100px;\n        height:70px;\n        padding:2px;\n        font :12px sans-serif;\n        background:lightsteelblue;\n        border:0px;\n        pointer-events:none;\n}";
-  var stylesheet="div.tooltip {\n        opacity: 0;\n        position : absolute;\n        text-align : center;\n        width:100px;\n        height:70px;\n        padding:2px;\n        font :12px sans-serif;\n        background:lightsteelblue;\n        border:0px;\n        pointer-events:none;\n}";
+  var css_248z = "div.tooltip {\n        opacity: 0;\n        position : absolute;\n        text-align : center;\n        padding:.3rem;\n        font-family: \"Open Sans\", \"Roboto\", \"Helvetica Neue\", \"Helvetica\", \"Arial\", sans-serif;\n        background:#EEEEEE;\n        pointer-events:none;\n        color:black;\n        border-radius: 5px;\n}\n.color-box span {\n        padding: 3px;\n        padding-left: 5px;\n        margin: 0px;\n        margin-right: 5px;\n        border-radius: 3px;\n      }\n      .color-box {\n        padding: 4px;\n        border-radius: 2px;\n      }\n      .paddingleft {\n              padding-left: 1rem;\n      }\n      \n      \n\n\n";
+  var stylesheet="div.tooltip {\n        opacity: 0;\n        position : absolute;\n        text-align : center;\n        padding:.3rem;\n        font-family: \"Open Sans\", \"Roboto\", \"Helvetica Neue\", \"Helvetica\", \"Arial\", sans-serif;\n        background:#EEEEEE;\n        pointer-events:none;\n        color:black;\n        border-radius: 5px;\n}\n.color-box span {\n        padding: 3px;\n        padding-left: 5px;\n        margin: 0px;\n        margin-right: 5px;\n        border-radius: 3px;\n      }\n      .color-box {\n        padding: 4px;\n        border-radius: 2px;\n      }\n      .paddingleft {\n              padding-left: 1rem;\n      }\n      \n      \n\n\n";
   styleInject(css_248z);
 
   var styleSheet = /*#__PURE__*/Object.freeze({
@@ -7411,6 +7411,11 @@
         cursor: "pointer"
       }).each((d, i) => {
         // loop through datapoints to fetch time and value to create tooltip hover events with value.
+        var toltipDat = {
+          group: d.group,
+          color: d.color,
+          unit
+        };
         lines.selectAll('dot').data(d.datapoints).enter().append("circle").attrs({
           "r": 4,
           "cx": function (d) {
@@ -7424,11 +7429,11 @@
           "stroke": d.color,
           "fill": "none",
           "stroke-width": "2px"
-        }).on("mouseover", function (d) {
+        }).on("mouseover", d => {
           select(this).transition().duration(200).style("opacity", 0.9); // add opacity in case of hover
 
           div.transition().duration(200).style("opacity", .9);
-          div.html(d.time + "<br/>" + Utils.roundUnitsValue(unit, d.value)).styles({
+          div.html(this.toolTipHtml(d, toltipDat)).styles({
             "left": event.pageX + 10 + "px",
             "top": event.pageY - 28 + "px",
             "pointer-events": "none"
@@ -7578,6 +7583,26 @@
         }
       });
       svg.append("g").attr("id", "brushArea").attr("class", "brush").call(brush);
+    }
+
+    toolTipHtml(d, ttlD) {
+      return `
+    <table>
+            <tr>
+              <td colspan="2" class="color-box paddingleft">
+                ${timeFormat("%c")(d.time)}
+              </td>
+            </tr>
+            <tr>
+              <td class="color-box">
+                <span style="background:${ttlD.color}"></span> ${ttlD.group}
+              </td>
+              <td class="color-box">
+                ${Utils.roundUnitsValue(ttlD.unit, d.value)}
+              </td>
+            </tr>
+      </table>
+    `;
     }
 
   }

@@ -358,9 +358,9 @@ export class LineGraph extends HTMLElement {
       })
       .text((d) => {
         if (d.group) {
-          return d.group;
+          return  d.group.substring(0, 20)+ '...';
         } else {
-          return this.dataset.field
+          return this.dataset.field.substring(0, 20)+ '...';
         }
       })
       // Legend text Click

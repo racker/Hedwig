@@ -7415,7 +7415,8 @@
           group: d.group,
           color: d.color,
           unit
-        };
+        }; // collection properties for Tooltip
+
         lines.selectAll('dot').data(d.datapoints).enter().append("circle").attrs({
           "r": 4,
           "cx": function (d) {
@@ -7433,7 +7434,8 @@
           select(this).transition().duration(200).style("opacity", 0.9); // add opacity in case of hover
 
           div.transition().duration(200).style("opacity", .9);
-          div.html(this.toolTipHtml(d, toltipDat)).styles({
+          div.html(this.tooltipTemplate(d, toltipDat)) // ToolTip Html template binding
+          .styles({
             "left": event.pageX + 10 + "px",
             "top": event.pageY - 28 + "px",
             "pointer-events": "none"
@@ -7477,6 +7479,10 @@
 
 
     setLegend(svg, height, data) {
+      var j = -1;
+      var k = 12;
+      var l = -1;
+      var m = 12;
       var legend = svg.append("g").attrs({
         "class": "legend",
         'transform': `translate(0,${height - 40})`
@@ -7491,25 +7497,38 @@
         return `rect${cssCls}`;
       }).attrs({
         "x": (d, i) => {
-          if (data.length <= 4) {
+          if (i < 6) {
             return 18;
           }
 
-          if (i <= parseInt((data.length - 1) / 2)) {
-            return 18;
-          } else {
+          if (i >= 6 && i < 12) {
             return 200;
+          }
+
+          if (i >= 12 && i < 18) {
+            return 382;
+          }
+
+          if (i >= 18 && i < 24) {
+            return 564;
+          }
+
+          if (i >= 24 && i < 30) {
+            return 746;
           }
         },
         "y": (d, i) => {
-          if (data.length <= 4) {
+          if (i < 6) {
             return i * 20 + 30;
           }
 
-          if (i <= parseInt((data.length - 1) / 2)) {
-            return i * 20 + 30;
-          } else {
-            return ((i - data.length) * -1 - 1) * 20 + 30;
+          if (i >= 6 && i < 12) {
+            j = j + 2;
+            return (i - j) * 20 + 30;
+          }
+
+          if (i >= 12 && i < 18) {
+            return (i - k) * 20 + 30;
           }
         },
         "width": 10,
@@ -7524,32 +7543,45 @@
         return `text${cssCls}`;
       }).attrs({
         "x": (d, i) => {
-          if (data.length <= 4) {
+          if (i < 6) {
             return 36;
           }
 
-          if (i <= parseInt((data.length - 1) / 2)) {
-            return 36;
-          } else {
+          if (i >= 6 && i < 12) {
             return 218;
+          }
+
+          if (i >= 12 && i < 18) {
+            return 400;
+          }
+
+          if (i >= 18 && i < 24) {
+            return 582;
+          }
+
+          if (i >= 24 && i < 30) {
+            return 764;
           }
         },
         "y": (d, i) => {
-          if (data.length <= 4) {
-            return i * 20 + 38;
+          if (i < 6) {
+            return i * 20 + 39;
           }
 
-          if (i <= parseInt((data.length - 1) / 2)) {
-            return i * 20 + 39;
-          } else {
-            return ((i - data.length) * -1 - 1) * 20 + 39;
+          if (i >= 6 && i < 12) {
+            l = l + 2;
+            return (i - l) * 20 + 39;
+          }
+
+          if (i >= 12 && i < 18) {
+            return (i - m) * 20 + 39;
           }
         }
       }).text(d => {
         if (d.group) {
-          return d.group;
+          if (d.group.length >= 20) return d.group.substring(0, 20) + '...';else return d.group;
         } else {
-          return this.dataset.field;
+          if (this.dataset.field.length >= 20) return this.dataset.field.substring(0, 20) + '...';else return this.dataset.field;
         }
       }) // Legend text Click
       .on('click', function (d, i) {
@@ -7584,8 +7616,15 @@
       });
       svg.append("g").attr("id", "brushArea").attr("class", "brush").call(brush);
     }
+    /**
+     * 
+     * @param d Data points object [value,time]
+     * @param ttlD An object with key unit and color and group
+     * @returns Tooltip html body
+     */
 
-    toolTipHtml(d, ttlD) {
+
+    tooltipTemplate(d, ttlD) {
       return `
     <table>
             <tr>

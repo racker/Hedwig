@@ -308,19 +308,19 @@ export class LineGraph extends HTMLElement {
           }
 
           if(i >= 6 && i < 12) {
-            return 200;
+            return 220;
           } 
 
           if( i >= 12 && i < 18) {
-            return 382;
+            return 422;
           }
 
           if( i >= 18 && i < 24) {
-            return 564;
+            return 624;
           }
 
           if( i >= 24 && i < 30) {
-            return 746;
+            return 826;
           }
         },
         "y": (d, i) => {
@@ -360,19 +360,19 @@ export class LineGraph extends HTMLElement {
           }
 
           if(i >= 6 && i < 12) {
-            return 218;
+            return 238;
           } 
 
           if( i >= 12 && i < 18) {
-            return 400;
+            return 440;
           }
 
           if( i >= 18 && i < 24) {
-            return 582;
+            return 642;
           }
 
           if( i >= 24 && i < 30) {
-            return 764;
+            return 844;
           }
         },
         "y": (d, i) => {

@@ -232,7 +232,7 @@ export class LineGraph extends HTMLElement {
     var xAxis = d3.axisBottom(xScale).ticks(5);
     // Configure Y Axis ticks and
     var yAxis = d3.axisLeft(yScale).ticks(5).tickFormat((d) => {
-      return `${d}${unit}`;
+      return `${Utils.roundUnitsValue(unit, d)}${unit}`;
     });
 
 

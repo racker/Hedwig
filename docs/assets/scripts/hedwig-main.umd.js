@@ -7386,7 +7386,7 @@
       }).append('g').attr("transform", `translate(${margin.top}, 0)`);
       this.setBrush(svg, xScale, height, width); // Create the lines
 
-      var line$1 = line().x(d => xScale(d.time)).y(d => yScale(Utils.roundUnitsValue(unit, d.value))); // add element for line and add class name
+      var line$1 = line().x(d => xScale(d.time)).y(d => yScale(d.value)); // add element for line and add class name
 
       let lines = svg.append('g').attr('class', 'lines'); // create g tag with path having class line-group and line.
 
@@ -7450,7 +7450,7 @@
       var xAxis = axisBottom(xScale).ticks(5); // Configure Y Axis ticks and
 
       var yAxis = axisLeft(yScale).ticks(5).tickFormat(d => {
-        return `${d}${unit}`;
+        return `${Utils.roundUnitsValue(unit, d)}${unit}`;
       }); // Add both Axis' to the SVG
 
       svg.append("g").attrs({
@@ -7502,19 +7502,19 @@
           }
 
           if (i >= 6 && i < 12) {
-            return 200;
+            return 220;
           }
 
           if (i >= 12 && i < 18) {
-            return 382;
+            return 422;
           }
 
           if (i >= 18 && i < 24) {
-            return 564;
+            return 624;
           }
 
           if (i >= 24 && i < 30) {
-            return 746;
+            return 826;
           }
         },
         "y": (d, i) => {
@@ -7548,19 +7548,19 @@
           }
 
           if (i >= 6 && i < 12) {
-            return 218;
+            return 238;
           }
 
           if (i >= 12 && i < 18) {
-            return 400;
+            return 440;
           }
 
           if (i >= 18 && i < 24) {
-            return 582;
+            return 642;
           }
 
           if (i >= 24 && i < 30) {
-            return 764;
+            return 844;
           }
         },
         "y": (d, i) => {

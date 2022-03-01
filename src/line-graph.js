@@ -181,6 +181,7 @@ export class LineGraph extends HTMLElement {
       })
       .each((d, i) => { // loop through datapoints to fetch time and value to create tooltip hover events with value.
         
+
         var toltipDat = {group:d.group, color:d.color, unit}; // collection properties for Tooltip
         
         lines.selectAll('dot')
@@ -280,6 +281,9 @@ export class LineGraph extends HTMLElement {
     var k = 12;
     var l = 6;
     var m = 12;
+    var n = 18;
+    var o = 24;
+    
 
     var legend = svg.append("g")
       .attrs({
@@ -383,12 +387,20 @@ export class LineGraph extends HTMLElement {
 
           if(i >= 6 && i < 12) {
             return (i - l) * 20 + 39;
-            /*l = l + 2;
-            return (i -l) * 20 + 39;*/
           }
+
           if(i >= 12 && i < 18) {
             return (i - m) * 20 + 39;
-          } 
+          }
+
+          if(i >= 18 && i < 24) {
+            return (i - n) * 20 + 39;
+          }
+          
+          if(i >= 24 && i < 30) {
+            return (i - o) * 20 + 39;
+          }
+
         }
       })
       .text((d) => {

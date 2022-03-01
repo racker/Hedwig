@@ -278,7 +278,7 @@ export class LineGraph extends HTMLElement {
   setLegend(svg, height, data) {
     var j = -1;
     var k = 12;
-    var l = -1;
+    var l = 6;
     var m = 12;
 
     var legend = svg.append("g")
@@ -382,8 +382,9 @@ export class LineGraph extends HTMLElement {
           }
 
           if(i >= 6 && i < 12) {
-            l = l + 2;
-            return (i -l) * 20 + 39;
+            return (i - l) * 20 + 39;
+            /*l = l + 2;
+            return (i -l) * 20 + 39;*/
           }
           if(i >= 12 && i < 18) {
             return (i - m) * 20 + 39;

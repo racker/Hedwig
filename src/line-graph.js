@@ -143,7 +143,7 @@ export class LineGraph extends HTMLElement {
     // Create the lines
     var line = d3.line()
       .x(d => xScale(d.time))
-      .y(d => yScale(Utils.roundUnitsValue(unit, d.value)));
+      .y(d => yScale(d.value));
 
     // add element for line and add class name
     let lines = svg.append('g')
@@ -405,15 +405,19 @@ export class LineGraph extends HTMLElement {
       })
       .text((d) => {
         if (d.group) {
-          if(d.group.length >= 20)
-             return d.group.substring(0, 20)+ '...';
+          let spltdGro=d.group.split('/');
+          let nwgrp=spltdGro[spltdGro.length-1]; // taking Last part of legend if "/" exist
+          if(nwgrp.length >= 20)
+             return nwgrp.substring(0, 20)+ '...';
           else
-            return  d.group;
+            return  nwgrp;
         } else {
-          if(this.dataset.field.length >= 20)
-            return this.dataset.field.substring(0, 20)+ '...'; 
+          let spltdGro=this.dataset.field.split('/');
+          let nwgrp=spltdGro[spltdGro.length-1];
+          if(nwgrp.length >= 20)
+             return nwgrp.substring(0, 20)+ '...'; 
           else
-            return this.dataset.field;
+            return nwgrp;
         }
       })
       // Legend text Click

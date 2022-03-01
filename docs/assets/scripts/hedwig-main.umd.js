@@ -7579,9 +7579,15 @@
         }
       }).text(d => {
         if (d.group) {
-          if (d.group.length >= 20) return d.group.substring(0, 20) + '...';else return d.group;
+          let spltdGro = d.group.split('/');
+          let nwgrp = spltdGro[spltdGro.length - 1];
+          if (nwgrp.length >= 20) return nwgrp.substring(0, 20) + '...';else return nwgrp;
         } else {
-          if (this.dataset.field.length >= 20) return this.dataset.field.substring(0, 20) + '...';else return this.dataset.field;
+          let spltdGro = this.dataset.field.split('/');
+          let nwgrp = spltdGro[spltdGro.length - 1];
+          if (nwgrp.length >= 20) return nwgrp.substring(0, 20) + '...';else {
+            return nwgrp;
+          }
         }
       }) // Legend text Click
       .on('click', function (d, i) {

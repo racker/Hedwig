@@ -277,6 +277,7 @@ export class LineGraph extends HTMLElement {
    * @param {data} data
    */
   setLegend(svg, height, data) {
+    // These variables are used to create legends and also adjust distance between different legends
     var j = 6;
     var k = 12;
     var l = 6;
@@ -356,7 +357,6 @@ export class LineGraph extends HTMLElement {
         "height": 10
       })
       .style("fill", (d) => {
-        console.log("d fill color ", d)
         return d.color;
       })
     // set text of legends

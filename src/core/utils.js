@@ -109,8 +109,10 @@ export class Utils {
                 case measurmentUnit === 'pages/second':
                 case measurmentUnit === 'octets':
                     return this.roundOffValue(value) + ' ' + measurmentUnit;
-                case measurmentUnit == '%':
-                    return this.roundOffValue(value) + ' %';             
+                case measurmentUnit == 'percent':
+                    return this.roundOffValue(value) + ' %';
+                case measurmentUnit == 'n':
+                    return this.roundOffValue(value) + '';             
                 default:
                     return this.roundOffValue(value);
             }

@@ -1,11 +1,12 @@
 {
   "unit": {
-    "percentage": "%",
+    "percent": "%",
     "bytes": "b",
     "packets/sec": "packets/s",
     "kilobytes": "kb",
     "megabytes": "mb",
     "kilobytes/second": "kb/s",
-    "available": "available"
+    "available": "available",
+    "none": "n"
   }
 }

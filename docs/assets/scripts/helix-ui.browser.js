@@ -4920,7 +4920,7 @@
             }
 
             /**
-             * Completion percentage
+             * Completion percent
              * @type {Integer}
              */
 

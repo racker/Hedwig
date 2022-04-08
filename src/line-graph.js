@@ -113,6 +113,9 @@ export class LineGraph extends HTMLElement {
     var height = parseInt(this.dataset.height);
     var width = parseInt(this.dataset.width);
     var unit = this.dataset.unit;
+    if(unit === 'n') {
+      unit = "";
+    }
 
     // Create X time scale
     var xScale = d3.scaleTime()

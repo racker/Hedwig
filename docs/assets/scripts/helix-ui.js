@@ -4047,7 +4047,7 @@ class HXProgressElement extends HXElement {
     }
 
     /**
-     * Completion percentage
+     * Completion percent
      * @type {Integer}
      */
     get value () {

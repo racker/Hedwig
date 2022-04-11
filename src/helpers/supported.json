@@ -1,6 +1,6 @@
 {
   "unit": {
-    "percentage": "%",
+    "percent": "%",
     "bytes": "b",
     "packets/sec": "packets/s",
     "kilobytes": "kb",

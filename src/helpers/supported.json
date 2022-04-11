@@ -6,7 +6,6 @@
     "kilobytes": "kb",
     "megabytes": "mb",
     "kilobytes/second": "kb/s",
-    "available": "available",
-    "none": "n"
+    "available": "available"
   }
 }

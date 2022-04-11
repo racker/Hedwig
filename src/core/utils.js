@@ -111,8 +111,6 @@ export class Utils {
                     return this.roundOffValue(value) + ' ' + measurmentUnit;
                 case measurmentUnit == 'percent':
                     return this.roundOffValue(value) + ' %';
-                case measurmentUnit == 'n':
-                    return this.roundOffValue(value) + '';             
                 default:
                     return this.roundOffValue(value);
             }

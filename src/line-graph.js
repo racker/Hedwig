@@ -3,9 +3,6 @@ import "d3-selection-multi";
 import {
   Defaults
 } from './defaults';
-import {
-  AxisLeft
-} from './helpers/axisConverter';
 import * as styleSheet from './styles/main.css';
 import {
   Utils
@@ -89,10 +86,9 @@ export class LineGraph extends HTMLElement {
     var arrColor;
     var defaults = new Defaults();
     colors.split(',').map(value => arr.push(value));
-    arrColor = [...arr, ...defaults.schemeCategory10Color];
+    arrColor = [...arr, ...Utils.randomColor()];
     this.lineColor.push.apply(this.lineColor, arrColor);
   }
-
   /**
    * @name disconnectedCallback
    * @description

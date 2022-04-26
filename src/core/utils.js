@@ -84,6 +84,15 @@ export class Utils {
                 return roundedValue;
             }
         }
+
+        static randomColor() {
+            var arr = [];    
+            for (var i = 0; i <= 70; i++) {
+                    arr.push("#" + ((1<<24)*Math.random() | 0).toString(16));
+            }
+            return arr;
+        }
+
         static roundUnitsValue(measurmentUnit, value) {
             switch(measurmentUnit) {
                 case measurmentUnit === 'bytes':

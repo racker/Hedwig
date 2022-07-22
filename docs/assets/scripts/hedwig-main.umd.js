@@ -7094,6 +7094,42 @@
   transition.prototype.attrs = transition_attrs;
   transition.prototype.styles = transition_styles;
 
+  function styleInject(css, ref) {
+    if ( ref === void 0 ) ref = {};
+    var insertAt = ref.insertAt;
+
+    if (!css || typeof document === 'undefined') { return; }
+
+    var head = document.head || document.getElementsByTagName('head')[0];
+    var style = document.createElement('style');
+    style.type = 'text/css';
+
+    if (insertAt === 'top') {
+      if (head.firstChild) {
+        head.insertBefore(style, head.firstChild);
+      } else {
+        head.appendChild(style);
+      }
+    } else {
+      head.appendChild(style);
+    }
+
+    if (style.styleSheet) {
+      style.styleSheet.cssText = css;
+    } else {
+      style.appendChild(document.createTextNode(css));
+    }
+  }
+
+  var css_248z = "div.tooltip {\n        opacity: 0;\n        position : absolute;\n        text-align : center;\n        padding:.3rem;\n        font-family: \"Open Sans\", \"Roboto\", \"Helvetica Neue\", \"Helvetica\", \"Arial\", sans-serif;\n        background:#EEEEEE;\n        pointer-events:none;\n        color:black;\n        border-radius: 5px;\n}\n.color-box span {\n        padding: 3px;\n        padding-left: 5px;\n        margin: 0px;\n        margin-right: 5px;\n        border-radius: 3px;\n      }\n      .color-box {\n        padding: 4px;\n        border-radius: 2px;\n      }\n      .paddingleft {\n              padding-left: 1rem;\n      }\n      \n      \n\n\n";
+  var stylesheet="div.tooltip {\n        opacity: 0;\n        position : absolute;\n        text-align : center;\n        padding:.3rem;\n        font-family: \"Open Sans\", \"Roboto\", \"Helvetica Neue\", \"Helvetica\", \"Arial\", sans-serif;\n        background:#EEEEEE;\n        pointer-events:none;\n        color:black;\n        border-radius: 5px;\n}\n.color-box span {\n        padding: 3px;\n        padding-left: 5px;\n        margin: 0px;\n        margin-right: 5px;\n        border-radius: 3px;\n      }\n      .color-box {\n        padding: 4px;\n        border-radius: 2px;\n      }\n      .paddingleft {\n              padding-left: 1rem;\n      }\n      \n      \n\n\n";
+  styleInject(css_248z);
+
+  var styleSheet = /*#__PURE__*/Object.freeze({
+    'default': css_248z,
+    stylesheet: stylesheet
+  });
+
   class Utils {
     /**
      * Convert bytes to largest unit
@@ -7190,6 +7226,16 @@
       }
     }
 
+    static randomColor() {
+      var arr = [];
+
+      for (var i = 0; i <= 70; i++) {
+        arr.push("#" + ((1 << 24) * Math.random() | 0).toString(16));
+      }
+
+      return arr;
+    }
+
     static roundUnitsValue(measurmentUnit, value) {
       switch (measurmentUnit) {
         case measurmentUnit === 'bytes':
@@ -7222,7 +7268,7 @@
         case measurmentUnit === 'octets':
           return this.roundOffValue(value) + ' ' + measurmentUnit;
 
-        case measurmentUnit == '%':
+        case measurmentUnit == 'percent':
           return this.roundOffValue(value) + ' %';
 
         default:
@@ -7231,42 +7277,6 @@
     }
 
   }
-
-  function styleInject(css, ref) {
-    if ( ref === void 0 ) ref = {};
-    var insertAt = ref.insertAt;
-
-    if (!css || typeof document === 'undefined') { return; }
-
-    var head = document.head || document.getElementsByTagName('head')[0];
-    var style = document.createElement('style');
-    style.type = 'text/css';
-
-    if (insertAt === 'top') {
-      if (head.firstChild) {
-        head.insertBefore(style, head.firstChild);
-      } else {
-        head.appendChild(style);
-      }
-    } else {
-      head.appendChild(style);
-    }
-
-    if (style.styleSheet) {
-      style.styleSheet.cssText = css;
-    } else {
-      style.appendChild(document.createTextNode(css));
-    }
-  }
-
-  var css_248z = "div.tooltip {\n        opacity: 0;\n        position : absolute;\n        text-align : center;\n        padding:.3rem;\n        font-family: \"Open Sans\", \"Roboto\", \"Helvetica Neue\", \"Helvetica\", \"Arial\", sans-serif;\n        background:#EEEEEE;\n        pointer-events:none;\n        color:black;\n        border-radius: 5px;\n}\n.color-box span {\n        padding: 3px;\n        padding-left: 5px;\n        margin: 0px;\n        margin-right: 5px;\n        border-radius: 3px;\n      }\n      .color-box {\n        padding: 4px;\n        border-radius: 2px;\n      }\n      .paddingleft {\n              padding-left: 1rem;\n      }\n      \n      \n\n\n";
-  var stylesheet="div.tooltip {\n        opacity: 0;\n        position : absolute;\n        text-align : center;\n        padding:.3rem;\n        font-family: \"Open Sans\", \"Roboto\", \"Helvetica Neue\", \"Helvetica\", \"Arial\", sans-serif;\n        background:#EEEEEE;\n        pointer-events:none;\n        color:black;\n        border-radius: 5px;\n}\n.color-box span {\n        padding: 3px;\n        padding-left: 5px;\n        margin: 0px;\n        margin-right: 5px;\n        border-radius: 3px;\n      }\n      .color-box {\n        padding: 4px;\n        border-radius: 2px;\n      }\n      .paddingleft {\n              padding-left: 1rem;\n      }\n      \n      \n\n\n";
-  styleInject(css_248z);
-
-  var styleSheet = /*#__PURE__*/Object.freeze({
-    'default': css_248z,
-    stylesheet: stylesheet
-  });
 
   const spclCharRegx = /[&\/\\#, +()$~%.'":*?<>{}]/g;
   /**
@@ -7318,6 +7328,7 @@
       return requestBody.map((item, i) => {
         let pointsArray = [];
         let group = Utils.findByProp(item.data, grouping);
+        let metric_name = item.data.metricName;
         let valuesArray = Object.keys(item.data.values); // loop through each time property
 
         for (const obj of valuesArray) {
@@ -7328,6 +7339,7 @@
         }
 
         return {
+          metric_name,
           group,
           datapoints: pointsArray,
           color: this.lineColor[i]
@@ -7343,9 +7355,8 @@
     getDataLineColor(colors) {
       var arr = [];
       var arrColor;
-      var defaults = new Defaults();
       colors.split(',').map(value => arr.push(value));
-      arrColor = [...arr, ...defaults.schemeCategory10Color];
+      arrColor = [...arr, ...Utils.randomColor()];
       this.lineColor.push.apply(this.lineColor, arrColor);
     }
     /**
@@ -7370,7 +7381,8 @@
       var margin = JSON.parse(this.dataset.margin);
       var height = parseInt(this.dataset.height);
       var width = parseInt(this.dataset.width);
-      var unit = this.dataset.unit; // Create X time scale
+      var unit = this.dataset.unit;
+      if (unit === 'undefined') unit = ""; // Create X time scale
 
       var xScale = time().domain(extent(Utils.maxTime(data))).range([0, width - margin.bottom]); // Create Y linear scale
 
@@ -7412,6 +7424,7 @@
       }).each((d, i) => {
         // loop through datapoints to fetch time and value to create tooltip hover events with value.
         var toltipDat = {
+          metric_name: d.metric_name,
           group: d.group,
           color: d.color,
           unit
@@ -7479,10 +7492,15 @@
 
 
     setLegend(svg, height, data) {
-      var j = -1;
+      // These variables are used to create legends and also adjust distance between different legends
+      var j = 6;
       var k = 12;
-      var l = -1;
+      var l = 6;
       var m = 12;
+      var n = 18;
+      var o = 24;
+      var p = 18;
+      var q = 24;
       var legend = svg.append("g").attrs({
         "class": "legend",
         'transform': `translate(0,${height - 40})`
@@ -7523,12 +7541,19 @@
           }
 
           if (i >= 6 && i < 12) {
-            j = j + 2;
             return (i - j) * 20 + 30;
           }
 
           if (i >= 12 && i < 18) {
             return (i - k) * 20 + 30;
+          }
+
+          if (i >= 18 && i < 24) {
+            return (i - p) * 20 + 30;
+          }
+
+          if (i >= 24 && i < 30) {
+            return (i - q) * 20 + 30;
           }
         },
         "width": 10,
@@ -7569,25 +7594,31 @@
           }
 
           if (i >= 6 && i < 12) {
-            l = l + 2;
             return (i - l) * 20 + 39;
           }
 
           if (i >= 12 && i < 18) {
             return (i - m) * 20 + 39;
           }
+
+          if (i >= 18 && i < 24) {
+            return (i - n) * 20 + 39;
+          }
+
+          if (i >= 24 && i < 30) {
+            return (i - o) * 20 + 39;
+          }
         }
       }).text(d => {
         if (d.group) {
           let spltdGro = d.group.split('/');
-          let nwgrp = spltdGro[spltdGro.length - 1];
+          let nwgrp = spltdGro[spltdGro.length - 1]; // taking Last part of legend if "/" exist
+
           if (nwgrp.length >= 20) return nwgrp.substring(0, 20) + '...';else return nwgrp;
         } else {
           let spltdGro = this.dataset.field.split('/');
           let nwgrp = spltdGro[spltdGro.length - 1];
-          if (nwgrp.length >= 20) return nwgrp.substring(0, 20) + '...';else {
-            return nwgrp;
-          }
+          if (nwgrp.length >= 20) return nwgrp.substring(0, 20) + '...';else return nwgrp;
         }
       }) // Legend text Click
       .on('click', function (d, i) {
@@ -7640,7 +7671,7 @@
             </tr>
             <tr>
               <td class="color-box">
-                <span style="background:${ttlD.color}"></span> ${ttlD.group}
+                <span style="background:${ttlD.color}"></span> ${ttlD.group || ttlD.metric_name}
               </td>
               <td class="color-box">
                 ${Utils.roundUnitsValue(ttlD.unit, d.value)}
@@ -7654,7 +7685,7 @@
   customElements.define('line-graph', LineGraph);
 
   var unit$1 = {
-  	percentage: "%",
+  	percent: "%",
   	bytes: "b",
   	"packets/sec": "packets/s",
   	kilobytes: "kb",

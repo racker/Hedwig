@@ -60,6 +60,7 @@ export class LineGraph extends HTMLElement {
     return requestBody.map((item, i) => {
       let pointsArray = [];
       let group = Utils.findByProp(item.data, grouping);
+      let metric_name = item.data.metricName;
       let valuesArray = Object.keys(item.data.values);
       // loop through each time property
       for (const obj of valuesArray) {
@@ -69,6 +70,7 @@ export class LineGraph extends HTMLElement {
         });
       }
       return {
+        metric_name,
         group,
         datapoints: pointsArray,
         color: this.lineColor[i]
@@ -179,7 +181,7 @@ export class LineGraph extends HTMLElement {
       .each((d, i) => { // loop through datapoints to fetch time and value to create tooltip hover events with value.
         
 
-        var toltipDat = {group:d.group, color:d.color, unit}; // collection properties for Tooltip
+        var toltipDat = {metric_name: d.metric_name, group:d.group, color:d.color, unit}; // collection properties for Tooltip
         
         lines.selectAll('dot')
           .data(d.datapoints)
@@ -491,7 +493,7 @@ export class LineGraph extends HTMLElement {
             </tr>
             <tr>
               <td class="color-box">
-                <span style="background:${ttlD.color}"></span> ${ttlD.group}
+                <span style="background:${ttlD.color}"></span> ${ttlD.group || ttlD.metric_name}
               </td>
               <td class="color-box">
                 ${Utils.roundUnitsValue(ttlD.unit, d.value)}

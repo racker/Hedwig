@@ -41,7 +41,20 @@ export class LineGraph extends HTMLElement {
       mode: 'open'
     });
     if (svg) {
-      this.shadowRoot.appendChild(svg);
+      const style = document.createElement("style");
+      style.textContent = `
+        .custom_div {
+          overflow-y:scroll; 
+          overflow-x:hidden;
+          width: 850px;
+          height: 300px;
+      }
+      `;
+      this.shadowRoot.appendChild(style);
+      let svg_new = document.createElement('div');
+      svg_new.setAttribute("class", "custom_div");
+      svg_new.append(svg);
+      this.shadowRoot.appendChild(svg_new);
       this.renderGraph(this.parseData(data), svg);
     }
   }
@@ -275,14 +288,14 @@ export class LineGraph extends HTMLElement {
    */
   setLegend(svg, height, data) {
     // These variables are used to create legends and also adjust distance between different legends
-    var j = 6;
-    var k = 12;
-    var l = 6;
-    var m = 12;
-    var n = 18;
-    var o = 24;
-    var p = 18;
-    var q = 24;
+    var j = 12;
+    var k = 24;
+    var l = 12;
+    var m = 24;
+    var n = 36;
+    var o = 48;
+    var p = 36;
+    var q = 48;
    
 
     var legend = svg.append("g")
@@ -307,44 +320,44 @@ export class LineGraph extends HTMLElement {
 
       .attrs({
         "x": (d, i) => {
-          if(i < 6) {
+          if(i < 12) {
             return 18;
           }
 
-          if(i >= 6 && i < 12) {
+          if(i >= 12 && i < 24) {
             return 220;
           } 
 
-          if( i >= 12 && i < 18) {
+          if( i >= 24 && i < 36) {
             return 422;
           }
 
-          if( i >= 18 && i < 24) {
+          if( i >= 36 && i < 48) {
             return 624;
           }
 
-          if( i >= 24 && i < 30) {
+          if( i >= 48 && i < 60) {
             return 826;
           }
         },
         "y": (d, i) => {
-            if(i < 6) {
+            if(i < 12) {
               return i * 20 + 30;
             }
 
-            if(i >= 6 && i < 12) {
+            if(i >= 12 && i < 24) {
               return (i - j) * 20 + 30;
             }
             
-            if(i >= 12 && i < 18) {
+            if(i >= 24 && i < 36) {
               return (i - k) * 20 + 30;
             }
 
-            if(i >= 18 && i < 24) {
+            if(i >= 36 && i < 48) {
               return (i - p) * 20 + 30;
             }
             
-            if(i >= 24 && i < 30) {
+            if(i >= 48 && i < 60) {
               return (i - q) * 20 + 30;
             }
 
@@ -369,45 +382,45 @@ export class LineGraph extends HTMLElement {
         "x": (d, i) => {    
           
 
-          if(i < 6) {
+          if(i < 12) {
             return 36;
           }
 
-          if(i >= 6 && i < 12) {
+          if(i >= 12 && i < 24) {
             return 238;
           } 
 
-          if( i >= 12 && i < 18) {
+          if( i >= 24 && i < 36) {
             return 440;
           }
 
-          if( i >= 18 && i < 24) {
+          if( i >= 36 && i < 48) {
             return 642;
           }
 
-          if( i >= 24 && i < 30) {
+          if( i >= 48 && i < 60) {
             return 844;
           }
         },
         "y": (d, i) => {
 
-          if(i < 6) {
+          if(i < 12) {
             return i * 20 + 39;
           }
 
-          if(i >= 6 && i < 12) {
+          if(i >= 12 && i < 24) {
             return (i - l) * 20 + 39;
           }
 
-          if(i >= 12 && i < 18) {
+          if(i >= 24 && i < 36) {
             return (i - m) * 20 + 39;
           }
 
-          if(i >= 18 && i < 24) {
+          if(i >= 36 && i < 48) {
             return (i - n) * 20 + 39;
           }
           
-          if(i >= 24 && i < 30) {
+          if(i >= 48 && i < 60) {
             return (i - o) * 20 + 39;
           }
 
@@ -480,7 +493,6 @@ export class LineGraph extends HTMLElement {
    * @param ttlD An object with key unit and color and group
    * @returns Tooltip html body
    */
-   
   tooltipTemplate(d,ttlD){
     return `
     <table>

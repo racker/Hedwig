@@ -41,7 +41,20 @@ export class LineGraph extends HTMLElement {
       mode: 'open'
     });
     if (svg) {
-      this.shadowRoot.appendChild(svg);
+      const style = document.createElement("style");
+      style.textContent = `
+        .custom_div {
+          overflow-y:scroll; 
+          overflow-x:hidden;
+          width: 850px;
+          height: 300px;
+      }
+      `;
+      this.shadowRoot.appendChild(style);
+      let svg_new = document.createElement('div');
+      svg_new.setAttribute("class", "custom_div");
+      svg_new.append(svg);
+      this.shadowRoot.appendChild(svg_new);
       this.renderGraph(this.parseData(data), svg);
     }
   }

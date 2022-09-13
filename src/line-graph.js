@@ -480,7 +480,6 @@ export class LineGraph extends HTMLElement {
    * @param ttlD An object with key unit and color and group
    * @returns Tooltip html body
    */
-   
   tooltipTemplate(d,ttlD){
     return `
     <table>
